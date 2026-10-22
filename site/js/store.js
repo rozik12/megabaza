@@ -364,6 +364,14 @@ document.addEventListener('change', e => { const el = e.target; if (el.dataset &
 $('oPhone').addEventListener('input', e => maskPhone(e.target)); $('aPhone').addEventListener('input', e => maskPhone(e.target));
 $('aEye').onclick = () => { const p = $('aPass'); p.type = p.type === 'password' ? 'text' : 'password'; };
 $('aPass').addEventListener('input', e => { const v = e.target.value, sc = (v.length >= 8) + (v.length >= 12) + /[A-Z]/.test(v) + /\d/.test(v) + /[^\w]/.test(v), el = $('aStr'); el.style.width = Math.min(100, sc * 22) + '%'; el.style.background = sc <= 2 ? '#ff6b6b' : sc === 3 ? '#ffb400' : '#3ecf8e'; });
+$('trackOpen').onclick = () => { $('trRes').textContent = ''; $('trackModal').classList.add('open'); };
+$('trClose').onclick = () => $('trackModal').classList.remove('open');
+$('trPhone').addEventListener('input', e => maskPhone(e.target));
+$('trackForm').addEventListener('submit', async e => {
+  e.preventDefault(); if (!sb) return toast(t('demo'));
+  const { data, error } = await sb.rpc('track_order', { p_id: +$('trId').value, p_phone: $('trPhone').value });
+  const o = data && data[0]; $('trRes').innerHTML = (error || !o) ? t('trackNone') : `<b>${t('st_' + o.status)}</b><br>${t('total')}: ${money(o.total)}<br>${t('trackDate')}: ${new Date(o.created_at).toLocaleString('ru-RU')}`;
+});
 $('doneClose').onclick = () => $('doneModal').classList.remove('open');
 $('doneOrders').onclick = () => { $('doneModal').classList.remove('open'); if ($('doneOrders').dataset.guest) openAuth('register'); else { openProfile(); } };
 $('q').addEventListener('input', e => { S.q = e.target.value; onF(); suggest(); });

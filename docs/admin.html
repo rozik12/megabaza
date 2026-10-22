@@ -43,7 +43,7 @@
   </div></div></section>
 
 <section id="tab-orders" class="scroll" hidden>
-  <div class="kv" style="margin-bottom:12px"><input id="oSearch" placeholder="Поиск: №, телефон, имя" style="max-width:260px"><select id="oStatus" style="max-width:180px"><option value="">Все статусы</option><option value="new">Новые</option><option value="processing">В работе</option><option value="done">Выполненные</option><option value="cancelled">Отменённые</option></select><button class="ghost" id="oExport">⬇ Excel</button></div>
+  <div class="kv" style="margin-bottom:12px"><input id="oSearch" placeholder="Поиск: №, телефон, имя" style="max-width:260px"><select id="oStatus" style="max-width:180px"><option value="">Все статусы</option><option value="new">Новые</option><option value="processing">В работе</option><option value="done">Выполненные</option><option value="cancelled">Отменённые</option></select><button class="ghost" id="oExport">⬇ Excel</button> <input id="rFrom" type="date" style="max-width:150px"><input id="rTo" type="date" style="max-width:150px"><button class="ghost" id="oReport">📈 Отчёт</button></div>
   <table class="tbl"><thead><tr><th>№</th><th>Дата</th><th>Клиент</th><th>Состав</th><th>Сумма</th><th>Статус / заметка</th></tr></thead><tbody id="ordRows"></tbody></table>
 </section>
 
@@ -198,6 +198,17 @@ $('ordRows').addEventListener('click', e => {
    ${o.discount > 0 ? `<p>Скидка: ${money(o.discount)}</p>` : ''}${o.delivery_fee > 0 ? `<p>Доставка: ${money(o.delivery_fee)}</p>` : ''}<h3>Итого: ${money(o.total)}</h3></body>`); w.document.close(); w.print();
 });
 $('oExport').onclick = () => { const ws = XLSX.utils.json_to_sheet(allOrders.map(o => ({ '№': o.id, Дата: new Date(o.created_at).toLocaleString('ru-RU'), Клиент: oName(o), Телефон: o.phone, Адрес: o.address, Доставка: o.delivery, Оплата: o.payment, Сумма: o.total, Статус: STATUS[o.status], Состав: o.order_items.map(i => i.name + ' x' + i.qty).join('; ') }))); const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'Заказы'); XLSX.writeFile(wb, 'orders.xlsx'); };
+
+$('oReport').onclick = () => {
+  const from = $('rFrom').value ? new Date($('rFrom').value) : new Date(0), to = $('rTo').value ? new Date($('rTo').value + 'T23:59:59') : new Date();
+  const l = allOrders.filter(o => { const d = new Date(o.created_at); return d >= from && d <= to; }), ok = l.filter(o => o.status !== 'cancelled'), byDay = {}, top = {};
+  ok.forEach(o => { const k = o.created_at.slice(0, 10); (byDay[k] = byDay[k] || { Дата: k, Заказов: 0, Выручка: 0 }); byDay[k].Заказов++; byDay[k].Выручка += +o.total; o.order_items.forEach(i => { (top[i.name] = top[i.name] || { Товар: i.name, Количество: 0, Сумма: 0 }); top[i.name].Количество += i.qty; top[i.name].Сумма += i.qty * +i.price; }); });
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(Object.values(byDay).sort((a, b) => a.Дата < b.Дата ? -1 : 1)), 'По дням');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(Object.values(top).sort((a, b) => b.Сумма - a.Сумма)), 'Товары');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(l.map(o => ({ '№': o.id, Дата: new Date(o.created_at).toLocaleString('ru-RU'), Клиент: oName(o), Телефон: o.phone, Сумма: o.total, Статус: STATUS[o.status] }))), 'Заказы');
+  XLSX.writeFile(wb, 'report.xlsx');
+};
 
 /* ---------- товары ---------- */
 async function loadProducts() {

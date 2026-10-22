@@ -65,7 +65,7 @@
     <div class="cols"><div class="tile" id="contactInfo"></div><div class="tile kv" id="contactBtns"></div></div>
     <iframe class="map" id="map" loading="lazy" title="map" hidden></iframe></section>
 </main>
-<footer><div class="wrap">© MEGABAZA · <a href="legal.html#offer" data-i="offer"></a> · <a href="legal.html#privacy" data-i="privacy"></a></div></footer>
+<footer><div class="wrap"><button class="ghost sm" id="trackOpen">📦 <span data-i="track"></span></button> · © MEGABAZA · <a href="legal.html#offer" data-i="offer"></a> · <a href="legal.html#privacy" data-i="privacy"></a></div></footer>
 <button class="top ghost" id="top" aria-label="Up">↑</button>
 
 <!-- корзина -->
@@ -123,6 +123,9 @@
 <nav class="mbar" id="mbar"><button data-m="home" aria-label="Home">🏠</button><button data-m="search" aria-label="Search">🔍</button><button data-m="chat" aria-label="Chat">💬</button><button data-m="cart" aria-label="Cart">🛒<b id="mcount">0</b></button></nav>
 <div class="modal" id="doneModal"><div class="box" style="text-align:center"><div style="font-size:56px">✅</div><h2 id="doneTitle"></h2><p class="muted" id="doneText"></p>
   <button class="btn" id="doneOrders"></button><button class="ghost" id="doneClose" data-i="continue"></button></div></div>
+<div class="modal" id="trackModal"><form class="box" id="trackForm"><h3>📦 <span data-i="track"></span></h3>
+  <input id="trId" type="number" min="1" data-ip="orderNo" required inputmode="numeric"><input id="trPhone" type="tel" data-ip="phone" inputmode="tel" required>
+  <div id="trRes" class="muted"></div><button class="btn" data-i="trackBtn"></button><button type="button" class="ghost" id="trClose" data-i="cancel"></button></form></div>
 <div class="toast" id="toast"></div>
 
 <script src="js/core.js"></script>
