@@ -71,10 +71,11 @@
 <!-- корзина -->
 <aside class="drawer" id="drawer" aria-label="Cart" style="overflow:auto">
   <div style="display:flex;justify-content:space-between;align-items:center"><h2 data-i="cartTitle"></h2><button class="ghost sm" id="close">✕</button></div>
+  <div id="ship"></div>
   <div class="items" id="items" style="min-height:80px"></div>
   <div id="form" style="display:none;flex-direction:column;gap:8px">
     <div class="tabs"><button type="button" class="chip on" data-dl="delivery" data-i="delivery"></button><button type="button" class="chip" data-dl="pickup" data-i="pickup"></button></div>
-    <input id="oName" data-ip="name" autocomplete="name"><input id="oPhone" type="tel" data-ip="phone" autocomplete="tel">
+    <input id="oName" data-ip="name" autocomplete="name"><input id="oPhone" type="tel" data-ip="phone" autocomplete="tel" inputmode="tel">
     <input id="oAddr" data-ip="addr" autocomplete="street-address">
     <select id="oSlot"><option data-i="slotAsap"></option><option data-i="slotToday"></option><option data-i="slotTomorrow"></option></select>
     <select id="oPay"><option value="cash" data-i="cash"></option><option value="card" data-i="card"></option></select>
@@ -91,7 +92,9 @@
   <div data-reg hidden><input id="aName" data-ip="regName" autocomplete="name"></div>
   <div data-reg hidden><input id="aPhone" type="tel" data-ip="phone" autocomplete="tel"></div>
   <input id="aEmail" type="email" data-ip="email" autocomplete="email">
-  <input id="aPass" type="password" data-ip="pass" autocomplete="current-password">
+  <div style="position:relative"><input id="aPass" type="password" data-ip="pass" autocomplete="current-password" style="padding-right:44px"><button type="button" id="aEye" class="ghost sm" style="position:absolute;right:4px;top:4px" aria-label="show">👁</button></div>
+  <div data-reg hidden><div class="strbar"><i id="aStr"></i></div></div>
+  <label data-reg hidden class="chk"><input type="checkbox" id="aTerms"> <span><span data-i="terms"></span> <a href="legal.html#offer" target="_blank" data-i="offer"></a></span></label>
   <div class="err" id="aErr"></div>
   <button class="btn" id="aSubmit"></button>
   <button type="button" class="ghost sm" id="aMagic" data-i="magic"></button>
@@ -118,6 +121,8 @@
     <textarea id="msgInput" rows="1" maxlength="2000" data-ip="msg"></textarea><button class="btn" aria-label="Send">➤</button></form>
 </section>
 <nav class="mbar" id="mbar"><button data-m="home" aria-label="Home">🏠</button><button data-m="search" aria-label="Search">🔍</button><button data-m="chat" aria-label="Chat">💬</button><button data-m="cart" aria-label="Cart">🛒<b id="mcount">0</b></button></nav>
+<div class="modal" id="doneModal"><div class="box" style="text-align:center"><div style="font-size:56px">✅</div><h2 id="doneTitle"></h2><p class="muted" id="doneText"></p>
+  <button class="btn" id="doneOrders"></button><button class="ghost" id="doneClose" data-i="continue"></button></div></div>
 <div class="toast" id="toast"></div>
 
 <script src="js/core.js"></script>

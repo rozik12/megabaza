@@ -22,7 +22,7 @@ async function getProfile() {
   if (!sb) return null;
   const { data: { session } } = await sb.auth.getSession();
   if (!session) return null;
-  const { data } = await sb.from('profiles').select('id,full_name,phone,role').eq('id', session.user.id).single();
+  const { data } = await sb.from('profiles').select('id,full_name,phone,role,wholesale,address').eq('id', session.user.id).single();
   return data ? { ...data, email: session.user.email } : null;
 }
 

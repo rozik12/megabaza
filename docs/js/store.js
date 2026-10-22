@@ -143,7 +143,16 @@ function openCompare() {
 }
 
 /* ---------- корзина ---------- */
-const saveCart = () => { lsSet('cart', cart); drawCart(); };
+const maxQty = p => p && p.stock != null ? Math.max(1, p.stock) : 99;
+const normPhone = v => { const d = String(v).replace(/\D/g, ''); if (d.length === 9) return '+998' + d; if (d.length === 12 && d.startsWith('998')) return '+' + d; return null; };
+function maskPhone(el) { let d = el.value.replace(/\D/g, ''); if (!d.startsWith('998')) d = '998' + d.replace(/^9?9?8?/, ''); d = d.slice(0, 12); const g = [d.slice(0, 3), d.slice(3, 5), d.slice(5, 8), d.slice(8, 10), d.slice(10, 12)].filter(Boolean); el.value = d.length ? '+' + g.join(' ') : ''; }
+let syncT; const scheduleSync = () => { if (!S.me || !sb) return; clearTimeout(syncT); syncT = setTimeout(() => sb.from('carts').upsert({ user_id: S.me.id, items: cart, updated_at: new Date().toISOString() }), 700); };
+async function loadCloudCart() {
+  const { data } = await sb.from('carts').select('items').eq('user_id', S.me.id).maybeSingle(); const remote = (data && data.items) || {}; let ch = false;
+  for (const [id, q] of Object.entries(remote)) if (byId(id) && (cart[id] || 0) < q) { cart[id] = Math.min(q, maxQty(byId(id))); ch = true; }
+  if (ch || Object.keys(cart).length) { lsSet('cart', cart); drawCart(); scheduleSync(); }
+}
+const saveCart = () => { lsSet('cart', cart); drawCart(); scheduleSync(); };
 function sums() {
   const ids = Object.keys(cart).filter(byId); let sub = 0, kit = 0; ids.forEach(id => { const p = byId(id), q = cart[id]; sub += unit(p, q) * q; kit += (priceOf(p) - unit(p, q)) * q; });
   const disc = Math.round(sub * S.promoPct / 100), feeS = +st('delivery_fee') || 0, freeS = +st('free_delivery_from') || 0;
@@ -153,11 +162,17 @@ function sums() {
 function drawCart() {
   const s = sums();
   $('count').textContent = $('mcount').textContent = s.ids.reduce((n, id) => n + cart[id], 0);
-  $('items').innerHTML = s.ids.map(id => { const p = byId(id); return `<div class="row"><div><div>${esc(p.name)}</div><small class="muted">${money(unit(p, cart[id]))}${unit(p, cart[id]) < priceOf(p) ? ' 🎁' : ''}</small></div>
-    <div class="qty"><button data-d="-1" data-id="${id}">−</button>${cart[id]}<button data-d="1" data-id="${id}">+</button></div></div>`; }).join('') || `<p class="empty">${t('empty')}</p>`;
+  $('items').innerHTML = s.ids.map(id => { const p = byId(id), q = cart[id], up = unit(p, q), mx = maxQty(p);
+    return `<div class="citem"><div class="cth">${imgOf(p)}</div><div class="cbody"><div class="cname" data-open="${id}">${esc(p.name)}</div>
+      <div class="muted sm2">${money(up)}${up < priceOf(p) ? ' 🎁' : ''}${p.stock != null && p.stock <= 5 ? ' · ' + t('left') + ' ' + p.stock + ' ' + t('pcs') : ''}</div>
+      <div class="qtyrow"><div class="qty"><button data-d="-1" data-id="${id}" aria-label="-">−</button><input class="qin" type="number" min="1" max="${mx}" value="${q}" data-qty="${id}" inputmode="numeric"><button data-d="1" data-id="${id}" aria-label="+">+</button></div>
+      <b>${money(up * q)}</b><button class="ghost sm rm" data-rm="${id}" aria-label="remove">🗑</button></div></div></div>`; }).join('')
+    || `<div class="empty">🛒<br>${t('empty')}<br><br><button class="btn" data-go="1">${t('startShopping')}</button></div>`;
+  const freeS = +st('free_delivery_from') || 0, left = freeS - (s.sub - s.disc);
+  $('ship').innerHTML = (S.delivery === 'delivery' && freeS && s.ids.length) ? (left > 0 ? `<div class="shipmsg">🚚 ${t('shipMore')} <b>${money(left)}</b></div><div class="bar"><i style="width:${Math.min(100, Math.round((s.sub - s.disc) / freeS * 100))}%"></i></div>` : `<div class="shipmsg ok">🚚 ${t('shipFree')} ✓</div>`) : '';
   $('form').style.display = s.ids.length ? 'flex' : 'none';
   $('oName').style.display = S.me ? 'none' : ''; $('oAddr').style.display = S.delivery === 'delivery' ? '' : 'none';
-  $('sums').innerHTML = `<div class="sumrow"><span>${t('sub')}</span><span>${money(s.sub + s.kit)}</span></div>${s.kit ? `<div class="sumrow"><span>🎁 ${t('kit')} ${KIT_PCT}%</span><span>−${money(s.kit)}</span></div>` : ''}${s.disc ? `<div class="sumrow"><span>${t('discount')} ${S.promoPct}%</span><span>−${money(s.disc)}</span></div>` : ''}
+  $('sums').innerHTML = `<div class="sumrow"><span>${t('sub')}</span><span>${money(s.sub + s.kit)}</span></div>${s.kit ? `<div class="sumrow"><span>🎁 ${t('kit')}</span><span>−${money(s.kit)}</span></div>` : ''}${s.disc ? `<div class="sumrow"><span>${t('discount')} ${S.promoPct}%</span><span>−${money(s.disc)}</span></div>` : ''}
     ${S.delivery === 'delivery' ? `<div class="sumrow"><span>${t('deliveryFee')}</span><span>${s.fee ? money(s.fee) : t('free')}</span></div>` : ''}<div style="font-weight:800;font-size:18px;display:flex;justify-content:space-between"><span>${t('total')}</span><span>${money(s.total)}</span></div>`;
   $('order').style.display = s.ids.length ? '' : 'none'; $('order').textContent = S.me ? t('order') : t('ordLogin');
   document.querySelectorAll('[data-dl]').forEach(b => b.classList.toggle('on', b.dataset.dl === S.delivery));
@@ -167,17 +182,23 @@ async function applyPromo() {
   const { data } = await sb.rpc('check_promo', { p_code: code, p_total: sums().sub });
   S.promoPct = data || 0; S.promo = S.promoPct ? code : ''; toast(S.promoPct ? `${t('promoOk')} ${S.promoPct}%` : t('promoBad')); drawCart();
 }
+function badField(id, msg) { const e = $(id); e.classList.add('bad'); $('oErr').textContent = msg; e.focus(); setTimeout(() => e.classList.remove('bad'), 2500); return false; }
 async function placeOrder() {
   if (!sb) return toast(t('err'));
-  const name = $('oName').value.trim(), phone = $('oPhone').value.trim(), addr = $('oAddr').value.trim();
-  if ((!S.me && name.length < 2) || phone.length < 7 || (S.delivery === 'delivery' && addr.length < 2)) { $('oErr').textContent = t('needFields'); return; }
+  const name = $('oName').value.trim(), phone = normPhone($('oPhone').value), addr = $('oAddr').value.trim();
+  if (!S.me && name.length < 2) return badField('oName', t('badName'));
+  if (!phone) return badField('oPhone', t('badPhone2'));
+  if (S.delivery === 'delivery' && addr.length < 5) return badField('oAddr', t('needFields'));
   $('oErr').textContent = ''; $('order').disabled = true;
   const items = sums().ids.map(id => ({ id: +id, qty: cart[id] }));
   const { data, error } = await sb.rpc('place_order', { items, p_phone: phone, p_address: addr, p_comment: [$('oSlot').value, $('oNote').value.trim()].filter(Boolean).join(' | '), p_delivery: S.delivery, p_payment: $('oPay').value, p_promo: S.promo, p_name: name });
   $('order').disabled = false;
   if (error) { $('oErr').textContent = t('orderErr'); return; }
   const total = sums().total; cart = {}; S.promoPct = 0; S.promo = ''; $('oPromo').value = ''; saveCart(); $('drawer').classList.remove('open');
-  toast(t('orderOk') + ' №' + data); loadCatalog().then(render);
+  if (S.me && addr && addr !== S.me.address) { sb.from('profiles').update({ address: addr, phone }).eq('id', S.me.id).then(() => { S.me.address = addr; }); }
+  $('doneTitle').textContent = t('doneTitle'); $('doneText').innerHTML = `${t('doneN')}: <b>№${data}</b><br><br>${S.me ? t('doneUser') : t('doneGuest')}`;
+  $('doneOrders').textContent = S.me ? t('btnProfile') : t('tabReg'); $('doneOrders').dataset.guest = S.me ? '' : '1'; $('doneModal').classList.add('open');
+  loadCatalog().then(render);
   if (typeof gtag === 'function') gtag('event', 'purchase', { transaction_id: data, value: total, currency: 'UZS' });
   if (typeof ym === 'function' && CFG.ymId) ym(CFG.ymId, 'reachGoal', 'order');
 }
@@ -193,16 +214,24 @@ function setMode(m) {
 }
 async function submitAuth(e) {
   e.preventDefault(); if (!sb) return;
-  const email = $('aEmail').value.trim(), password = $('aPass').value;
-  if (!email || !password) { $('aErr').textContent = t('email') + ' / ' + t('pass'); return; }
-  if (mode === 'register' && ($('aName').value.trim().length < 2 || $('aPhone').value.trim().length < 7)) { $('aErr').textContent = t('regName') + ' / ' + t('phone'); return; }
+  const email = $('aEmail').value.trim().toLowerCase(), password = $('aPass').value;
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { $('aErr').textContent = t('badEmail'); return; }
+  if (mode === 'login' && !password) { $('aErr').textContent = t('pass'); return; }
+  let regPhone = '';
+  if (mode === 'register') {
+    if ($('aName').value.trim().length < 2) { $('aErr').textContent = t('badName'); return; }
+    regPhone = normPhone($('aPhone').value); if (!regPhone) { $('aErr').textContent = t('badPhone2'); return; }
+    if (password.length < 8) { $('aErr').textContent = t('badPass'); return; }
+    if (!$('aTerms').checked) { $('aErr').textContent = t('needTerms'); return; }
+  }
   $('aSubmit').disabled = true;
   const res = mode === 'login' ? await sb.auth.signInWithPassword({ email, password })
-    : await sb.auth.signUp({ email, password, options: { data: { full_name: $('aName').value.trim(), phone: $('aPhone').value.trim() } } });
+    : await sb.auth.signUp({ email, password, options: { data: { full_name: $('aName').value.trim(), phone: regPhone } } });
   $('aSubmit').disabled = false;
   if (res.error) { $('aErr').textContent = authErrorText(res.error); return; }
-  if (!res.data.session) { $('aErr').textContent = '✉ ' + t('magicSent'); return; }
+  if (!res.data.session) { $('aErr').textContent = '✉ ' + (mode === 'register' ? t('confirmMail') : t('magicSent')); return; }
   $('authModal').classList.remove('open'); $('authForm').reset();
+  if (mode === 'register') toast(t('welcomeUser'));
   if (typeof gtag === 'function' && mode === 'register') gtag('event', 'sign_up');
 }
 async function refreshUser() {
@@ -210,13 +239,13 @@ async function refreshUser() {
   $('authBtn').textContent = S.me ? (S.me.full_name || t('profile')).split(' ')[0] : t('login');
   $('adminLink').hidden = !(S.me && S.me.role === 'admin');
   if (S.me) {
-    $('oPhone').value ||= S.me.phone || '';
+    $('oPhone').value ||= S.me.phone || ''; $('oAddr').value ||= S.me.address || ''; maskPhone($('oPhone'));
     const [f, g] = await Promise.all([sb.from('favorites').select('product_id'), sb.from('garage').select('*').order('id')]);
     const local = [...S.favs]; S.favs = new Set((f.data || []).map(r => r.product_id));
     if (local.length) { await sb.from('favorites').upsert(local.map(id => ({ user_id: S.me.id, product_id: id }))); local.forEach(id => S.favs.add(id)); lsSet('favs', []); }
     S.garage = g.data || [];
   } else { S.garage = []; S.favs = new Set(ls('favs', [])); }
-  render(); drawCart(); chat.setUser(S.me);
+  render(); drawCart(); chat.setUser(S.me); if (S.me) loadCloudCart();
 }
 
 /* ---------- профиль ---------- */
@@ -296,8 +325,10 @@ document.addEventListener('click', async e => {
   if (d.fav) { e.stopPropagation(); return toggleFav(d.fav); }
   if (d.open) return openProduct(d.open);
   if (d.c) { S.cat = d.c; render(); }
-  if (d.add) { cart[d.add] = (cart[d.add] || 0) + 1; saveCart(); toast(t('added')); if (typeof gtag === 'function') gtag('event', 'add_to_cart', { items: [{ item_id: d.add }] }); }
-  if (d.d) { cart[d.id] += +d.d; if (cart[d.id] <= 0) delete cart[d.id]; saveCart(); }
+  if (d.add) { cart[d.add] = Math.min((cart[d.add] || 0) + 1, maxQty(byId(d.add))); if (cart[d.add] >= maxQty(byId(d.add)) && byId(d.add).stock != null) toast(t('maxStock')); saveCart(); toast(t('added')); if (typeof gtag === 'function') gtag('event', 'add_to_cart', { items: [{ item_id: d.add }] }); }
+  if (d.d) { cart[d.id] = Math.min(cart[d.id] + +d.d, maxQty(byId(d.id))); if (cart[d.id] <= 0) delete cart[d.id]; saveCart(); }
+  if (d.rm) { delete cart[d.rm]; saveCart(); toast(t('removed')); }
+  if (d.go) { $('drawer').classList.remove('open'); scrollTo({ top: 0, behavior: 'smooth' }); }
   if (d.mode) setMode(d.mode);
   if (d.deals) { S.deals = !S.deals; render(); }
   if (d.season) { S.season = S.season === d.season ? '' : d.season; render(); }
@@ -329,6 +360,12 @@ document.addEventListener('click', async e => {
   if (e.target.id === 'pReset') { await sb.auth.resetPasswordForEmail(S.me.email, { redirectTo: location.origin + location.pathname }); toast(t('resetSent')); }
 });
 const onF = debounce(() => render(), 120);
+document.addEventListener('change', e => { const el = e.target; if (el.dataset && el.dataset.qty) { const p = byId(el.dataset.qty); cart[el.dataset.qty] = Math.max(1, Math.min(maxQty(p), parseInt(el.value) || 1)); saveCart(); } });
+$('oPhone').addEventListener('input', e => maskPhone(e.target)); $('aPhone').addEventListener('input', e => maskPhone(e.target));
+$('aEye').onclick = () => { const p = $('aPass'); p.type = p.type === 'password' ? 'text' : 'password'; };
+$('aPass').addEventListener('input', e => { const v = e.target.value, sc = (v.length >= 8) + (v.length >= 12) + /[A-Z]/.test(v) + /\d/.test(v) + /[^\w]/.test(v), el = $('aStr'); el.style.width = Math.min(100, sc * 22) + '%'; el.style.background = sc <= 2 ? '#ff6b6b' : sc === 3 ? '#ffb400' : '#3ecf8e'; });
+$('doneClose').onclick = () => $('doneModal').classList.remove('open');
+$('doneOrders').onclick = () => { $('doneModal').classList.remove('open'); if ($('doneOrders').dataset.guest) openAuth('register'); else { openProfile(); } };
 $('q').addEventListener('input', e => { S.q = e.target.value; onF(); suggest(); });
 $('q').addEventListener('blur', () => setTimeout(() => $('sugg').hidden = true, 150));
 function suggest() {
