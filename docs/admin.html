@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MEGABAZA — админ-панель</title>
+<meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#232237">
+<link rel="icon" href="mark.png"><link rel="stylesheet" href="css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="config.js"></script>
+</head>
+<body>
+<header><div class="wrap bar" style="max-width:none">
+  <a class="logo" href="./"><img src="mark.png" alt=""><div>MEGABAZA<small>админ-панель</small></div></a>
+  <div class="grow"></div><span class="muted" id="who"></span><button class="ghost sm" id="out" hidden>Выйти</button>
+</div></header>
+
+<div class="modal open" id="gate"><form class="box" id="loginForm"><h3>Вход для администратора</h3>
+  <input id="lEmail" type="email" placeholder="Почта" autocomplete="email"><input id="lPass" type="password" placeholder="Пароль" autocomplete="current-password">
+  <div class="err" id="lErr"></div><button class="btn">Войти</button></form></div>
+
+<nav class="nav" id="nav" hidden>
+  <button class="chip on" data-tab="dash">📊 Дашборд</button>
+  <button class="chip" data-tab="chat">💬 Чат <span class="dot" id="chatDot" hidden style="position:static;display:inline-block"></span></button>
+  <button class="chip" data-tab="orders">📦 Заказы <span class="dot" id="ordDot" hidden style="position:static;display:inline-block"></span></button>
+  <button class="chip" data-tab="products">🛠 Товары</button>
+  <button class="chip" data-tab="customers">👥 Клиенты</button>
+  <button class="chip" data-tab="market">📣 Маркетинг и настройки</button>
+  <button class="chip" data-tab="log">🧾 Журнал</button>
+</nav>
+
+<section id="tab-dash" class="scroll" hidden><div class="kpi" id="kpi"></div><div class="tile"><b>Выручка за 7 дней</b><div class="bars" id="bars" style="margin:16px 0 28px"></div></div><div class="tile" style="margin-top:16px"><b>Топ товаров</b><div id="top"></div></div></section>
+
+<section id="tab-chat" hidden><div class="adm" id="adm">
+  <div class="threads" id="threads"></div>
+  <div class="pane">
+    <div class="chathead"><span><button class="ghost sm back" id="back">←</button> <b id="thName">Выберите диалог</b> <span class="muted" id="thPhone"></span></span><span id="thTools" hidden><button class="ghost sm" id="noteBtn">📝 Заметка</button></span></div>
+    <div class="msgs" id="msgs"></div><div class="typing" id="typing"></div>
+    <div class="qr" id="qr"></div>
+    <form class="compose" id="compose" hidden><label class="ghost sm" style="cursor:pointer;margin:0;display:grid;place-items:center;border-radius:10px">📎<input type="file" id="file" accept="image/*" hidden></label>
+      <textarea id="msgInput" rows="1" maxlength="2000" placeholder="Ответ клиенту…"></textarea><button class="btn" aria-label="Отправить">➤</button></form>
+  </div></div></section>
+
+<section id="tab-orders" class="scroll" hidden>
+  <div class="kv" style="margin-bottom:12px"><input id="oSearch" placeholder="Поиск: №, телефон, имя" style="max-width:260px"><select id="oStatus" style="max-width:180px"><option value="">Все статусы</option><option value="new">Новые</option><option value="processing">В работе</option><option value="done">Выполненные</option><option value="cancelled">Отменённые</option></select><button class="ghost" id="oExport">⬇ Excel</button></div>
+  <table class="tbl"><thead><tr><th>№</th><th>Дата</th><th>Клиент</th><th>Состав</th><th>Сумма</th><th>Статус / заметка</th></tr></thead><tbody id="ordRows"></tbody></table>
+</section>
+
+<section id="tab-products" class="scroll" hidden>
+  <div class="kv" style="margin-bottom:12px"><input id="pSearch" placeholder="Поиск товара" style="max-width:240px"><button class="btn" id="pNew">+ Товар</button><button class="ghost" id="pExport">⬇ Excel</button>
+    <label class="ghost" style="cursor:pointer;padding:9px 14px;border-radius:10px;margin:0">⬆ Импорт из Excel<input type="file" id="pImport" accept=".xlsx,.xls,.csv" hidden></label><button class="ghost" id="catBtn">Категории</button></div>
+  <p class="muted" style="margin-bottom:8px">Колонки для импорта: name, category (название или id), price, car, brand, sku, stock, description, old_price, wholesale_price, badge.</p>
+  <table class="tbl"><thead><tr><th></th><th>Товар</th><th>Цена</th><th>Склад</th><th>Наличие</th><th>На сайте</th><th></th></tr></thead><tbody id="prodRows"></tbody></table>
+</section>
+
+<section id="tab-customers" class="scroll" hidden><table class="tbl"><thead><tr><th>Клиент</th><th>Телефон</th><th>Заказов</th><th>Сумма</th><th>Опт</th><th>Заметка</th><th></th></tr></thead><tbody id="custRows"></tbody></table></section>
+
+<section id="tab-market" class="scroll" hidden>
+  <div class="cols">
+   <div class="tile"><b>Настройки магазина</b><form id="setForm" style="display:grid;gap:8px;margin-top:8px"></form></div>
+   <div class="tile"><b>Telegram-уведомления</b><p class="muted">Токен бота (@BotFather) и ID чата — новые заказы и сообщения придут в Telegram.</p><form id="tgForm" style="display:grid;gap:8px;margin-top:8px"><input id="tgTok" placeholder="Токен бота"><input id="tgChat" placeholder="Chat ID"><button class="btn">Сохранить</button></form></div>
+   <div class="tile"><b>Промокоды</b><form id="promoForm" class="kv" style="margin:8px 0"><input id="prCode" placeholder="КОД" style="width:110px;text-transform:uppercase"><input id="prPct" type="number" min="1" max="90" placeholder="%" style="width:70px"><input id="prMin" type="number" min="0" placeholder="от, сум" style="width:110px"><button class="btn sm">+</button></form><div id="promos"></div></div>
+   <div class="tile"><b>Баннеры</b><form id="banForm" style="display:grid;gap:8px;margin:8px 0"><input id="bTitle" placeholder="Заголовок" required><input id="bText" placeholder="Текст"><input id="bLink" placeholder="Ссылка (необязательно)"><button class="btn sm">+ Баннер</button></form><div id="bans"></div></div>
+   <div class="tile"><b>Рассылка всем клиентам (в чат)</b><form id="bcForm" style="display:grid;gap:8px;margin-top:8px"><textarea id="bcText" rows="3" maxlength="2000" placeholder="Текст акции…"></textarea><button class="btn">Отправить</button></form></div>
+   <div class="tile"><b>Быстрые ответы</b><form id="qrForm" class="kv" style="margin:8px 0"><input id="qrText" placeholder="Текст ответа" style="flex:1"><button class="btn sm">+</button></form><div id="qrList"></div></div>
+  </div></section>
+
+<section id="tab-log" class="scroll" hidden><table class="tbl"><thead><tr><th>Когда</th><th>Таблица</th><th>Действие</th><th>ID</th></tr></thead><tbody id="logRows"></tbody></table></section>
+
+<div class="modal mod" id="pModal"><form class="box" id="pForm" style="gap:8px"><h3 id="pTitle">Товар</h3>
+  <input id="fName" placeholder="Название" required maxlength="200"><div class="kv"><input id="fCar" placeholder="Для авто" style="flex:1"><input id="fBrand" placeholder="Бренд" style="flex:1"></div>
+  <div class="kv"><input id="fSku" placeholder="Артикул" style="flex:1"><select id="fCat" style="flex:1"></select></div>
+  <div class="kv"><input id="fPrice" type="number" min="0" placeholder="Цена" required style="flex:1"><input id="fOld" type="number" min="0" placeholder="Старая цена" style="flex:1"><input id="fWh" type="number" min="0" placeholder="Опт. цена" style="flex:1"></div>
+  <div class="kv"><input id="fStock" type="number" min="0" placeholder="Склад (пусто = без учёта)" style="flex:1"><input id="fBadge" placeholder="Бейдж: Хит, Новинка…" style="flex:1"></div>
+  <textarea id="fDesc" rows="3" placeholder="Описание"></textarea>
+  <div class="kv"><img id="fImgPrev" alt="" style="height:60px;border-radius:8px" hidden><label class="ghost" style="cursor:pointer;padding:9px 14px;border-radius:10px;margin:0">📷 Фото<input type="file" id="fImg" accept="image/*" hidden></label><span class="muted" id="fImgSt"></span></div>
+  <div class="kv"><label style="margin:0"><input type="checkbox" id="fStockOk" style="width:auto"> В наличии</label><label style="margin:0"><input type="checkbox" id="fActive" style="width:auto"> На сайте</label></div>
+  <div class="kv"><button class="btn">Сохранить</button><button type="button" class="ghost" id="pCancel">Отмена</button></div></form></div>
+<div class="modal mod" id="nModal"><form class="box" id="nForm"><h3>Заметка о клиенте</h3><textarea id="nText" rows="4"></textarea><div class="kv"><button class="btn">Сохранить</button><button type="button" class="ghost" id="nCancel">Отмена</button></div></form></div>
+<div class="toast" id="toast"></div>
+
+<script src="js/core.js"></script>
+<script>
+if (!sb) { document.body.innerHTML = '<p style="padding:40px;text-align:center">Подключите Supabase в config.js</p>'; throw 0; }
+let admin = null, tab = 'dash', cur = null, feed = null, threads = [], newOrders = 0, typeCh = null, typeHide, typeT = 0, allOrders = [], allProducts = [], cats = [], editId = null, noteUid = null;
+const STATUS = { new: 'Новый', processing: 'В работе', done: 'Выполнен', cancelled: 'Отменён' };
+const err = m => toast('⚠ ' + m);
+const mapErr = (r, m) => { if (r.error) { err(m + ': ' + r.error.message); return true; } };
+
+/* ---------- вход ---------- */
+async function boot() {
+  const p = await getProfile();
+  if (!p || p.role !== 'admin') { $('gate').classList.add('open'); $('nav').hidden = true; $('out').hidden = !p; if (p) $('lErr').textContent = 'У этого аккаунта нет прав администратора'; return; }
+  admin = p; $('gate').classList.remove('open'); $('nav').hidden = false; $('out').hidden = false; $('who').textContent = p.full_name || p.email;
+  feed = createFeed($('msgs'), m => m.from_admin);
+  subscribe(); showTab('dash'); loadThreads(); loadQR(); askNotify();
+}
+$('loginForm').addEventListener('submit', async e => { e.preventDefault(); const { error } = await sb.auth.signInWithPassword({ email: $('lEmail').value.trim(), password: $('lPass').value }); if (error) $('lErr').textContent = authErrorText(error); else { $('lErr').textContent = ''; boot(); } });
+$('out').onclick = async () => { await sb.auth.signOut(); location.reload(); };
+
+/* ---------- вкладки ---------- */
+const LOAD = { dash: loadDash, orders: loadOrders, products: loadProducts, customers: loadCustomers, market: loadMarket, log: loadLog };
+function showTab(t) {
+  tab = t; document.querySelectorAll('[data-tab]').forEach(b => b.classList.toggle('on', b.dataset.tab === t));
+  ['dash', 'chat', 'orders', 'products', 'customers', 'market', 'log'].forEach(x => $('tab-' + x).hidden = x !== t);
+  if (t === 'orders') { newOrders = 0; $('ordDot').hidden = true; }
+  LOAD[t]?.();
+}
+document.addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (b) showTab(b.dataset.tab); });
+
+/* ---------- realtime ---------- */
+function subscribe() {
+  sb.channel('admin-msgs').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, ({ new: m }) => {
+    if (m.from_admin) { if (m.user_id === cur) feed.add(m); return; }
+    if (m.user_id === cur && tab === 'chat') { feed.add(m); sb.rpc('mark_read', { thread: cur }); $('typing').textContent = ''; } else notify('💬 Новое сообщение', m.body);
+    loadThreadsSoon();
+  }).on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'messages' }, ({ new: m }) => { if (m.user_id === cur && m.from_admin && m.read_at) feed.markRead(); })
+  .subscribe();
+  sb.channel('admin-orders').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'orders' }, () => {
+    notify('📦 Новый заказ!', 'Откройте вкладку «Заказы»');
+    if (tab === 'orders') loadOrders(); else { newOrders++; $('ordDot').hidden = false; $('ordDot').textContent = newOrders; }
+  }).subscribe();
+}
+
+/* ---------- дашборд ---------- */
+async function loadDash() {
+  const { data: s } = await sb.rpc('admin_stats'); if (!s) return;
+  const k = (l, v) => `<div class="tile"><span class="muted">${l}</span><b>${v}</b></div>`;
+  $('kpi').innerHTML = k('Заказов сегодня', s.today_orders) + k('Выручка сегодня', money(s.today_revenue)) + k('Выручка за 7 дней', money(s.week_revenue)) + k('Новых заказов', s.new_orders) + k('Непрочитанных сообщений', s.unread) + k('Клиентов', s.customers);
+  const max = Math.max(1, ...s.series.map(x => +x.sum));
+  $('bars').innerHTML = s.series.map(x => `<div style="height:${Math.max(2, +x.sum / max * 100)}%" title="${money(x.sum)} · ${x.n} зак."><span>${x.d.slice(5)}</span></div>`).join('');
+  $('top').innerHTML = s.top.map(x => `<div class="sumrow" style="padding:4px 0"><span>${esc(x.name)}</span><span>${x.qty} шт.</span></div>`).join('') || '<p class="muted">Пока нет данных</p>';
+}
+
+/* ---------- чат ---------- */
+const loadThreadsSoon = debounce(() => loadThreads(), 150);
+async function loadThreads() {
+  const { data, error } = await sb.rpc('admin_threads'); if (error) return err('Диалоги не загрузились');
+  threads = data; const unread = threads.reduce((s, t) => s + +t.unread, 0); $('chatDot').hidden = !unread; $('chatDot').textContent = unread;
+  $('threads').innerHTML = threads.map(t => `<div class="th ${t.user_id === cur ? 'on' : ''}" data-u="${esc(t.user_id)}"><b>${esc(t.full_name || 'Клиент')}${+t.unread ? `<span class="dot">${t.unread}</span>` : ''}</b><div class="meta">${t.last_from_admin ? 'Вы: ' : ''}${esc(t.last_body)}</div></div>`).join('') || '<p class="empty">Сообщений пока нет</p>';
+}
+async function openThread(uid, nm, ph) {
+  cur = uid; const t = threads.find(x => x.user_id === uid);
+  $('thName').textContent = t ? (t.full_name || 'Клиент') : (nm || 'Диалог'); $('thPhone').textContent = t ? t.phone : (ph || '');
+  $('compose').hidden = false; $('thTools').hidden = false; $('adm').classList.add('open'); feed.clear(); $('typing').textContent = '';
+  if (typeCh) sb.removeChannel(typeCh);
+  typeCh = sb.channel('chat-' + uid).on('broadcast', { event: 'typing' }, ({ payload }) => { if (!payload.admin) { $('typing').textContent = 'печатает…'; clearTimeout(typeHide); typeHide = setTimeout(() => $('typing').textContent = '', 3000); } }).subscribe();
+  const { data } = await sb.from('messages').select('id,body,from_admin,created_at,read_at,attachment_url').eq('user_id', uid).order('id', { ascending: false }).limit(200);
+  if (cur !== uid) return; feed.addMany((data || []).reverse());
+  await sb.rpc('mark_read', { thread: uid }); loadThreads(); $('msgInput').focus();
+}
+$('threads').addEventListener('click', e => { const el = e.target.closest('.th'); if (el) openThread(el.dataset.u); });
+$('back').onclick = () => $('adm').classList.remove('open');
+async function sendMsg(row, tempId) {
+  const { data, error } = await sb.from('messages').insert({ user_id: cur, from_admin: true, ...row }).select('id,body,from_admin,created_at,read_at,attachment_url').single();
+  if (error) { feed.fail(tempId); err('Не отправлено'); } else { feed.add({ ...data, tempId }); loadThreadsSoon(); }
+}
+$('compose').addEventListener('submit', e => { e.preventDefault(); const i = $('msgInput'), text = i.value.trim(); if (!text || !cur) return; i.value = ''; sendMsg({ body: text }, feed.pending(text)); });
+$('msgInput').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); $('compose').requestSubmit(); } });
+$('msgInput').addEventListener('input', () => { if (typeCh && Date.now() - typeT > 2000) { typeT = Date.now(); typeCh.send({ type: 'broadcast', event: 'typing', payload: { admin: true } }); } });
+$('file').addEventListener('change', async e => {
+  const f = e.target.files[0]; e.target.value = ''; if (!f || !cur) return; const tempId = feed.pending('📷');
+  const path = `${cur}/a-${Date.now()}.${(f.type.split('/')[1] || 'jpg').replace('jpeg', 'jpg')}`; const up = await sb.storage.from('chat').upload(path, f, { contentType: f.type });
+  if (up.error) { feed.fail(tempId); return err('Фото не загрузилось'); } sendMsg({ body: '📷', attachment_url: sb.storage.from('chat').getPublicUrl(path).data.publicUrl }, tempId);
+});
+async function loadQR() { const { data } = await sb.from('quick_replies').select('*').order('id'); $('qr').innerHTML = (data || []).map(r => `<button class="ghost sm" data-qr="${esc(r.text)}">${esc(r.text.slice(0, 28))}${r.text.length > 28 ? '…' : ''}</button>`).join(''); }
+$('qr').addEventListener('click', e => { const t = e.target.dataset.qr; if (t) { $('msgInput').value = t; $('msgInput').focus(); } });
+$('noteBtn').onclick = async () => { noteUid = cur; const { data } = await sb.from('customer_notes').select('note').eq('user_id', cur).maybeSingle(); $('nText').value = data?.note || ''; $('nModal').classList.add('open'); };
+$('nForm').addEventListener('submit', async e => { e.preventDefault(); const r = await sb.from('customer_notes').upsert({ user_id: noteUid, note: $('nText').value }); if (!mapErr(r, 'Заметка')) { $('nModal').classList.remove('open'); toast('Сохранено'); if (tab === 'customers') loadCustomers(); } });
+$('nCancel').onclick = () => $('nModal').classList.remove('open');
+
+/* ---------- заказы ---------- */
+async function loadOrders() {
+  const { data, error } = await sb.from('orders').select('id,status,total,phone,address,comment,created_at,delivery,payment,promo,discount,delivery_fee,guest_name,admin_note,profiles(full_name),order_items(name,qty,price)').order('id', { ascending: false }).limit(500);
+  if (error) return err('Заказы не загрузились'); allOrders = data; drawOrders();
+}
+const oName = o => o.profiles?.full_name || o.guest_name || 'Гость';
+function drawOrders() {
+  const q = $('oSearch').value.trim().toLowerCase(), s = $('oStatus').value;
+  const l = allOrders.filter(o => (!s || o.status === s) && (!q || (o.id + ' ' + o.phone + ' ' + oName(o)).toLowerCase().includes(q)));
+  $('ordRows').innerHTML = l.map(o => `<tr><td>${o.id}</td><td>${new Date(o.created_at).toLocaleString('ru-RU', { dateStyle: 'short', timeStyle: 'short' })}</td>
+    <td>${esc(oName(o))}<br><span class="muted">${esc(o.phone)}<br>${o.delivery === 'pickup' ? 'Самовывоз' : esc(o.address)}<br>${o.payment === 'card' ? 'Карта' : 'Наличные'}${o.comment ? '<br>💬 ' + esc(o.comment) : ''}</span></td>
+    <td>${o.order_items.map(i => `${esc(i.name)} × ${i.qty}`).join('<br>')}</td>
+    <td>${money(o.total)}${o.discount > 0 ? `<br><span class="muted">скидка ${money(o.discount)} ${esc(o.promo)}</span>` : ''}${o.delivery_fee > 0 ? `<br><span class="muted">доставка ${money(o.delivery_fee)}</span>` : ''}</td>
+    <td><select data-o="${o.id}">${Object.entries(STATUS).map(([k, v]) => `<option value="${k}" ${k === o.status ? 'selected' : ''}>${v}</option>`).join('')}</select><input data-note="${o.id}" value="${esc(o.admin_note)}" placeholder="Заметка" style="margin-top:6px"><button class="ghost sm" data-print="${o.id}" style="margin-top:6px">🖨 Накладная</button></td></tr>`).join('') || '<tr><td colspan="6" class="empty">Заказов нет</td></tr>';
+}
+$('oSearch').addEventListener('input', debounce(drawOrders, 150)); $('oStatus').onchange = drawOrders;
+$('ordRows').addEventListener('change', async e => {
+  const el = e.target; let r;
+  if (el.dataset.o) r = await sb.from('orders').update({ status: el.value }).eq('id', el.dataset.o); else if (el.dataset.note) r = await sb.from('orders').update({ admin_note: el.value }).eq('id', el.dataset.note); else return;
+  if (!mapErr(r, 'Не сохранено')) toast('Сохранено');
+});
+$('ordRows').addEventListener('click', e => {
+  const id = e.target.dataset.print; if (!id) return; const o = allOrders.find(x => x.id == id), w = open('', '_blank'); if (!w) return;
+  w.document.write(`<meta charset=utf-8><title>Накладная №${o.id}</title><body style="font:14px system-ui;padding:24px;max-width:700px"><h2>MEGABAZA — накладная №${o.id}</h2><p>${new Date(o.created_at).toLocaleString('ru-RU')}<br>Клиент: ${esc(oName(o))}, ${esc(o.phone)}<br>${o.delivery === 'pickup' ? 'Самовывоз' : 'Адрес: ' + esc(o.address)}</p>
+   <table border=1 cellpadding=6 style="border-collapse:collapse;width:100%"><tr><th>Товар</th><th>Кол-во</th><th>Цена</th><th>Сумма</th></tr>${o.order_items.map(i => `<tr><td>${esc(i.name)}</td><td>${i.qty}</td><td>${money(i.price)}</td><td>${money(i.price * i.qty)}</td></tr>`).join('')}</table>
+   ${o.discount > 0 ? `<p>Скидка: ${money(o.discount)}</p>` : ''}${o.delivery_fee > 0 ? `<p>Доставка: ${money(o.delivery_fee)}</p>` : ''}<h3>Итого: ${money(o.total)}</h3></body>`); w.document.close(); w.print();
+});
+$('oExport').onclick = () => { const ws = XLSX.utils.json_to_sheet(allOrders.map(o => ({ '№': o.id, Дата: new Date(o.created_at).toLocaleString('ru-RU'), Клиент: oName(o), Телефон: o.phone, Адрес: o.address, Доставка: o.delivery, Оплата: o.payment, Сумма: o.total, Статус: STATUS[o.status], Состав: o.order_items.map(i => i.name + ' x' + i.qty).join('; ') }))); const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'Заказы'); XLSX.writeFile(wb, 'orders.xlsx'); };
+
+/* ---------- товары ---------- */
+async function loadProducts() {
+  const [c, p] = await Promise.all([sb.from('categories').select('id,name,sort').order('sort'), sb.from('products').select('*').order('id', { ascending: false })]);
+  if (c.error || p.error) return err('Товары не загрузились'); cats = c.data; allProducts = p.data;
+  $('fCat').innerHTML = cats.map(x => `<option value="${esc(x.id)}">${esc(x.name)}</option>`).join(''); drawProducts();
+}
+function drawProducts() {
+  const q = $('pSearch').value.trim().toLowerCase();
+  $('prodRows').innerHTML = allProducts.filter(x => !q || (x.name + x.sku + x.brand + x.car).toLowerCase().includes(q)).slice(0, 300).map(x => `<tr>
+    <td>${x.image_url ? `<img src="${esc(x.image_url)}" alt="" style="width:44px;height:44px;object-fit:cover;border-radius:8px" loading="lazy">` : ''}</td>
+    <td>${esc(x.name)}<br><span class="muted">${esc(x.sku)} ${esc(x.brand)} ${esc(x.car)}</span></td>
+    <td><input type="number" min="0" value="${x.price}" data-p="${x.id}" data-f="price" style="width:110px"></td>
+    <td>${x.stock ?? '∞'}</td>
+    <td><input type="checkbox" data-p="${x.id}" data-f="in_stock" ${x.in_stock ? 'checked' : ''} style="width:auto"></td>
+    <td><input type="checkbox" data-p="${x.id}" data-f="active" ${x.active ? 'checked' : ''} style="width:auto"></td>
+    <td><button class="ghost sm" data-edit="${x.id}">Изменить</button> <button class="ghost sm" data-del="${x.id}">✕</button></td></tr>`).join('');
+}
+$('pSearch').addEventListener('input', debounce(drawProducts, 150));
+$('prodRows').addEventListener('change', async e => { const el = e.target; if (!el.dataset.p) return; const r = await sb.from('products').update({ [el.dataset.f]: el.type === 'checkbox' ? el.checked : +el.value }).eq('id', el.dataset.p); if (!mapErr(r, 'Не сохранено')) toast('Сохранено'); });
+$('prodRows').addEventListener('click', async e => {
+  const d = e.target.dataset;
+  if (d.del && confirm('Удалить товар?')) { const r = await sb.from('products').delete().eq('id', d.del); if (!mapErr(r, 'Не удалено')) loadProducts(); }
+  if (d.edit) openPForm(allProducts.find(x => x.id == d.edit));
+});
+$('pNew').onclick = () => openPForm(null);
+let imgUrl = null;
+function openPForm(x) {
+  editId = x?.id || null; $('pTitle').textContent = x ? 'Изменить товар' : 'Новый товар'; imgUrl = x?.image_url || null;
+  const v = (id, val) => $(id).value = val ?? '';
+  v('fName', x?.name); v('fCar', x?.car); v('fBrand', x?.brand); v('fSku', x?.sku); v('fCat', x?.category); v('fPrice', x?.price); v('fOld', x?.old_price); v('fWh', x?.wholesale_price); v('fStock', x?.stock); v('fBadge', x?.badge); v('fDesc', x?.description);
+  $('fStockOk').checked = x ? x.in_stock : true; $('fActive').checked = x ? x.active : true; $('fImgPrev').hidden = !imgUrl; if (imgUrl) $('fImgPrev').src = imgUrl; $('fImgSt').textContent = ''; $('pModal').classList.add('open');
+}
+$('pCancel').onclick = () => $('pModal').classList.remove('open');
+// фото сжимается в WebP прямо в браузере — сайт грузится быстрее
+function toWebp(file) { return new Promise((res, rej) => { const im = new Image(); im.onload = () => { const k = Math.min(1, 1200 / Math.max(im.width, im.height)), c = document.createElement('canvas'); c.width = im.width * k; c.height = im.height * k; c.getContext('2d').drawImage(im, 0, 0, c.width, c.height); c.toBlob(b => b ? res(b) : rej(), 'image/webp', .82); }; im.onerror = rej; im.src = URL.createObjectURL(file); }); }
+$('fImg').addEventListener('change', async e => {
+  const f = e.target.files[0]; e.target.value = ''; if (!f) return; $('fImgSt').textContent = 'Загрузка…';
+  try { const b = await toWebp(f), path = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}.webp`; const up = await sb.storage.from('products').upload(path, b, { contentType: 'image/webp', cacheControl: '31536000' });
+    if (up.error) throw up.error; imgUrl = sb.storage.from('products').getPublicUrl(path).data.publicUrl; $('fImgPrev').src = imgUrl; $('fImgPrev').hidden = false; $('fImgSt').textContent = '✓'; } catch { $('fImgSt').textContent = 'Ошибка'; }
+});
+$('pForm').addEventListener('submit', async e => {
+  e.preventDefault(); const n = id => $(id).value === '' ? null : +$(id).value;
+  const row = { name: $('fName').value.trim(), car: $('fCar').value.trim(), brand: $('fBrand').value.trim(), sku: $('fSku').value.trim(), category: $('fCat').value || null, price: +$('fPrice').value, old_price: n('fOld'), wholesale_price: n('fWh'), stock: n('fStock'), badge: $('fBadge').value.trim() || null, description: $('fDesc').value.trim(), image_url: imgUrl, in_stock: $('fStockOk').checked, active: $('fActive').checked };
+  const r = editId ? await sb.from('products').update(row).eq('id', editId) : await sb.from('products').insert(row);
+  if (!mapErr(r, 'Не сохранено')) { $('pModal').classList.remove('open'); toast('Сохранено'); loadProducts(); }
+});
+$('pExport').onclick = () => { const ws = XLSX.utils.json_to_sheet(allProducts.map(x => ({ name: x.name, category: x.category, price: x.price, car: x.car, brand: x.brand, sku: x.sku, stock: x.stock, description: x.description, old_price: x.old_price, wholesale_price: x.wholesale_price, badge: x.badge }))); const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'Товары'); XLSX.writeFile(wb, 'products.xlsx'); };
+$('pImport').addEventListener('change', async e => {
+  const f = e.target.files[0]; e.target.value = ''; if (!f) return;
+  const wb = XLSX.read(await f.arrayBuffer()), rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { defval: '' });
+  const cid = v => { v = String(v).trim().toLowerCase(); return (cats.find(c => c.id.toLowerCase() === v || c.name.toLowerCase() === v) || {}).id || null; };
+  const num = v => v === '' || v == null || isNaN(+v) ? null : +v;
+  const list = rows.filter(r => String(r.name).trim() && num(r.price) != null).map(r => ({ name: String(r.name).trim().slice(0, 200), category: cid(r.category), price: num(r.price), car: String(r.car || ''), brand: String(r.brand || ''), sku: String(r.sku || ''), stock: num(r.stock), description: String(r.description || ''), old_price: num(r.old_price), wholesale_price: num(r.wholesale_price), badge: String(r.badge || '') || null }));
+  if (!list.length) return err('Нет строк с name и price'); if (!confirm(`Импортировать ${list.length} товаров?`)) return;
+  for (let i = 0; i < list.length; i += 200) { const r = await sb.from('products').insert(list.slice(i, i + 200)); if (mapErr(r, 'Импорт')) return; }
+  toast(`Импортировано: ${list.length}`); loadProducts();
+});
+$('catBtn').onclick = async () => {
+  const a = prompt('Категории (id — название):\n' + cats.map(c => `${c.id} — ${c.name}`).join('\n') + '\n\nДобавить/переименовать: введите "id=Название". Удалить: "-id". Отмена — пусто.'); if (!a) return;
+  const r = a.startsWith('-') ? await sb.from('categories').delete().eq('id', a.slice(1).trim()) : (() => { const [id, ...nm] = a.split('='); return nm.length ? sb.from('categories').upsert({ id: id.trim(), name: nm.join('=').trim(), sort: cats.length + 1 }) : { error: { message: 'формат id=Название' } }; })();
+  if (!mapErr(await r, 'Категории')) loadProducts();
+};
+
+/* ---------- клиенты ---------- */
+async function loadCustomers() {
+  const { data, error } = await sb.rpc('admin_customers'); if (error) return err('Клиенты не загрузились');
+  $('custRows').innerHTML = data.map(c => `<tr><td>${esc(c.full_name)}</td><td>${esc(c.phone)}</td><td>${c.orders}</td><td>${money(c.spent)}</td>
+    <td><input type="checkbox" data-w="${c.id}" ${c.wholesale ? 'checked' : ''} style="width:auto"></td><td class="muted">${esc(c.note)}</td>
+    <td><button class="ghost sm" data-chat="${c.id}" data-n="${esc(c.full_name)}" data-ph="${esc(c.phone)}">💬</button></td></tr>`).join('') || '<tr><td colspan="7" class="empty">Клиентов пока нет</td></tr>';
+}
+$('custRows').addEventListener('change', async e => { if (e.target.dataset.w) { const r = await sb.rpc('admin_set_wholesale', { uid: e.target.dataset.w, v: e.target.checked }); if (!mapErr(r, 'Не сохранено')) toast('Сохранено'); } });
+$('custRows').addEventListener('click', e => { const d = e.target.dataset; if (d.chat) { showTab('chat'); openThread(d.chat, d.n, d.ph); } });
+
+/* ---------- маркетинг и настройки ---------- */
+const SET = [['phone', 'Телефон'], ['address', 'Адрес'], ['hours_from', 'Открытие (час)'], ['hours_to', 'Закрытие (час)'], ['telegram', 'Telegram (без @)'], ['whatsapp', 'WhatsApp (номер)'], ['instagram', 'Instagram (ссылка)'], ['delivery_fee', 'Стоимость доставки, сум'], ['free_delivery_from', 'Бесплатно от суммы, сум (0 — всегда платно)']];
+async function loadMarket() {
+  const [s, ps, p, b, q] = await Promise.all([sb.from('settings').select('*'), sb.from('private_settings').select('*'), sb.from('promo_codes').select('*'), sb.from('banners').select('*').order('sort'), sb.from('quick_replies').select('*').order('id')]);
+  const sv = Object.fromEntries((s.data || []).map(r => [r.key, r.value])); $('setForm').innerHTML = SET.map(([k, l]) => `<label>${l}<input data-set="${k}" value="${esc(sv[k] || '')}"></label>`).join('') + '<button class="btn">Сохранить</button>';
+  const pv = Object.fromEntries((ps.data || []).map(r => [r.key, r.value])); $('tgTok').value = pv.tg_token || ''; $('tgChat').value = pv.tg_chat || '';
+  const row = (t, id, tbl, extra = '') => `<div class="row" style="margin-top:6px"><span>${t}</span><span>${extra}<button class="ghost sm" data-rm="${tbl}:${id}">✕</button></span></div>`;
+  $('promos').innerHTML = (p.data || []).map(x => row(`<b>${esc(x.code)}</b> −${x.percent}% от ${money(x.min_total)}`, x.code, 'promo_codes', `<input type="checkbox" data-act="promo_codes:code:${esc(x.code)}" ${x.active ? 'checked' : ''} style="width:auto"> `)).join('');
+  $('bans').innerHTML = (b.data || []).map(x => row(esc(x.title), x.id, 'banners', `<input type="checkbox" data-act="banners:id:${x.id}" ${x.active ? 'checked' : ''} style="width:auto"> `)).join('');
+  $('qrList').innerHTML = (q.data || []).map(x => row(esc(x.text.slice(0, 40)), x.id, 'quick_replies')).join('');
+}
+$('setForm').addEventListener('submit', async e => { e.preventDefault(); const rows = [...document.querySelectorAll('[data-set]')].map(i => ({ key: i.dataset.set, value: i.value.trim() })); if (!mapErr(await sb.from('settings').upsert(rows), 'Настройки')) toast('Сохранено'); });
+$('tgForm').addEventListener('submit', async e => { e.preventDefault(); if (!mapErr(await sb.from('private_settings').upsert([{ key: 'tg_token', value: $('tgTok').value.trim() }, { key: 'tg_chat', value: $('tgChat').value.trim() }]), 'Telegram')) toast('Сохранено'); });
+$('promoForm').addEventListener('submit', async e => { e.preventDefault(); if (!mapErr(await sb.from('promo_codes').insert({ code: $('prCode').value.trim().toUpperCase(), percent: +$('prPct').value, min_total: +$('prMin').value || 0 }), 'Промокод')) { e.target.reset(); loadMarket(); } });
+$('banForm').addEventListener('submit', async e => { e.preventDefault(); if (!mapErr(await sb.from('banners').insert({ title: $('bTitle').value.trim(), text: $('bText').value.trim(), link: $('bLink').value.trim() }), 'Баннер')) { e.target.reset(); loadMarket(); } });
+$('qrForm').addEventListener('submit', async e => { e.preventDefault(); if (!mapErr(await sb.from('quick_replies').insert({ text: $('qrText').value.trim() }), 'Ответ')) { e.target.reset(); loadMarket(); loadQR(); } });
+$('bcForm').addEventListener('submit', async e => { e.preventDefault(); const t = $('bcText').value.trim(); if (!t || !confirm('Отправить сообщение ВСЕМ клиентам?')) return; const { data, error } = await sb.rpc('admin_broadcast', { p_text: t }); if (error) err('Не отправлено'); else { toast(`Отправлено: ${data}`); $('bcText').value = ''; } });
+$('tab-market').addEventListener('click', async e => { const rm = e.target.dataset.rm; if (rm && confirm('Удалить?')) { const [tb, id] = rm.split(':'); if (!mapErr(await sb.from(tb).delete().eq(tb === 'promo_codes' ? 'code' : 'id', id), 'Не удалено')) { loadMarket(); loadQR(); } } });
+$('tab-market').addEventListener('change', async e => { const a = e.target.dataset.act; if (a) { const [tb, col, id] = a.split(':'); mapErr(await sb.from(tb).update({ active: e.target.checked }).eq(col, id), 'Не сохранено'); } });
+
+/* ---------- журнал ---------- */
+async function loadLog() {
+  const { data } = await sb.from('audit_log').select('at,table_name,op,row_id').order('id', { ascending: false }).limit(150);
+  $('logRows').innerHTML = (data || []).map(l => `<tr><td>${new Date(l.at).toLocaleString('ru-RU')}</td><td>${esc(l.table_name)}</td><td>${esc(l.op)}</td><td>${esc(l.row_id)}</td></tr>`).join('') || '<tr><td colspan="4" class="empty">Пусто</td></tr>';
+}
+boot();
+</script>
+</body>
+</html>
