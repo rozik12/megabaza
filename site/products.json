@@ -2,460 +2,2790 @@
  "currency": "сум",
  "categories": [
   {
-   "id": "tires_car",
-   "name": "Шины для легковых"
+   "id": "engine",
+   "name": "Двигатель"
   },
   {
-   "id": "tires_lt",
-   "name": "Микроавтобус и пикап"
+   "id": "suspension",
+   "name": "Подвеска"
   },
   {
-   "id": "tires_suv",
-   "name": "Внедорожные шины"
+   "id": "brakes",
+   "name": "Тормозная система"
   },
   {
-   "id": "tires_truck",
-   "name": "Грузовые шины"
+   "id": "electrics",
+   "name": "Электрика"
   },
   {
-   "id": "disks",
-   "name": "Диски"
+   "id": "body",
+   "name": "Кузов и оптика"
   },
   {
-   "id": "accessories",
-   "name": "Камеры, вентили, аксессуары"
+   "id": "steering",
+   "name": "Рулевое управление"
   },
   {
-   "id": "services",
-   "name": "Услуги"
+   "id": "filters",
+   "name": "Фильтры"
+  },
+  {
+   "id": "ignition",
+   "name": "Зажигание"
+  },
+  {
+   "id": "cooling",
+   "name": "Охлаждение"
+  },
+  {
+   "id": "transmission",
+   "name": "Трансмиссия"
+  },
+  {
+   "id": "fluids",
+   "name": "Масла и жидкости"
   }
  ],
  "products": [
   {
    "id": 1,
-   "cat": "tires_car",
-   "name": "Шина 155/70 R13 летняя",
-   "brand": "",
-   "car": "Chevrolet Matiz / Spark",
-   "price": 350000
+   "cat": "engine",
+   "name": "Комплект ГРМ (ремень + ролики)",
+   "brand": "Gates",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0001",
+   "price": 480000
   },
   {
    "id": 2,
-   "cat": "tires_car",
-   "name": "Шина 175/70 R13 летняя",
-   "brand": "",
-   "car": "Chevrolet Damas / Nexia (старые)",
-   "price": 370000
+   "cat": "engine",
+   "name": "Комплект ГРМ (ремень + ролики)",
+   "brand": "Gates",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0002",
+   "price": 376000
   },
   {
    "id": 3,
-   "cat": "tires_car",
-   "name": "Шина 175/65 R14 летняя",
-   "brand": "",
-   "car": "Chevrolet Spark / Nexia",
-   "price": 440000
+   "cat": "engine",
+   "name": "Комплект ГРМ (ремень + ролики)",
+   "brand": "Gates",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0003",
+   "price": 528000
   },
   {
    "id": 4,
-   "cat": "tires_car",
-   "name": "Шина 185/60 R14 летняя",
-   "brand": "",
-   "car": "Chevrolet Nexia",
-   "price": 450000
+   "cat": "engine",
+   "name": "Комплект ГРМ (ремень + ролики)",
+   "brand": "Gates",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0004",
+   "price": 490000
   },
   {
    "id": 5,
-   "cat": "tires_car",
-   "name": "Шина 185/65 R15 летняя",
-   "brand": "",
-   "car": "Chevrolet Nexia 3 / Cobalt",
-   "price": 530000,
-   "badge": "Хит"
+   "cat": "engine",
+   "name": "Комплект ГРМ (ремень + ролики)",
+   "brand": "Gates",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0005",
+   "price": 414000
   },
   {
    "id": 6,
-   "cat": "tires_car",
-   "name": "Шина 185/65 R15 зимняя",
-   "brand": "",
-   "car": "Chevrolet Nexia 3 / Cobalt",
-   "price": 590000
+   "cat": "engine",
+   "name": "Подушка двигателя",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0006",
+   "price": 304000
   },
   {
    "id": 7,
-   "cat": "tires_car",
-   "name": "Шина 195/65 R15 летняя",
-   "brand": "",
-   "car": "Chevrolet Cobalt / Gentra",
-   "price": 550000,
-   "old_price": 616000
+   "cat": "engine",
+   "name": "Подушка двигателя",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0007",
+   "price": 238000
   },
   {
    "id": 8,
-   "cat": "tires_car",
-   "name": "Шина 195/65 R15 всесезонная",
-   "brand": "",
-   "car": "Chevrolet Cobalt / Gentra",
-   "price": 590000,
-   "badge": "Хит"
+   "cat": "engine",
+   "name": "Подушка двигателя",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0008",
+   "price": 334000
   },
   {
    "id": 9,
-   "cat": "tires_car",
-   "name": "Шина 205/60 R15 летняя",
-   "brand": "",
-   "car": "Chevrolet Gentra / Lacetti",
-   "price": 560000
+   "cat": "engine",
+   "name": "Подушка двигателя",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0009",
+   "price": 310000
   },
   {
    "id": 10,
-   "cat": "tires_car",
-   "name": "Шина 205/55 R16 летняя",
-   "brand": "",
-   "car": "Chevrolet Lacetti / Gentra",
-   "price": 690000,
-   "old_price": 772000,
-   "badge": "Хит"
+   "cat": "engine",
+   "name": "Подушка двигателя",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0010",
+   "price": 262000
   },
   {
    "id": 11,
-   "cat": "tires_car",
-   "name": "Шина 205/55 R16 зимняя",
-   "brand": "",
-   "car": "Chevrolet Lacetti / Gentra",
-   "price": 760000
+   "cat": "engine",
+   "name": "Помпа водяная",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0011",
+   "price": 343000
   },
   {
    "id": 12,
-   "cat": "tires_car",
-   "name": "Шина 215/60 R16 летняя",
-   "brand": "",
-   "car": "Chevrolet Malibu",
-   "price": 700000
+   "cat": "engine",
+   "name": "Помпа водяная",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0012",
+   "price": 269000
   },
   {
    "id": 13,
-   "cat": "tires_car",
-   "name": "Шина 215/55 R17 летняя",
-   "brand": "",
-   "car": "Chevrolet Malibu",
-   "price": 890000
+   "cat": "engine",
+   "name": "Помпа водяная",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0013",
+   "price": 377000
   },
   {
    "id": 14,
-   "cat": "tires_car",
-   "name": "Шина 225/45 R17 летняя",
-   "brand": "",
-   "car": "Chevrolet Malibu / седаны",
-   "price": 910000
-  },
-  {
-   "id": 15,
-   "cat": "tires_car",
-   "name": "Шина 235/45 R18 летняя",
-   "brand": "",
-   "car": "Chevrolet Malibu / седаны",
-   "price": 1130000
-  },
-  {
-   "id": 16,
-   "cat": "tires_lt",
-   "name": "Шина 195/75 R16C всесезонная",
-   "brand": "",
-   "car": "Микроавтобусы",
-   "price": 910000
-  },
-  {
-   "id": 17,
-   "cat": "tires_lt",
-   "name": "Шина 205/75 R16C всесезонная",
-   "brand": "",
-   "car": "Фургоны, пикапы",
-   "price": 930000
-  },
-  {
-   "id": 18,
-   "cat": "tires_lt",
-   "name": "Шина 215/75 R16C всесезонная",
-   "brand": "",
-   "car": "Фургоны, пикапы",
-   "price": 950000
-  },
-  {
-   "id": 19,
-   "cat": "tires_lt",
-   "name": "Шина 235/65 R16C всесезонная",
-   "brand": "",
-   "car": "Микроавтобусы, фургоны",
-   "price": 990000
-  },
-  {
-   "id": 20,
-   "cat": "tires_suv",
-   "name": "Шина 215/65 R16 всесезонная",
-   "brand": "",
-   "car": "Chevrolet Tracker / кроссоверы",
-   "price": 870000
-  },
-  {
-   "id": 21,
-   "cat": "tires_suv",
-   "name": "Шина 235/65 R17 всесезонная",
-   "brand": "",
-   "car": "Кроссоверы / SUV",
-   "price": 1160000,
-   "badge": "Хит"
-  },
-  {
-   "id": 22,
-   "cat": "tires_suv",
-   "name": "Шина 235/60 R17 всесезонная",
-   "brand": "",
-   "car": "Chevrolet Captiva",
-   "price": 1160000
-  },
-  {
-   "id": 23,
-   "cat": "tires_suv",
-   "name": "Шина 265/65 R17 всесезонная",
-   "brand": "",
-   "car": "Внедорожники",
-   "price": 1230000,
-   "old_price": 1377000
-  },
-  {
-   "id": 24,
-   "cat": "tires_suv",
-   "name": "Шина 255/55 R18 всесезонная",
-   "brand": "",
-   "car": "Chevrolet Captiva / SUV",
-   "price": 1460000
-  },
-  {
-   "id": 25,
-   "cat": "tires_truck",
-   "name": "Шина 275/70 R22.5 рулевая",
-   "brand": "",
-   "car": "Грузовики, тягачи",
-   "price": 2900000
-  },
-  {
-   "id": 26,
-   "cat": "tires_truck",
-   "name": "Шина 295/80 R22.5 рулевая",
-   "brand": "",
-   "car": "Грузовики, тягачи",
-   "price": 3100000,
-   "badge": "Хит"
-  },
-  {
-   "id": 27,
-   "cat": "tires_truck",
-   "name": "Шина 295/80 R22.5 ведущая",
-   "brand": "",
-   "car": "Грузовики, тягачи",
-   "price": 3200000
-  },
-  {
-   "id": 28,
-   "cat": "tires_truck",
-   "name": "Шина 315/80 R22.5 ведущая",
-   "brand": "",
-   "car": "Грузовики, тягачи",
-   "price": 3400000,
-   "badge": "Хит"
-  },
-  {
-   "id": 29,
-   "cat": "tires_truck",
-   "name": "Шина 385/65 R22.5 прицепная",
-   "brand": "",
-   "car": "Грузовики, тягачи",
-   "price": 3300000
-  },
-  {
-   "id": 30,
-   "cat": "tires_truck",
-   "name": "Шина 8.25 R20 универсальная",
-   "brand": "",
-   "car": "Грузовики, тягачи",
-   "price": 2300000
-  },
-  {
-   "id": 31,
-   "cat": "tires_truck",
-   "name": "Шина 9.00 R20 универсальная",
-   "brand": "",
-   "car": "Грузовики, тягачи",
-   "price": 2450000
-  },
-  {
-   "id": 32,
-   "cat": "tires_truck",
-   "name": "Шина 10.00 R20 универсальная",
-   "brand": "",
-   "car": "Грузовики, тягачи",
-   "price": 2500000
-  },
-  {
-   "id": 33,
-   "cat": "tires_truck",
-   "name": "Шина 11.00 R20 универсальная",
-   "brand": "",
-   "car": "Грузовики, тягачи",
-   "price": 2600000
-  },
-  {
-   "id": 34,
-   "cat": "tires_truck",
-   "name": "Шина 12.00 R20 универсальная",
-   "brand": "",
-   "car": "Грузовики, тягачи",
-   "price": 3000000
-  },
-  {
-   "id": 35,
-   "cat": "disks",
-   "name": "Диск штампованный R13",
-   "brand": "",
-   "car": "Универсальный",
-   "price": 320000
-  },
-  {
-   "id": 36,
-   "cat": "disks",
-   "name": "Диск штампованный R14",
-   "brand": "",
-   "car": "Универсальный",
+   "cat": "engine",
+   "name": "Помпа водяная",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0014",
    "price": 350000
   },
   {
+   "id": 15,
+   "cat": "engine",
+   "name": "Помпа водяная",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0015",
+   "price": 296000
+  },
+  {
+   "id": 16,
+   "cat": "engine",
+   "name": "Прокладка ГБЦ",
+   "brand": "Victor Reinz",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0016",
+   "price": 190000
+  },
+  {
+   "id": 17,
+   "cat": "engine",
+   "name": "Прокладка ГБЦ",
+   "brand": "Victor Reinz",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0017",
+   "price": 149000
+  },
+  {
+   "id": 18,
+   "cat": "engine",
+   "name": "Прокладка ГБЦ",
+   "brand": "Victor Reinz",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0018",
+   "price": 209000
+  },
+  {
+   "id": 19,
+   "cat": "engine",
+   "name": "Прокладка ГБЦ",
+   "brand": "Victor Reinz",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0019",
+   "price": 194000
+  },
+  {
+   "id": 20,
+   "cat": "engine",
+   "name": "Прокладка ГБЦ",
+   "brand": "Victor Reinz",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0020",
+   "price": 164000
+  },
+  {
+   "id": 21,
+   "cat": "engine",
+   "name": "Прокладка клапанной крышки",
+   "brand": "Victor Reinz",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0021",
+   "price": 72000
+  },
+  {
+   "id": 22,
+   "cat": "engine",
+   "name": "Прокладка клапанной крышки",
+   "brand": "Victor Reinz",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0022",
+   "price": 62000
+  },
+  {
+   "id": 23,
+   "cat": "engine",
+   "name": "Прокладка клапанной крышки",
+   "brand": "Victor Reinz",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0023",
+   "price": 79000
+  },
+  {
+   "id": 24,
+   "cat": "engine",
+   "name": "Прокладка клапанной крышки",
+   "brand": "Victor Reinz",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0024",
+   "price": 74000
+  },
+  {
+   "id": 25,
+   "cat": "engine",
+   "name": "Прокладка клапанной крышки",
+   "brand": "Victor Reinz",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0025",
+   "price": 69000
+  },
+  {
+   "id": 26,
+   "cat": "engine",
+   "name": "Ремень ГРМ",
+   "brand": "Gates",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0026",
+   "price": 163000
+  },
+  {
+   "id": 27,
+   "cat": "engine",
+   "name": "Ремень ГРМ",
+   "brand": "Gates",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0027",
+   "price": 128000
+  },
+  {
+   "id": 28,
+   "cat": "engine",
+   "name": "Ремень ГРМ",
+   "brand": "Gates",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0028",
+   "price": 180000
+  },
+  {
+   "id": 29,
+   "cat": "engine",
+   "name": "Ремень ГРМ",
+   "brand": "Gates",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0029",
+   "price": 166000
+  },
+  {
+   "id": 30,
+   "cat": "engine",
+   "name": "Ремень ГРМ",
+   "brand": "Gates",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0030",
+   "price": 141000
+  },
+  {
+   "id": 31,
+   "cat": "engine",
+   "name": "Ремень генератора",
+   "brand": "Gates",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0031",
+   "price": 88000
+  },
+  {
+   "id": 32,
+   "cat": "engine",
+   "name": "Ремень генератора",
+   "brand": "Gates",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0032",
+   "price": 69000
+  },
+  {
+   "id": 33,
+   "cat": "engine",
+   "name": "Ремень генератора",
+   "brand": "Gates",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0033",
+   "price": 97000
+  },
+  {
+   "id": 34,
+   "cat": "engine",
+   "name": "Ремень генератора",
+   "brand": "Gates",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0034",
+   "price": 82000
+  },
+  {
+   "id": 35,
+   "cat": "engine",
+   "name": "Ремень генератора",
+   "brand": "Gates",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0035",
+   "price": 76000
+  },
+  {
+   "id": 36,
+   "cat": "engine",
+   "name": "Ролик натяжителя ГРМ",
+   "brand": "INA",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0036",
+   "price": 182000
+  },
+  {
    "id": 37,
-   "cat": "disks",
-   "name": "Диск штампованный R15",
-   "brand": "",
-   "car": "Универсальный",
-   "price": 380000
+   "cat": "engine",
+   "name": "Ролик натяжителя ГРМ",
+   "brand": "INA",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0037",
+   "price": 158000
   },
   {
    "id": 38,
-   "cat": "disks",
-   "name": "Диск штампованный R16",
-   "brand": "",
-   "car": "Универсальный",
-   "price": 430000
+   "cat": "engine",
+   "name": "Ролик натяжителя ГРМ",
+   "brand": "INA",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0038",
+   "price": 201000
   },
   {
    "id": 39,
-   "cat": "disks",
-   "name": "Диск литой R15",
-   "brand": "",
-   "car": "Универсальный",
-   "price": 780000
+   "cat": "engine",
+   "name": "Ролик натяжителя ГРМ",
+   "brand": "INA",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0039",
+   "price": 186000
   },
   {
    "id": 40,
-   "cat": "disks",
-   "name": "Диск литой R16",
-   "brand": "",
-   "car": "Универсальный",
-   "price": 900000
+   "cat": "engine",
+   "name": "Ролик натяжителя ГРМ",
+   "brand": "INA",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0040",
+   "price": 174000
   },
   {
    "id": 41,
-   "cat": "disks",
-   "name": "Диск литой R17",
-   "brand": "",
-   "car": "Универсальный",
-   "price": 1100000
+   "cat": "engine",
+   "name": "Сальник коленвала передний",
+   "brand": "Elring",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0041",
+   "price": 47000
   },
   {
    "id": 42,
-   "cat": "accessories",
-   "name": "Камера для шины R13",
-   "brand": "",
-   "car": "Легковые",
-   "price": 75000
+   "cat": "engine",
+   "name": "Сальник коленвала передний",
+   "brand": "Elring",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0042",
+   "price": 37000
   },
   {
    "id": 43,
-   "cat": "accessories",
-   "name": "Камера для шины R15",
-   "brand": "",
-   "car": "Легковые",
-   "price": 85000
+   "cat": "engine",
+   "name": "Сальник коленвала передний",
+   "brand": "Elring",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0043",
+   "price": 51000
   },
   {
    "id": 44,
-   "cat": "accessories",
-   "name": "Вентиль бескамерный (4 шт.)",
-   "brand": "",
-   "car": "Универсальный",
-   "price": 25000
+   "cat": "engine",
+   "name": "Сальник коленвала передний",
+   "brand": "Elring",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0044",
+   "price": 43000
   },
   {
    "id": 45,
-   "cat": "accessories",
-   "name": "Балансировочные грузики (упаковка)",
-   "brand": "",
-   "car": "Универсальный",
-   "price": 60000
+   "cat": "engine",
+   "name": "Сальник коленвала передний",
+   "brand": "Elring",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0045",
+   "price": 40000
   },
   {
    "id": 46,
-   "cat": "accessories",
-   "name": "Герметик для шин",
-   "brand": "",
-   "car": "Универсальный",
-   "price": 70000
+   "cat": "engine",
+   "name": "Термостат",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0046",
+   "price": 163000
   },
   {
    "id": 47,
-   "cat": "accessories",
-   "name": "Колёсные болты (комплект 20 шт.)",
-   "brand": "",
-   "car": "Универсальный",
-   "price": 140000
+   "cat": "engine",
+   "name": "Термостат",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0047",
+   "price": 128000
   },
   {
    "id": 48,
-   "cat": "accessories",
-   "name": "Насос автомобильный",
-   "brand": "",
-   "car": "Универсальный",
+   "cat": "engine",
+   "name": "Термостат",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0048",
    "price": 180000
   },
   {
    "id": 49,
-   "cat": "services",
-   "name": "Шиномонтаж (4 колеса)",
-   "brand": "",
-   "car": "Универсальный",
-   "price": 120000,
-   "badge": "Хит"
+   "cat": "engine",
+   "name": "Термостат",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0049",
+   "price": 166000
   },
   {
    "id": 50,
-   "cat": "services",
-   "name": "Балансировка (4 колеса)",
-   "brand": "",
-   "car": "Универсальный",
-   "price": 80000
+   "cat": "engine",
+   "name": "Термостат",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0050",
+   "price": 141000
   },
   {
    "id": 51,
-   "cat": "services",
-   "name": "Ремонт прокола",
-   "brand": "",
-   "car": "Универсальный",
-   "price": 40000
+   "cat": "ignition",
+   "name": "Катушка зажигания",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0051",
+   "price": 372000
   },
   {
    "id": 52,
-   "cat": "services",
-   "name": "Хранение шин (сезон)",
-   "brand": "",
-   "car": "Универсальный",
-   "price": 200000
+   "cat": "ignition",
+   "name": "Катушка зажигания",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0052",
+   "price": 292000
+  },
+  {
+   "id": 53,
+   "cat": "ignition",
+   "name": "Катушка зажигания",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0053",
+   "price": 410000
+  },
+  {
+   "id": 54,
+   "cat": "ignition",
+   "name": "Катушка зажигания",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0054",
+   "price": 380000
+  },
+  {
+   "id": 55,
+   "cat": "ignition",
+   "name": "Катушка зажигания",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0055",
+   "price": 321000
+  },
+  {
+   "id": 56,
+   "cat": "ignition",
+   "name": "Провода высоковольтные (комплект)",
+   "brand": "Bosch",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0056",
+   "price": 163000
+  },
+  {
+   "id": 57,
+   "cat": "ignition",
+   "name": "Провода высоковольтные (комплект)",
+   "brand": "Bosch",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0057",
+   "price": 128000
+  },
+  {
+   "id": 58,
+   "cat": "ignition",
+   "name": "Провода высоковольтные (комплект)",
+   "brand": "Bosch",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0058",
+   "price": 180000
+  },
+  {
+   "id": 59,
+   "cat": "ignition",
+   "name": "Провода высоковольтные (комплект)",
+   "brand": "Bosch",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0059",
+   "price": 166000
+  },
+  {
+   "id": 60,
+   "cat": "ignition",
+   "name": "Провода высоковольтные (комплект)",
+   "brand": "Bosch",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0060",
+   "price": 141000
+  },
+  {
+   "id": 61,
+   "cat": "ignition",
+   "name": "Свечи зажигания (комплект 4 шт)",
+   "brand": "NGK",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0061",
+   "price": 146000,
+   "badge": "Хит"
+  },
+  {
+   "id": 62,
+   "cat": "ignition",
+   "name": "Свечи зажигания (комплект 4 шт)",
+   "brand": "NGK",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0062",
+   "price": 114000,
+   "badge": "Хит"
+  },
+  {
+   "id": 63,
+   "cat": "ignition",
+   "name": "Свечи зажигания (комплект 4 шт)",
+   "brand": "NGK",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0063",
+   "price": 160000,
+   "badge": "Хит"
+  },
+  {
+   "id": 64,
+   "cat": "ignition",
+   "name": "Свечи зажигания (комплект 4 шт)",
+   "brand": "NGK",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0064",
+   "price": 134000,
+   "badge": "Хит"
+  },
+  {
+   "id": 65,
+   "cat": "ignition",
+   "name": "Свечи зажигания (комплект 4 шт)",
+   "brand": "NGK",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0065",
+   "price": 126000,
+   "badge": "Хит"
+  },
+  {
+   "id": 66,
+   "cat": "body",
+   "name": "Зеркало боковое левое",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0066",
+   "price": 510000
+  },
+  {
+   "id": 67,
+   "cat": "body",
+   "name": "Зеркало боковое левое",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0067",
+   "price": 399000
+  },
+  {
+   "id": 68,
+   "cat": "body",
+   "name": "Зеркало боковое левое",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0068",
+   "price": 561000
+  },
+  {
+   "id": 69,
+   "cat": "body",
+   "name": "Зеркало боковое левое",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0069",
+   "price": 520000
+  },
+  {
+   "id": 70,
+   "cat": "body",
+   "name": "Зеркало боковое левое",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0070",
+   "price": 439000
+  },
+  {
+   "id": 71,
+   "cat": "body",
+   "name": "Фара передняя левая",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0071",
+   "price": 950000
+  },
+  {
+   "id": 72,
+   "cat": "body",
+   "name": "Фара передняя левая",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0072",
+   "price": 745000
+  },
+  {
+   "id": 73,
+   "cat": "body",
+   "name": "Фара передняя левая",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0073",
+   "price": 1045000
+  },
+  {
+   "id": 74,
+   "cat": "body",
+   "name": "Фара передняя левая",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0074",
+   "price": 969000
+  },
+  {
+   "id": 75,
+   "cat": "body",
+   "name": "Фара передняя левая",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0075",
+   "price": 819000
+  },
+  {
+   "id": 76,
+   "cat": "body",
+   "name": "Фонарь задний правый",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0076",
+   "price": 676000
+  },
+  {
+   "id": 77,
+   "cat": "body",
+   "name": "Фонарь задний правый",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0077",
+   "price": 530000
+  },
+  {
+   "id": 78,
+   "cat": "body",
+   "name": "Фонарь задний правый",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0078",
+   "price": 744000
+  },
+  {
+   "id": 79,
+   "cat": "body",
+   "name": "Фонарь задний правый",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0079",
+   "price": 624000
+  },
+  {
+   "id": 80,
+   "cat": "body",
+   "name": "Фонарь задний правый",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0080",
+   "price": 583000
+  },
+  {
+   "id": 81,
+   "cat": "body",
+   "name": "Щётки стеклоочистителя (пара)",
+   "brand": "Bosch",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0081",
+   "price": 133000,
+   "badge": "Хит"
+  },
+  {
+   "id": 82,
+   "cat": "body",
+   "name": "Щётки стеклоочистителя (пара)",
+   "brand": "Bosch",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0082",
+   "price": 104000,
+   "badge": "Хит"
+  },
+  {
+   "id": 83,
+   "cat": "body",
+   "name": "Щётки стеклоочистителя (пара)",
+   "brand": "Bosch",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0083",
+   "price": 146000,
+   "badge": "Хит"
+  },
+  {
+   "id": 84,
+   "cat": "body",
+   "name": "Щётки стеклоочистителя (пара)",
+   "brand": "Bosch",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0084",
+   "price": 135000,
+   "badge": "Хит"
+  },
+  {
+   "id": 85,
+   "cat": "body",
+   "name": "Щётки стеклоочистителя (пара)",
+   "brand": "Bosch",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0085",
+   "price": 114000,
+   "badge": "Хит"
+  },
+  {
+   "id": 86,
+   "cat": "fluids",
+   "name": "Масло моторное 5W-30, 4 л",
+   "brand": "Shell Helix",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0086",
+   "price": 340000,
+   "badge": "Хит"
+  },
+  {
+   "id": 87,
+   "cat": "fluids",
+   "name": "Масло моторное 5W-30, 4 л",
+   "brand": "Shell Helix",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0087",
+   "price": 333000,
+   "badge": "Хит"
+  },
+  {
+   "id": 88,
+   "cat": "fluids",
+   "name": "Масло моторное 5W-30, 4 л",
+   "brand": "Shell Helix",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0088",
+   "price": 340000,
+   "badge": "Хит"
+  },
+  {
+   "id": 89,
+   "cat": "fluids",
+   "name": "Масло моторное 5W-30, 4 л",
+   "brand": "Shell Helix",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0089",
+   "price": 347000,
+   "badge": "Хит"
+  },
+  {
+   "id": 90,
+   "cat": "fluids",
+   "name": "Масло моторное 5W-30, 4 л",
+   "brand": "Shell Helix",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0090",
+   "price": 333000,
+   "badge": "Хит"
+  },
+  {
+   "id": 91,
+   "cat": "fluids",
+   "name": "Масло трансмиссионное 75W-90, 1 л",
+   "brand": "Total",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0091",
+   "price": 114000
+  },
+  {
+   "id": 92,
+   "cat": "fluids",
+   "name": "Масло трансмиссионное 75W-90, 1 л",
+   "brand": "Total",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0092",
+   "price": 112000
+  },
+  {
+   "id": 93,
+   "cat": "fluids",
+   "name": "Масло трансмиссионное 75W-90, 1 л",
+   "brand": "Total",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0093",
+   "price": 114000
+  },
+  {
+   "id": 94,
+   "cat": "fluids",
+   "name": "Масло трансмиссионное 75W-90, 1 л",
+   "brand": "Total",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0094",
+   "price": 106000
+  },
+  {
+   "id": 95,
+   "cat": "fluids",
+   "name": "Масло трансмиссионное 75W-90, 1 л",
+   "brand": "Total",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0095",
+   "price": 112000
+  },
+  {
+   "id": 96,
+   "cat": "cooling",
+   "name": "Антифриз G12, 5 л",
+   "brand": "Total",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0096",
+   "price": 160000
+  },
+  {
+   "id": 97,
+   "cat": "cooling",
+   "name": "Антифриз G12, 5 л",
+   "brand": "Total",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0097",
+   "price": 157000
+  },
+  {
+   "id": 98,
+   "cat": "cooling",
+   "name": "Антифриз G12, 5 л",
+   "brand": "Total",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0098",
+   "price": 160000
+  },
+  {
+   "id": 99,
+   "cat": "cooling",
+   "name": "Антифриз G12, 5 л",
+   "brand": "Total",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0099",
+   "price": 163000
+  },
+  {
+   "id": 100,
+   "cat": "cooling",
+   "name": "Антифриз G12, 5 л",
+   "brand": "Total",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0100",
+   "price": 157000
+  },
+  {
+   "id": 101,
+   "cat": "cooling",
+   "name": "Бачок расширительный",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0101",
+   "price": 146000
+  },
+  {
+   "id": 102,
+   "cat": "cooling",
+   "name": "Бачок расширительный",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0102",
+   "price": 114000
+  },
+  {
+   "id": 103,
+   "cat": "cooling",
+   "name": "Бачок расширительный",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0103",
+   "price": 160000
+  },
+  {
+   "id": 104,
+   "cat": "cooling",
+   "name": "Бачок расширительный",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0104",
+   "price": 134000
+  },
+  {
+   "id": 105,
+   "cat": "cooling",
+   "name": "Бачок расширительный",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0105",
+   "price": 126000
+  },
+  {
+   "id": 106,
+   "cat": "cooling",
+   "name": "Радиатор охлаждения",
+   "brand": "Nissens",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0106",
+   "price": 912000
+  },
+  {
+   "id": 107,
+   "cat": "cooling",
+   "name": "Радиатор охлаждения",
+   "brand": "Nissens",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0107",
+   "price": 790000
+  },
+  {
+   "id": 108,
+   "cat": "cooling",
+   "name": "Радиатор охлаждения",
+   "brand": "Nissens",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0108",
+   "price": 1003000
+  },
+  {
+   "id": 109,
+   "cat": "cooling",
+   "name": "Радиатор охлаждения",
+   "brand": "Nissens",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0109",
+   "price": 931000
+  },
+  {
+   "id": 110,
+   "cat": "cooling",
+   "name": "Радиатор охлаждения",
+   "brand": "Nissens",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0110",
+   "price": 869000
+  },
+  {
+   "id": 111,
+   "cat": "suspension",
+   "name": "Амортизатор задний",
+   "brand": "Kayaba",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0111",
+   "price": 388000
+  },
+  {
+   "id": 112,
+   "cat": "suspension",
+   "name": "Амортизатор задний",
+   "brand": "Kayaba",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0112",
+   "price": 304000
+  },
+  {
+   "id": 113,
+   "cat": "suspension",
+   "name": "Амортизатор задний",
+   "brand": "Kayaba",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0113",
+   "price": 426000
+  },
+  {
+   "id": 114,
+   "cat": "suspension",
+   "name": "Амортизатор задний",
+   "brand": "Kayaba",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0114",
+   "price": 395000
+  },
+  {
+   "id": 115,
+   "cat": "suspension",
+   "name": "Амортизатор задний",
+   "brand": "Kayaba",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0115",
+   "price": 334000
+  },
+  {
+   "id": 116,
+   "cat": "suspension",
+   "name": "Амортизатор передний",
+   "brand": "Kayaba",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0116",
+   "price": 441000,
+   "badge": "Хит"
+  },
+  {
+   "id": 117,
+   "cat": "suspension",
+   "name": "Амортизатор передний",
+   "brand": "Kayaba",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0117",
+   "price": 346000,
+   "badge": "Хит"
+  },
+  {
+   "id": 118,
+   "cat": "suspension",
+   "name": "Амортизатор передний",
+   "brand": "Kayaba",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0118",
+   "price": 485000,
+   "badge": "Хит"
+  },
+  {
+   "id": 119,
+   "cat": "suspension",
+   "name": "Амортизатор передний",
+   "brand": "Kayaba",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0119",
+   "price": 450000,
+   "badge": "Хит"
+  },
+  {
+   "id": 120,
+   "cat": "suspension",
+   "name": "Амортизатор передний",
+   "brand": "Kayaba",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0120",
+   "price": 380000,
+   "badge": "Хит"
+  },
+  {
+   "id": 121,
+   "cat": "suspension",
+   "name": "Втулка стабилизатора",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0121",
+   "price": 30000
+  },
+  {
+   "id": 122,
+   "cat": "suspension",
+   "name": "Втулка стабилизатора",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0122",
+   "price": 24000
+  },
+  {
+   "id": 123,
+   "cat": "suspension",
+   "name": "Втулка стабилизатора",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0123",
+   "price": 33000
+  },
+  {
+   "id": 124,
+   "cat": "suspension",
+   "name": "Втулка стабилизатора",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0124",
+   "price": 31000
+  },
+  {
+   "id": 125,
+   "cat": "suspension",
+   "name": "Втулка стабилизатора",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0125",
+   "price": 26000
+  },
+  {
+   "id": 126,
+   "cat": "suspension",
+   "name": "Опора амортизатора передняя",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0126",
+   "price": 154000
+  },
+  {
+   "id": 127,
+   "cat": "suspension",
+   "name": "Опора амортизатора передняя",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0127",
+   "price": 133000
+  },
+  {
+   "id": 128,
+   "cat": "suspension",
+   "name": "Опора амортизатора передняя",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0128",
+   "price": 169000
+  },
+  {
+   "id": 129,
+   "cat": "suspension",
+   "name": "Опора амортизатора передняя",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0129",
+   "price": 157000
+  },
+  {
+   "id": 130,
+   "cat": "suspension",
+   "name": "Опора амортизатора передняя",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0130",
+   "price": 146000
+  },
+  {
+   "id": 131,
+   "cat": "suspension",
+   "name": "Подшипник ступицы передний",
+   "brand": "SKF",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0131",
+   "price": 245000
+  },
+  {
+   "id": 132,
+   "cat": "suspension",
+   "name": "Подшипник ступицы передний",
+   "brand": "SKF",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0132",
+   "price": 192000
+  },
+  {
+   "id": 133,
+   "cat": "suspension",
+   "name": "Подшипник ступицы передний",
+   "brand": "SKF",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0133",
+   "price": 270000
+  },
+  {
+   "id": 134,
+   "cat": "suspension",
+   "name": "Подшипник ступицы передний",
+   "brand": "SKF",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0134",
+   "price": 250000
+  },
+  {
+   "id": 135,
+   "cat": "suspension",
+   "name": "Подшипник ступицы передний",
+   "brand": "SKF",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0135",
+   "price": 211000
+  },
+  {
+   "id": 136,
+   "cat": "suspension",
+   "name": "Пружина передней подвески",
+   "brand": "Lesjöfors",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0136",
+   "price": 270000
+  },
+  {
+   "id": 137,
+   "cat": "suspension",
+   "name": "Пружина передней подвески",
+   "brand": "Lesjöfors",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0137",
+   "price": 212000
+  },
+  {
+   "id": 138,
+   "cat": "suspension",
+   "name": "Пружина передней подвески",
+   "brand": "Lesjöfors",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0138",
+   "price": 297000
+  },
+  {
+   "id": 139,
+   "cat": "suspension",
+   "name": "Пружина передней подвески",
+   "brand": "Lesjöfors",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0139",
+   "price": 250000
+  },
+  {
+   "id": 140,
+   "cat": "suspension",
+   "name": "Пружина передней подвески",
+   "brand": "Lesjöfors",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0140",
+   "price": 233000
+  },
+  {
+   "id": 141,
+   "cat": "suspension",
+   "name": "Пыльник амортизатора с отбойником",
+   "brand": "Febi",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0141",
+   "price": 60000
+  },
+  {
+   "id": 142,
+   "cat": "suspension",
+   "name": "Пыльник амортизатора с отбойником",
+   "brand": "Febi",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0142",
+   "price": 47000
+  },
+  {
+   "id": 143,
+   "cat": "suspension",
+   "name": "Пыльник амортизатора с отбойником",
+   "brand": "Febi",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0143",
+   "price": 66000
+  },
+  {
+   "id": 144,
+   "cat": "suspension",
+   "name": "Пыльник амортизатора с отбойником",
+   "brand": "Febi",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0144",
+   "price": 61000
+  },
+  {
+   "id": 145,
+   "cat": "suspension",
+   "name": "Пыльник амортизатора с отбойником",
+   "brand": "Febi",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0145",
+   "price": 52000
+  },
+  {
+   "id": 146,
+   "cat": "suspension",
+   "name": "Рычаг передний нижний",
+   "brand": "CTR",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0146",
+   "price": 412000
+  },
+  {
+   "id": 147,
+   "cat": "suspension",
+   "name": "Рычаг передний нижний",
+   "brand": "CTR",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0147",
+   "price": 323000
+  },
+  {
+   "id": 148,
+   "cat": "suspension",
+   "name": "Рычаг передний нижний",
+   "brand": "CTR",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0148",
+   "price": 453000
+  },
+  {
+   "id": 149,
+   "cat": "suspension",
+   "name": "Рычаг передний нижний",
+   "brand": "CTR",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0149",
+   "price": 420000
+  },
+  {
+   "id": 150,
+   "cat": "suspension",
+   "name": "Рычаг передний нижний",
+   "brand": "CTR",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0150",
+   "price": 355000
+  },
+  {
+   "id": 151,
+   "cat": "suspension",
+   "name": "Сайлентблок рычага",
+   "brand": "Lemförder",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0151",
+   "price": 57000
+  },
+  {
+   "id": 152,
+   "cat": "suspension",
+   "name": "Сайлентблок рычага",
+   "brand": "Lemförder",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0152",
+   "price": 45000
+  },
+  {
+   "id": 153,
+   "cat": "suspension",
+   "name": "Сайлентблок рычага",
+   "brand": "Lemförder",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0153",
+   "price": 63000
+  },
+  {
+   "id": 154,
+   "cat": "suspension",
+   "name": "Сайлентблок рычага",
+   "brand": "Lemförder",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0154",
+   "price": 53000
+  },
+  {
+   "id": 155,
+   "cat": "suspension",
+   "name": "Сайлентблок рычага",
+   "brand": "Lemförder",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0155",
+   "price": 49000
+  },
+  {
+   "id": 156,
+   "cat": "suspension",
+   "name": "Стойка стабилизатора",
+   "brand": "CTR",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0156",
+   "price": 82000
+  },
+  {
+   "id": 157,
+   "cat": "suspension",
+   "name": "Стойка стабилизатора",
+   "brand": "CTR",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0157",
+   "price": 71000
+  },
+  {
+   "id": 158,
+   "cat": "suspension",
+   "name": "Стойка стабилизатора",
+   "brand": "CTR",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0158",
+   "price": 90000
+  },
+  {
+   "id": 159,
+   "cat": "suspension",
+   "name": "Стойка стабилизатора",
+   "brand": "CTR",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0159",
+   "price": 83000
+  },
+  {
+   "id": 160,
+   "cat": "suspension",
+   "name": "Стойка стабилизатора",
+   "brand": "CTR",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0160",
+   "price": 78000
+  },
+  {
+   "id": 161,
+   "cat": "suspension",
+   "name": "Ступица задняя в сборе",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0161",
+   "price": 490000
+  },
+  {
+   "id": 162,
+   "cat": "suspension",
+   "name": "Ступица задняя в сборе",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0162",
+   "price": 384000
+  },
+  {
+   "id": 163,
+   "cat": "suspension",
+   "name": "Ступица задняя в сборе",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0163",
+   "price": 539000
+  },
+  {
+   "id": 164,
+   "cat": "suspension",
+   "name": "Ступица задняя в сборе",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0164",
+   "price": 499000
+  },
+  {
+   "id": 165,
+   "cat": "suspension",
+   "name": "Ступица задняя в сборе",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0165",
+   "price": 422000
+  },
+  {
+   "id": 166,
+   "cat": "suspension",
+   "name": "Шаровая опора",
+   "brand": "CTR",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0166",
+   "price": 122000
+  },
+  {
+   "id": 167,
+   "cat": "suspension",
+   "name": "Шаровая опора",
+   "brand": "CTR",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0167",
+   "price": 96000
+  },
+  {
+   "id": 168,
+   "cat": "suspension",
+   "name": "Шаровая опора",
+   "brand": "CTR",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0168",
+   "price": 135000
+  },
+  {
+   "id": 169,
+   "cat": "suspension",
+   "name": "Шаровая опора",
+   "brand": "CTR",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0169",
+   "price": 125000
+  },
+  {
+   "id": 170,
+   "cat": "suspension",
+   "name": "Шаровая опора",
+   "brand": "CTR",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0170",
+   "price": 106000
+  },
+  {
+   "id": 171,
+   "cat": "steering",
+   "name": "Наконечник рулевой тяги",
+   "brand": "CTR",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0171",
+   "price": 91000
+  },
+  {
+   "id": 172,
+   "cat": "steering",
+   "name": "Наконечник рулевой тяги",
+   "brand": "CTR",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0172",
+   "price": 79000
+  },
+  {
+   "id": 173,
+   "cat": "steering",
+   "name": "Наконечник рулевой тяги",
+   "brand": "CTR",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0173",
+   "price": 100000
+  },
+  {
+   "id": 174,
+   "cat": "steering",
+   "name": "Наконечник рулевой тяги",
+   "brand": "CTR",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0174",
+   "price": 93000
+  },
+  {
+   "id": 175,
+   "cat": "steering",
+   "name": "Наконечник рулевой тяги",
+   "brand": "CTR",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0175",
+   "price": 87000
+  },
+  {
+   "id": 176,
+   "cat": "steering",
+   "name": "Насос гидроусилителя",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0176",
+   "price": 1323000
+  },
+  {
+   "id": 177,
+   "cat": "steering",
+   "name": "Насос гидроусилителя",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0177",
+   "price": 1037000
+  },
+  {
+   "id": 178,
+   "cat": "steering",
+   "name": "Насос гидроусилителя",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0178",
+   "price": 1455000
+  },
+  {
+   "id": 179,
+   "cat": "steering",
+   "name": "Насос гидроусилителя",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0179",
+   "price": 1350000
+  },
+  {
+   "id": 180,
+   "cat": "steering",
+   "name": "Насос гидроусилителя",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0180",
+   "price": 1140000
+  },
+  {
+   "id": 181,
+   "cat": "steering",
+   "name": "Пыльник рулевой рейки",
+   "brand": "Febi",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0181",
+   "price": 57000
+  },
+  {
+   "id": 182,
+   "cat": "steering",
+   "name": "Пыльник рулевой рейки",
+   "brand": "Febi",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0182",
+   "price": 45000
+  },
+  {
+   "id": 183,
+   "cat": "steering",
+   "name": "Пыльник рулевой рейки",
+   "brand": "Febi",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0183",
+   "price": 63000
+  },
+  {
+   "id": 184,
+   "cat": "steering",
+   "name": "Пыльник рулевой рейки",
+   "brand": "Febi",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0184",
+   "price": 53000
+  },
+  {
+   "id": 185,
+   "cat": "steering",
+   "name": "Пыльник рулевой рейки",
+   "brand": "Febi",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0185",
+   "price": 49000
+  },
+  {
+   "id": 186,
+   "cat": "steering",
+   "name": "Рулевая тяга",
+   "brand": "CTR",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0186",
+   "price": 140000
+  },
+  {
+   "id": 187,
+   "cat": "steering",
+   "name": "Рулевая тяга",
+   "brand": "CTR",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0187",
+   "price": 110000
+  },
+  {
+   "id": 188,
+   "cat": "steering",
+   "name": "Рулевая тяга",
+   "brand": "CTR",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0188",
+   "price": 154000
+  },
+  {
+   "id": 189,
+   "cat": "steering",
+   "name": "Рулевая тяга",
+   "brand": "CTR",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0189",
+   "price": 143000
+  },
+  {
+   "id": 190,
+   "cat": "steering",
+   "name": "Рулевая тяга",
+   "brand": "CTR",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0190",
+   "price": 121000
+  },
+  {
+   "id": 191,
+   "cat": "brakes",
+   "name": "Барабан тормозной задний",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0191",
+   "price": 284000
+  },
+  {
+   "id": 192,
+   "cat": "brakes",
+   "name": "Барабан тормозной задний",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0192",
+   "price": 223000
+  },
+  {
+   "id": 193,
+   "cat": "brakes",
+   "name": "Барабан тормозной задний",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0193",
+   "price": 313000
+  },
+  {
+   "id": 194,
+   "cat": "brakes",
+   "name": "Барабан тормозной задний",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0194",
+   "price": 290000
+  },
+  {
+   "id": 195,
+   "cat": "brakes",
+   "name": "Барабан тормозной задний",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0195",
+   "price": 245000
+  },
+  {
+   "id": 196,
+   "cat": "brakes",
+   "name": "Главный тормозной цилиндр",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0196",
+   "price": 650000
+  },
+  {
+   "id": 197,
+   "cat": "brakes",
+   "name": "Главный тормозной цилиндр",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0197",
+   "price": 510000
+  },
+  {
+   "id": 198,
+   "cat": "brakes",
+   "name": "Главный тормозной цилиндр",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0198",
+   "price": 715000
+  },
+  {
+   "id": 199,
+   "cat": "brakes",
+   "name": "Главный тормозной цилиндр",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0199",
+   "price": 663000
+  },
+  {
+   "id": 200,
+   "cat": "brakes",
+   "name": "Главный тормозной цилиндр",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0200",
+   "price": 561000
+  },
+  {
+   "id": 201,
+   "cat": "brakes",
+   "name": "Диск тормозной передний",
+   "brand": "TRW",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0201",
+   "price": 333000
+  },
+  {
+   "id": 202,
+   "cat": "brakes",
+   "name": "Диск тормозной передний",
+   "brand": "TRW",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0202",
+   "price": 261000
+  },
+  {
+   "id": 203,
+   "cat": "brakes",
+   "name": "Диск тормозной передний",
+   "brand": "TRW",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0203",
+   "price": 366000
+  },
+  {
+   "id": 204,
+   "cat": "brakes",
+   "name": "Диск тормозной передний",
+   "brand": "TRW",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0204",
+   "price": 307000
+  },
+  {
+   "id": 205,
+   "cat": "brakes",
+   "name": "Диск тормозной передний",
+   "brand": "TRW",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0205",
+   "price": 287000
+  },
+  {
+   "id": 206,
+   "cat": "brakes",
+   "name": "Колодки тормозные задние",
+   "brand": "Sangsin",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0206",
+   "price": 150000
+  },
+  {
+   "id": 207,
+   "cat": "brakes",
+   "name": "Колодки тормозные задние",
+   "brand": "Sangsin",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0207",
+   "price": 118000
+  },
+  {
+   "id": 208,
+   "cat": "brakes",
+   "name": "Колодки тормозные задние",
+   "brand": "Sangsin",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0208",
+   "price": 165000
+  },
+  {
+   "id": 209,
+   "cat": "brakes",
+   "name": "Колодки тормозные задние",
+   "brand": "Sangsin",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0209",
+   "price": 153000
+  },
+  {
+   "id": 210,
+   "cat": "brakes",
+   "name": "Колодки тормозные задние",
+   "brand": "Sangsin",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0210",
+   "price": 129000
+  },
+  {
+   "id": 211,
+   "cat": "brakes",
+   "name": "Колодки тормозные передние",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0211",
+   "price": 173000,
+   "badge": "Хит"
+  },
+  {
+   "id": 212,
+   "cat": "brakes",
+   "name": "Колодки тормозные передние",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0212",
+   "price": 150000,
+   "badge": "Хит"
+  },
+  {
+   "id": 213,
+   "cat": "brakes",
+   "name": "Колодки тормозные передние",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0213",
+   "price": 190000,
+   "badge": "Хит"
+  },
+  {
+   "id": 214,
+   "cat": "brakes",
+   "name": "Колодки тормозные передние",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0214",
+   "price": 176000,
+   "badge": "Хит"
+  },
+  {
+   "id": 215,
+   "cat": "brakes",
+   "name": "Колодки тормозные передние",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0215",
+   "price": 165000,
+   "badge": "Хит"
+  },
+  {
+   "id": 216,
+   "cat": "brakes",
+   "name": "Тормозная жидкость DOT-4, 1 л",
+   "brand": "Bosch",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0216",
+   "price": 68000
+  },
+  {
+   "id": 217,
+   "cat": "brakes",
+   "name": "Тормозная жидкость DOT-4, 1 л",
+   "brand": "Bosch",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0217",
+   "price": 66000
+  },
+  {
+   "id": 218,
+   "cat": "brakes",
+   "name": "Тормозная жидкость DOT-4, 1 л",
+   "brand": "Bosch",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0218",
+   "price": 68000
+  },
+  {
+   "id": 219,
+   "cat": "brakes",
+   "name": "Тормозная жидкость DOT-4, 1 л",
+   "brand": "Bosch",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0219",
+   "price": 62000
+  },
+  {
+   "id": 220,
+   "cat": "brakes",
+   "name": "Тормозная жидкость DOT-4, 1 л",
+   "brand": "Bosch",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0220",
+   "price": 66000
+  },
+  {
+   "id": 221,
+   "cat": "brakes",
+   "name": "Цилиндр тормозной задний",
+   "brand": "Febi",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0221",
+   "price": 97000
+  },
+  {
+   "id": 222,
+   "cat": "brakes",
+   "name": "Цилиндр тормозной задний",
+   "brand": "Febi",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0222",
+   "price": 76000
+  },
+  {
+   "id": 223,
+   "cat": "brakes",
+   "name": "Цилиндр тормозной задний",
+   "brand": "Febi",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0223",
+   "price": 107000
+  },
+  {
+   "id": 224,
+   "cat": "brakes",
+   "name": "Цилиндр тормозной задний",
+   "brand": "Febi",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0224",
+   "price": 99000
+  },
+  {
+   "id": 225,
+   "cat": "brakes",
+   "name": "Цилиндр тормозной задний",
+   "brand": "Febi",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0225",
+   "price": 84000
+  },
+  {
+   "id": 226,
+   "cat": "brakes",
+   "name": "Шланг тормозной передний",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0226",
+   "price": 67000
+  },
+  {
+   "id": 227,
+   "cat": "brakes",
+   "name": "Шланг тормозной передний",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0227",
+   "price": 58000
+  },
+  {
+   "id": 228,
+   "cat": "brakes",
+   "name": "Шланг тормозной передний",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0228",
+   "price": 74000
+  },
+  {
+   "id": 229,
+   "cat": "brakes",
+   "name": "Шланг тормозной передний",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0229",
+   "price": 69000
+  },
+  {
+   "id": 230,
+   "cat": "brakes",
+   "name": "Шланг тормозной передний",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0230",
+   "price": 64000
+  },
+  {
+   "id": 231,
+   "cat": "transmission",
+   "name": "Пыльник ШРУСа",
+   "brand": "Febi",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0231",
+   "price": 48000
+  },
+  {
+   "id": 232,
+   "cat": "transmission",
+   "name": "Пыльник ШРУСа",
+   "brand": "Febi",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0232",
+   "price": 42000
+  },
+  {
+   "id": 233,
+   "cat": "transmission",
+   "name": "Пыльник ШРУСа",
+   "brand": "Febi",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0233",
+   "price": 53000
+  },
+  {
+   "id": 234,
+   "cat": "transmission",
+   "name": "Пыльник ШРУСа",
+   "brand": "Febi",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0234",
+   "price": 49000
+  },
+  {
+   "id": 235,
+   "cat": "transmission",
+   "name": "Пыльник ШРУСа",
+   "brand": "Febi",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0235",
+   "price": 46000
+  },
+  {
+   "id": 236,
+   "cat": "transmission",
+   "name": "Сцепление в сборе (корзина, диск, выжимной)",
+   "brand": "Valeo",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0236",
+   "price": 1274000
+  },
+  {
+   "id": 237,
+   "cat": "transmission",
+   "name": "Сцепление в сборе (корзина, диск, выжимной)",
+   "brand": "Valeo",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0237",
+   "price": 998000
+  },
+  {
+   "id": 238,
+   "cat": "transmission",
+   "name": "Сцепление в сборе (корзина, диск, выжимной)",
+   "brand": "Valeo",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0238",
+   "price": 1401000
+  },
+  {
+   "id": 239,
+   "cat": "transmission",
+   "name": "Сцепление в сборе (корзина, диск, выжимной)",
+   "brand": "Valeo",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0239",
+   "price": 1300000
+  },
+  {
+   "id": 240,
+   "cat": "transmission",
+   "name": "Сцепление в сборе (корзина, диск, выжимной)",
+   "brand": "Valeo",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0240",
+   "price": 1098000
+  },
+  {
+   "id": 241,
+   "cat": "transmission",
+   "name": "ШРУС наружный",
+   "brand": "GKN",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0241",
+   "price": 459000
+  },
+  {
+   "id": 242,
+   "cat": "transmission",
+   "name": "ШРУС наружный",
+   "brand": "GKN",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0242",
+   "price": 360000
+  },
+  {
+   "id": 243,
+   "cat": "transmission",
+   "name": "ШРУС наружный",
+   "brand": "GKN",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0243",
+   "price": 505000
+  },
+  {
+   "id": 244,
+   "cat": "transmission",
+   "name": "ШРУС наружный",
+   "brand": "GKN",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0244",
+   "price": 468000
+  },
+  {
+   "id": 245,
+   "cat": "transmission",
+   "name": "ШРУС наружный",
+   "brand": "GKN",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0245",
+   "price": 396000
+  },
+  {
+   "id": 246,
+   "cat": "filters",
+   "name": "Фильтр воздушный",
+   "brand": "Mann-Filter",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0246",
+   "price": 56000,
+   "badge": "Хит"
+  },
+  {
+   "id": 247,
+   "cat": "filters",
+   "name": "Фильтр воздушный",
+   "brand": "Mann-Filter",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0247",
+   "price": 44000,
+   "badge": "Хит"
+  },
+  {
+   "id": 248,
+   "cat": "filters",
+   "name": "Фильтр воздушный",
+   "brand": "Mann-Filter",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0248",
+   "price": 62000,
+   "badge": "Хит"
+  },
+  {
+   "id": 249,
+   "cat": "filters",
+   "name": "Фильтр воздушный",
+   "brand": "Mann-Filter",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0249",
+   "price": 57000,
+   "badge": "Хит"
+  },
+  {
+   "id": 250,
+   "cat": "filters",
+   "name": "Фильтр воздушный",
+   "brand": "Mann-Filter",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0250",
+   "price": 48000,
+   "badge": "Хит"
+  },
+  {
+   "id": 251,
+   "cat": "filters",
+   "name": "Фильтр масляный",
+   "brand": "Mann-Filter",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0251",
+   "price": 44000,
+   "badge": "Хит"
+  },
+  {
+   "id": 252,
+   "cat": "filters",
+   "name": "Фильтр масляный",
+   "brand": "Mann-Filter",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0252",
+   "price": 35000,
+   "badge": "Хит"
+  },
+  {
+   "id": 253,
+   "cat": "filters",
+   "name": "Фильтр масляный",
+   "brand": "Mann-Filter",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0253",
+   "price": 49000,
+   "badge": "Хит"
+  },
+  {
+   "id": 254,
+   "cat": "filters",
+   "name": "Фильтр масляный",
+   "brand": "Mann-Filter",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0254",
+   "price": 45000,
+   "badge": "Хит"
+  },
+  {
+   "id": 255,
+   "cat": "filters",
+   "name": "Фильтр масляный",
+   "brand": "Mann-Filter",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0255",
+   "price": 38000,
+   "badge": "Хит"
+  },
+  {
+   "id": 256,
+   "cat": "filters",
+   "name": "Фильтр салона",
+   "brand": "Bosch",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0256",
+   "price": 48000,
+   "badge": "Хит"
+  },
+  {
+   "id": 257,
+   "cat": "filters",
+   "name": "Фильтр салона",
+   "brand": "Bosch",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0257",
+   "price": 42000,
+   "badge": "Хит"
+  },
+  {
+   "id": 258,
+   "cat": "filters",
+   "name": "Фильтр салона",
+   "brand": "Bosch",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0258",
+   "price": 53000,
+   "badge": "Хит"
+  },
+  {
+   "id": 259,
+   "cat": "filters",
+   "name": "Фильтр салона",
+   "brand": "Bosch",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0259",
+   "price": 49000,
+   "badge": "Хит"
+  },
+  {
+   "id": 260,
+   "cat": "filters",
+   "name": "Фильтр салона",
+   "brand": "Bosch",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0260",
+   "price": 46000,
+   "badge": "Хит"
+  },
+  {
+   "id": 261,
+   "cat": "filters",
+   "name": "Фильтр топливный",
+   "brand": "Bosch",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0261",
+   "price": 70000
+  },
+  {
+   "id": 262,
+   "cat": "filters",
+   "name": "Фильтр топливный",
+   "brand": "Bosch",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0262",
+   "price": 55000
+  },
+  {
+   "id": 263,
+   "cat": "filters",
+   "name": "Фильтр топливный",
+   "brand": "Bosch",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0263",
+   "price": 77000
+  },
+  {
+   "id": 264,
+   "cat": "filters",
+   "name": "Фильтр топливный",
+   "brand": "Bosch",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0264",
+   "price": 71000
+  },
+  {
+   "id": 265,
+   "cat": "filters",
+   "name": "Фильтр топливный",
+   "brand": "Bosch",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0265",
+   "price": 60000
+  },
+  {
+   "id": 266,
+   "cat": "electrics",
+   "name": "Аккумулятор 60 Ач",
+   "brand": "Varta",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0266",
+   "price": 1275000
+  },
+  {
+   "id": 267,
+   "cat": "electrics",
+   "name": "Аккумулятор 60 Ач",
+   "brand": "Varta",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0267",
+   "price": 1000000
+  },
+  {
+   "id": 268,
+   "cat": "electrics",
+   "name": "Аккумулятор 60 Ач",
+   "brand": "Varta",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0268",
+   "price": 1402000
+  },
+  {
+   "id": 269,
+   "cat": "electrics",
+   "name": "Аккумулятор 60 Ач",
+   "brand": "Varta",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0269",
+   "price": 1300000
+  },
+  {
+   "id": 270,
+   "cat": "electrics",
+   "name": "Аккумулятор 60 Ач",
+   "brand": "Varta",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0270",
+   "price": 1100000
+  },
+  {
+   "id": 271,
+   "cat": "electrics",
+   "name": "Генератор",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0271",
+   "price": 2496000
+  },
+  {
+   "id": 272,
+   "cat": "electrics",
+   "name": "Генератор",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0272",
+   "price": 1958000
+  },
+  {
+   "id": 273,
+   "cat": "electrics",
+   "name": "Генератор",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0273",
+   "price": 2746000
+  },
+  {
+   "id": 274,
+   "cat": "electrics",
+   "name": "Генератор",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0274",
+   "price": 2304000
+  },
+  {
+   "id": 275,
+   "cat": "electrics",
+   "name": "Генератор",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0275",
+   "price": 2154000
+  },
+  {
+   "id": 276,
+   "cat": "electrics",
+   "name": "Датчик кислорода (лямбда-зонд)",
+   "brand": "Bosch",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0276",
+   "price": 650000
+  },
+  {
+   "id": 277,
+   "cat": "electrics",
+   "name": "Датчик кислорода (лямбда-зонд)",
+   "brand": "Bosch",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0277",
+   "price": 510000
+  },
+  {
+   "id": 278,
+   "cat": "electrics",
+   "name": "Датчик кислорода (лямбда-зонд)",
+   "brand": "Bosch",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0278",
+   "price": 715000
+  },
+  {
+   "id": 279,
+   "cat": "electrics",
+   "name": "Датчик кислорода (лямбда-зонд)",
+   "brand": "Bosch",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0279",
+   "price": 663000
+  },
+  {
+   "id": 280,
+   "cat": "electrics",
+   "name": "Датчик кислорода (лямбда-зонд)",
+   "brand": "Bosch",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0280",
+   "price": 561000
+  },
+  {
+   "id": 281,
+   "cat": "electrics",
+   "name": "Датчик положения коленвала",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0281",
+   "price": 224000
+  },
+  {
+   "id": 282,
+   "cat": "electrics",
+   "name": "Датчик положения коленвала",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0282",
+   "price": 176000
+  },
+  {
+   "id": 283,
+   "cat": "electrics",
+   "name": "Датчик положения коленвала",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0283",
+   "price": 247000
+  },
+  {
+   "id": 284,
+   "cat": "electrics",
+   "name": "Датчик положения коленвала",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0284",
+   "price": 229000
+  },
+  {
+   "id": 285,
+   "cat": "electrics",
+   "name": "Датчик положения коленвала",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0285",
+   "price": 194000
+  },
+  {
+   "id": 286,
+   "cat": "electrics",
+   "name": "Датчик температуры охлаждающей жидкости",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0286",
+   "price": 91000
+  },
+  {
+   "id": 287,
+   "cat": "electrics",
+   "name": "Датчик температуры охлаждающей жидкости",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0287",
+   "price": 79000
+  },
+  {
+   "id": 288,
+   "cat": "electrics",
+   "name": "Датчик температуры охлаждающей жидкости",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0288",
+   "price": 100000
+  },
+  {
+   "id": 289,
+   "cat": "electrics",
+   "name": "Датчик температуры охлаждающей жидкости",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0289",
+   "price": 93000
+  },
+  {
+   "id": 290,
+   "cat": "electrics",
+   "name": "Датчик температуры охлаждающей жидкости",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0290",
+   "price": 87000
+  },
+  {
+   "id": 291,
+   "cat": "electrics",
+   "name": "Лампа фары H4",
+   "brand": "Philips",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0291",
+   "price": 43000
+  },
+  {
+   "id": 292,
+   "cat": "electrics",
+   "name": "Лампа фары H4",
+   "brand": "Philips",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0292",
+   "price": 47000
+  },
+  {
+   "id": 293,
+   "cat": "electrics",
+   "name": "Лампа фары H4",
+   "brand": "Philips",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0293",
+   "price": 43000
+  },
+  {
+   "id": 294,
+   "cat": "electrics",
+   "name": "Лампа фары H4",
+   "brand": "Philips",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0294",
+   "price": 44000
+  },
+  {
+   "id": 295,
+   "cat": "electrics",
+   "name": "Лампа фары H4",
+   "brand": "Philips",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0295",
+   "price": 47000
+  },
+  {
+   "id": 296,
+   "cat": "electrics",
+   "name": "Стартер",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Cobalt",
+   "sku": "AZ-0296",
+   "price": 1764000
+  },
+  {
+   "id": 297,
+   "cat": "electrics",
+   "name": "Стартер",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Damas",
+   "sku": "AZ-0297",
+   "price": 1382000
+  },
+  {
+   "id": 298,
+   "cat": "electrics",
+   "name": "Стартер",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Gentra / Lacetti",
+   "sku": "AZ-0298",
+   "price": 1940000
+  },
+  {
+   "id": 299,
+   "cat": "electrics",
+   "name": "Стартер",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Nexia 3",
+   "sku": "AZ-0299",
+   "price": 1800000
+  },
+  {
+   "id": 300,
+   "cat": "electrics",
+   "name": "Стартер",
+   "brand": "GM оригинал",
+   "car": "Chevrolet Spark",
+   "sku": "AZ-0300",
+   "price": 1521000
   }
  ]
 }

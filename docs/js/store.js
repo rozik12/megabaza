@@ -14,7 +14,7 @@ const unit = (p, q) => isTire(p) && q >= 4 ? Math.round(priceOf(p) * (100 - KIT_
 const isDeal = p => p.badge || (p.old_price && +p.old_price > priceOf(p));
 const stars = n => '★'.repeat(n) + '☆'.repeat(5 - n);
 const st = k => S.settings[k] || '';
-const ICONS = { tires_car: '🚗', tires_lt: '🚐', tires_suv: '🚙', tires_truck: '🚛', disks: '⚙️', accessories: '🔧', services: '🛠' };
+const ICONS = { tires_car: '🚗', tires_lt: '🚐', tires_suv: '🚙', tires_truck: '🚛', disks: '⚙️', accessories: '🔧', services: '🛠', engine: '⚙️', suspension: '🔩', brakes: '🛑', electrics: '⚡', body: '🚘', steering: '🎛', filters: '🧰', ignition: '🔥', cooling: '❄️', transmission: '⚙️', fluids: '🛢' };
 const catIcon = id => ICONS[id] || '🛞';
 const TIRE_SVG = `<svg viewBox="0 0 100 100" class="phsvg" aria-hidden="true"><circle cx="50" cy="50" r="40" fill="#2b2d3a"/><circle cx="50" cy="50" r="27" fill="#dfe1ea"/><circle cx="50" cy="50" r="9" fill="#2b2d3a"/>${[0, 72, 144, 216, 288].map(a => `<rect x="48.2" y="25" width="3.6" height="15" rx="1.8" fill="#9ea2b5" transform="rotate(${a} 50 50)"/>`).join('')}</svg>`;
 const imgOf = p => p.image_url ? `<img src="${esc(p.image_url)}" alt="${esc(p.name)}" loading="lazy" decoding="async">` : (isTire(p) ? TIRE_SVG : `<span class="phico">${catIcon(p.cat)}</span>`);
@@ -26,7 +26,7 @@ async function loadCatalog() {
     try {
       let [c, p] = await Promise.all([sb.from('categories').select('id,name').order('sort'), sb.from('products').select(COLS).eq('active', true).order('id', { ascending: false })]);
       if (p.error) p = await sb.from('products').select('id,category,name,car,brand,price,in_stock').eq('active', true).order('id', { ascending: false });
-      if (!c.error && !p.error) { S.cats = c.data; S.products = p.data.map(x => ({ ...x, cat: x.category, price: +x.price })); lsSet('catalog', { c: S.cats, p: S.products }); return; }
+      if (!c.error && !p.error && p.data.length) { S.cats = c.data; S.products = p.data.map(x => ({ ...x, cat: x.category, price: +x.price })); lsSet('catalog', { c: S.cats, p: S.products }); return; }
     } catch {}
     const cached = ls('catalog', null);
     if (cached) { S.cats = cached.c; S.products = cached.p; $('offline').hidden = false; return; }
@@ -38,10 +38,10 @@ async function loadExtras() {
   if (!sb) return;
   const [s, b] = await Promise.all([sb.from('settings').select('key,value'), sb.from('banners').select('title,text,link').eq('active', true).order('sort')]);
   if (!s.error) s.data.forEach(r => S.settings[r.key] = r.value);
-  if (!b.error && b.data.length) drawSlider(b.data);
+  if (!b.error && b.data.length) { S.dbBanners = true; drawSlider(b.data); }
   drawContacts();
 }
-const defaultSlides = () => [{ title: t('sl1t'), text: t('sl1d'), link: '#grid' }, { title: t('sl2t'), text: t('sl2d'), link: '#grid' }, { title: t('sl3t'), text: t('sl3d'), link: 'https://t.me/' + (CFG.bot || '') }];
+const defaultSlides = () => [{ title: t('sl1t'), text: t('sl1d'), link: '#grid' }, { title: t(S.products.some(isTire) ? 'sl2t' : 'sl2t2'), text: t(S.products.some(isTire) ? 'sl2d' : 'sl2d2'), link: '#grid' }, { title: t('sl3t'), text: t('sl3d'), link: 'https://t.me/' + (CFG.bot || '') }];
 let slideTimer;
 function drawSlider(list) {
   const el = $('slider'); el.hidden = false;
@@ -76,7 +76,7 @@ function cardHtml(p) {
   const pr = priceOf(p), low = p.stock != null && p.stock > 0 && p.stock <= 5, pct = p.old_price && +p.old_price > pr ? Math.round((1 - pr / p.old_price) * 100) : 0;
   return `<div class="card"><div class="img" data-open="${p.id}">${imgOf(p)}${p.badge ? `<span class="badge">${esc(p.badge)}</span>` : ''}<button class="heart ${S.favs.has(p.id) ? 'on' : ''}" data-fav="${p.id}" aria-label="fav">♥</button></div>
     <div class="cbd"><div class="price"><b>${money(pr)}</b></div>${pct ? `<div class="old2"><s>${money(p.old_price)}</s> <span class="disc">−${pct}%</span></div>` : ''}
-    <h3 data-open="${p.id}">${esc(p.name)}</h3><div class="meta">${esc(p.car)}${p.brand ? ' · ' + esc(p.brand) : ''}</div>
+    <h3 data-open="${p.id}">${esc(p.name)}</h3><div class="meta">${esc(p.car)}${p.brand ? ' · ' + esc(p.brand) : ''}</div>${p.sku ? `<div class="meta">${esc(p.sku)}</div>` : ''}
     ${low ? `<div class="meta red">${t('left')} ${p.stock} ${t('pcs')}</div>` : (isTire(p) ? `<div class="meta">🎁 ${t('kitS')}</div>` : '')}
     <div class="cact" data-act="${p.id}">${cardAct(p)}</div></div></div>`;
 }
@@ -98,10 +98,12 @@ function downloadPrice() {
 function render() {
   $('chips').innerHTML = [{ id: 'all', name: t('all') }, ...S.cats].map(c => `<button class="ctile ${c.id === S.cat ? 'on' : ''}" data-c="${esc(c.id)}"><span class="cico">${c.id === 'all' ? '🛍' : catIcon(c.id)}</span><span>${esc(c.name)}</span></button>`).join('');
   $('chips2').innerHTML = `<button class="chip ${S.deals ? 'on' : ''}" data-deals="1">🔥 ${t('deals')}</button>` + ['summer', 'winter', 'all'].map(k => `<button class="chip ${S.season === k ? 'on' : ''}" data-season="${k}">${t('s_' + k)}</button>`).join('');
+  const tires = S.products.some(isTire); { const pb = document.querySelector('.promo span'); pb.dataset.i = tires ? 'promoBar' : 'promoBar2'; pb.textContent = t(pb.dataset.i); } $('finder').hidden = !tires; $('chips2').querySelectorAll('[data-season]').forEach(b => b.hidden = !tires);
   renderFinder(); fillMega(); renderHits();
   const brands = [...new Set(S.products.map(p => p.brand).filter(Boolean))].sort();
   $('brand').innerHTML = `<option value="">${t('allbrands')}</option>` + brands.map(b => `<option ${b === S.brand ? 'selected' : ''}>${esc(b)}</option>`).join('');
-  $('car').innerHTML = `<option value="">${t('anycar')}</option>` + S.garage.map(g => `<option value="${esc(g.model.toLowerCase())}" ${g.model.toLowerCase() === S.car ? 'selected' : ''}>${t('mycar')}: ${esc(g.make)} ${esc(g.model)}</option>`).join('');
+  const models = [...new Set(S.products.flatMap(p => (p.car || '').replace(/Chevrolet\s*/gi, '').split('/').map(x => x.trim()).filter(x => /^[A-Za-z]/.test(x))))].sort();
+  $('car').innerHTML = `<option value="">${t('anycar')}</option>` + models.map(m => `<option value="${esc(m.toLowerCase())}" ${m.toLowerCase() === S.car ? 'selected' : ''}>${esc(m)}</option>`).join('') + S.garage.map(g => `<option value="${esc(g.model.toLowerCase())}" ${g.model.toLowerCase() === S.car ? 'selected' : ''}>${t('mycar')}: ${esc(g.make)} ${esc(g.model)}</option>`).join('');
   const l = filtered();
   $('foundN').textContent = (S.q || S.brand || S.car || S.stockOnly || S.pmin || S.pmax || S.deals || S.season || S.fw || S.cat !== 'all') ? `${t('found')} ${l.length}` : '';
   $('grid').innerHTML = l.map(cardHtml).join('') || `<p class="empty" style="grid-column:1/-1">${t('nothing')}</p>`;
@@ -436,7 +438,7 @@ $('top').onclick = () => scrollTo({ top: 0, behavior: 'smooth' });
   document.documentElement.dataset.theme = ls('theme', 'light'); $('lang').textContent = LANG.toUpperCase(); applyI18n(); setMode('login');
   $('demo').hidden = CONFIGURED; $('tgBtn').href = $('footTg').href = 'https://t.me/' + (CFG.bot || ''); drawSlider(defaultSlides()); loadAnalytics();
   $('grid').innerHTML = '<div class="sk"></div>'.repeat(8);
-  await Promise.all([loadCatalog(), loadExtras()]); render(); drawCart();
+  await Promise.all([loadCatalog(), loadExtras()]); if (!S.dbBanners) drawSlider(defaultSlides()); render(); drawCart();
   const pid = new URLSearchParams(location.search).get('p'); if (pid) openProduct(pid);
   if (sb) {
     sb.auth.onAuthStateChange((ev) => {

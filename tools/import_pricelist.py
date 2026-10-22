@@ -1,0 +1,65 @@
+# Импорт прайс-листа автозапчастей (pricelist.xlsx) -> bot/catalog.json, site/products.json, products-import.xlsx
+# Запуск из корня репозитория: python3 tools/import_pricelist.py [путь_к_xlsx]
+import sys, json, collections, openpyxl
+src = sys.argv[1] if len(sys.argv) > 1 else 'pricelist.xlsx'
+ws = openpyxl.load_workbook(src)['Прайс']
+CATS = {  # ru -> (id, uz, en)
+ 'Двигатель': ('engine', 'Dvigatel', 'Engine'), 'Подвеска': ('suspension', 'Osma (podveska)', 'Suspension'),
+ 'Тормозная система': ('brakes', 'Tormoz tizimi', 'Brakes'), 'Электрика': ('electrics', 'Elektr jihozlari', 'Electrical'),
+ 'Кузов и оптика': ('body', 'Kuzov va optika', 'Body & lights'), 'Рулевое управление': ('steering', 'Rul boshqaruvi', 'Steering'),
+ 'Фильтры': ('filters', 'Filtrlar', 'Filters'), 'Зажигание': ('ignition', "O‘t oldirish", 'Ignition'),
+ 'Охлаждение': ('cooling', 'Sovutish', 'Cooling'), 'Трансмиссия': ('transmission', 'Transmissiya', 'Transmission'),
+ 'Масла и жидкости': ('fluids', 'Moylar va suyuqliklar', 'Oils & fluids')}
+TR = {  # ru -> (uz, en)
+ 'Комплект ГРМ (ремень + ролики)': ('GRM komplekti (kamar + roliklar)', 'Timing kit (belt + rollers)'), 'Подушка двигателя': ("Dvigatel yostig‘i", 'Engine mount'),
+ 'Помпа водяная': ('Suv nasosi (pompa)', 'Water pump'), 'Прокладка ГБЦ': ('GBS prokladkasi', 'Cylinder head gasket'),
+ 'Прокладка клапанной крышки': ("Klapan qopqog‘i prokladkasi", 'Valve cover gasket'), 'Ремень ГРМ': ('GRM kamari', 'Timing belt'),
+ 'Ремень генератора': ('Generator kamari', 'Alternator belt'), 'Ролик натяжителя ГРМ': ('GRM taranglovchi roligi', 'Timing belt tensioner'),
+ 'Сальник коленвала передний': ('Tirsakli val oldingi salnigi', 'Crankshaft front seal'), 'Термостат': ('Termostat', 'Thermostat'),
+ 'Катушка зажигания': ("O‘t oldirish g‘altagi", 'Ignition coil'), 'Провода высоковольтные (комплект)': ('Yuqori kuchlanishli simlar (komplekt)', 'High-voltage ignition wires (set)'),
+ 'Свечи зажигания (комплект 4 шт)': ('Svechalar (4 dona komplekt)', 'Spark plugs (set of 4)'), 'Зеркало боковое левое': ('Yon oyna (chap)', 'Side mirror, left'),
+ 'Фара передняя левая': ('Old fara (chap)', 'Headlight, front left'), 'Фонарь задний правый': ("Orqa chiroq (o‘ng)", 'Tail light, rear right'),
+ 'Щётки стеклоочистителя (пара)': ("Shisha tozalagich cho‘tkalari (juft)", 'Wiper blades (pair)'), 'Масло моторное 5W-30, 4 л': ('Dvigatel moyi 5W-30, 4 l', 'Engine oil 5W-30, 4 L'),
+ 'Масло трансмиссионное 75W-90, 1 л': ('Transmissiya moyi 75W-90, 1 l', 'Transmission oil 75W-90, 1 L'), 'Антифриз G12, 5 л': ('Antifriz G12, 5 l', 'Antifreeze G12, 5 L'),
+ 'Бачок расширительный': ('Kengaytirish bachogi', 'Coolant expansion tank'), 'Радиатор охлаждения': ('Sovutish radiatori', 'Radiator'),
+ 'Амортизатор задний': ('Orqa amortizator', 'Shock absorber, rear'), 'Амортизатор передний': ('Old amortizator', 'Shock absorber, front'),
+ 'Втулка стабилизатора': ('Stabilizator vtulkasi', 'Stabilizer bushing'), 'Опора амортизатора передняя': ('Old amortizator tayanchi', 'Front strut mount'),
+ 'Подшипник ступицы передний': ('Old stupitsa podshipnigi', 'Front wheel bearing (hub)'), 'Пружина передней подвески': ('Old osma prujinasi', 'Front coil spring'),
+ 'Пыльник амортизатора с отбойником': ('Amortizator changyutgichi (otboynik bilan)', 'Strut boot with bump stop'), 'Рычаг передний нижний': ('Old pastki richag', 'Front lower control arm'),
+ 'Сайлентблок рычага': ('Richag saylentbloki', 'Control arm bushing'), 'Стойка стабилизатора': ('Stabilizator tayanchi (stoyka)', 'Stabilizer link'),
+ 'Ступица задняя в сборе': ("Orqa stupitsa (yig‘ma)", 'Rear hub assembly'), 'Шаровая опора': ('Sharovoy tayanch', 'Ball joint'),
+ 'Наконечник рулевой тяги': ('Rul tortqisi uchligi', 'Tie rod end'), 'Насос гидроусилителя': ('Gidrokuchaytirgich nasosi', 'Power steering pump'),
+ 'Пыльник рулевой рейки': ('Rul reykasi changyutgichi', 'Steering rack boot'), 'Рулевая тяга': ('Rul tortqisi', 'Tie rod'),
+ 'Барабан тормозной задний': ('Orqa tormoz barabani', 'Rear brake drum'), 'Главный тормозной цилиндр': ('Bosh tormoz silindri', 'Brake master cylinder'),
+ 'Диск тормозной передний': ('Old tormoz diski', 'Front brake disc'), 'Колодки тормозные задние': ('Orqa tormoz kolodkalari', 'Rear brake pads'),
+ 'Колодки тормозные передние': ('Old tormoz kolodkalari', 'Front brake pads'), 'Тормозная жидкость DOT-4, 1 л': ('Tormoz suyuqligi DOT-4, 1 l', 'Brake fluid DOT-4, 1 L'),
+ 'Цилиндр тормозной задний': ('Orqa tormoz silindri', 'Rear brake wheel cylinder'), 'Шланг тормозной передний': ('Old tormoz shlangi', 'Front brake hose'),
+ 'Пыльник ШРУСа': ('SHRUS changyutgichi', 'CV joint boot'), 'Сцепление в сборе (корзина, диск, выжимной)': ('Ilashish komplekti (korzina, disk, siqish podshipnigi)', 'Clutch kit (cover, disc, release bearing)'),
+ 'ШРУС наружный': ('Tashqi SHRUS', 'Outer CV joint'), 'Фильтр воздушный': ('Havo filtri', 'Air filter'), 'Фильтр масляный': ('Moy filtri', 'Oil filter'),
+ 'Фильтр салона': ('Salon filtri', 'Cabin filter'), 'Фильтр топливный': ("Yoqilg‘i filtri", 'Fuel filter'), 'Аккумулятор 60 Ач': ('Akkumulyator 60 Ah', 'Battery 60 Ah'),
+ 'Генератор': ('Generator', 'Alternator'), 'Датчик кислорода (лямбда-зонд)': ('Kislorod datchigi (lambda-zond)', 'Oxygen sensor (lambda)'),
+ 'Датчик положения коленвала': ('Tirsakli val holati datchigi', 'Crankshaft position sensor'), 'Датчик температуры охлаждающей жидкости': ('Sovutish suyuqligi harorati datchigi', 'Coolant temperature sensor'),
+ 'Лампа фары H4': ('Fara lampasi H4', 'Headlight bulb H4'), 'Стартер': ('Starter', 'Starter')}
+HITS = {'Фильтр масляный', 'Фильтр воздушный', 'Фильтр салона', 'Колодки тормозные передние', 'Масло моторное 5W-30, 4 л', 'Свечи зажигания (комплект 4 шт)', 'Щётки стеклоочистителя (пара)', 'Амортизатор передний'}
+rows = []
+for r in range(5, ws.max_row + 1):
+    v = [ws.cell(r, c).value for c in range(1, 10)]
+    if v[3] and isinstance(v[8], (int, float)): rows.append(v)
+miss = {v[3] for v in rows if v[3] not in TR}; assert not miss, miss
+miss = {v[4] for v in rows if v[4] not in CATS}; assert not miss, miss
+C = lambda ru, uz, en: dict(ru=ru, uz=uz, en=en)
+prods = []
+for i, (n, sku, _ph, name, cat, car, brand, unit, price) in enumerate(rows, 1):
+    uz, en = TR[name]
+    prods.append(dict(id=i, cat=CATS[cat][0], price=int(price), stock=None, w=None, h=None, d=None, season=None, hit=name in HITS, new=False, old=None, sku=sku, brand=brand,
+        name=C(name, uz, en), car=C(car, car, car),
+        desc=C(f'Артикул {sku}. Производитель: {brand}. Подходит: {car}.', f'Artikul {sku}. Ishlab chiqaruvchi: {brand}. Mos: {car}.', f'SKU {sku}. Brand: {brand}. Fits: {car}.')))
+cats = [dict(id=v[0], name=C(k, v[1], v[2])) for k, v in CATS.items()]
+json.dump(dict(categories=cats, products=prods), open('bot/catalog.json', 'w', encoding='utf8'), ensure_ascii=False, separators=(',', ':'))
+json.dump(dict(currency='сум', categories=[dict(id=c['id'], name=c['name']['ru']) for c in cats],
+    products=[dict(id=p['id'], cat=p['cat'], name=p['name']['ru'], brand=p['brand'], car=p['car']['ru'], sku=p['sku'], price=p['price'], **({'badge': 'Хит'} if p['hit'] else {})) for p in prods]),
+    open('site/products.json', 'w', encoding='utf8'), ensure_ascii=False, indent=1)
+wb = openpyxl.Workbook(); w = wb.active; w.append(['name', 'category', 'price', 'car', 'brand', 'sku', 'stock', 'description', 'old_price', 'wholesale_price', 'badge'])
+for p in prods: w.append([p['name']['ru'], p['cat'], p['price'], p['car']['ru'], p['brand'], p['sku'], None, p['desc']['ru'], None, None, 'Хит' if p['hit'] else None])
+wb.save('products-import.xlsx')
+print(len(prods), 'товаров;', len(cats), 'разделов;', sum(p['hit'] for p in prods), 'хитов')

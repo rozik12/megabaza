@@ -35,6 +35,8 @@ const prod = id => { const p = CAT.products.find(x => x.id === +id); if (!p) ret
 const avail = p => p.in_stock && (p.stock === null || p.stock > 0);
 const nm = (p, l) => p.name[l] || p.name.ru;
 const cname = (c, l) => c.name[l] || c.name.ru;
+const carShort = (p) => String((p.car && p.car.ru) || '').replace(/Chevrolet\s*/gi, '').trim();
+const fullName = (p, l) => nm(p, l) + (carShort(p) ? ' (' + carShort(p) + ')' : '');
 const norm = s => String(s).toLowerCase().replace(/[^a-zа-я0-9./]+/g, ' ').trim();
 
 /* ---------- переводы ---------- */
@@ -135,6 +137,7 @@ const X = {
   cartRemind: '🛒 You left items in your cart. Shall we place the order?', showMap: '📍 On map', shopContact: '☎ Store contact', sizeHint: 'Tip: type a size, e.g. 205/55 R16.', total2: 'To pay', continue: '🛍 Continue shopping', myCars: 'My cars', repeatDone: 'Items from the order were added to your cart 🛒', notFoundCar: 'Tell the manager your car make and year — we will find the right tires.' }
 };
 for (const k of Object.keys(L)) { const { btn, ...rest } = X[k]; Object.assign(L[k].btn, btn); Object.assign(L[k], rest); }
+Object.assign(L.ru, { allParts: 'Все запчасти', pickCat: 'Выберите раздел:' }); Object.assign(L.uz, { allParts: 'Barcha ehtiyot qismlar', pickCat: 'Bo‘limni tanlang:' }); Object.assign(L.en, { allParts: 'All parts', pickCat: 'Choose a section:' });
 const lg = u => L[u.lang] || L.ru;
 const money = (n, l) => Number(n).toLocaleString('ru-RU') + ' ' + L[l].cur;
 const esc = s => String(s ?? '').replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
@@ -193,7 +196,7 @@ function listView(u, rt, page) {
   if (rt.sort) ids.sort((a, b) => rt.sort === 'asc' ? a.price - b.price : b.price - a.price);
   const n = ids.length, pages = Math.max(1, Math.ceil(n / PAGE)); page = Math.min(Math.max(1, page), pages); rt.page = page;
   const badge = p => (p.hit ? '🔥' : '') + (salePct(p) ? '🏷' : '') + (p.new ? '🆕' : '') + (avail(p) ? '' : '❌');
-  const rows = ids.slice((page - 1) * PAGE, page * PAGE).map(p => [{ text: `${badge(p)}${nm(p, l).slice(0, 34)} · ${Number(p.price).toLocaleString('ru-RU')}`, callback_data: 'i:' + p.id }]);
+  const rows = ids.slice((page - 1) * PAGE, page * PAGE).map(p => [{ text: `${badge(p)}${nm(p, l).slice(0, 24)}${carShort(p) ? ' · ' + carShort(p).slice(0, 14) : ''} · ${Math.round(p.price / 1000)}k`, callback_data: 'i:' + p.id }]);
   const nav = []; if (page > 1) nav.push({ text: '◀', callback_data: 'pg:' + (page - 1) }); nav.push({ text: t.page(page, pages), callback_data: 'n' }); if (page < pages) nav.push({ text: '▶', callback_data: 'pg:' + (page + 1) });
   const mark = (c, k, txt) => ({ text: (c === k ? '✓ ' : '') + txt, callback_data: (k === 'summer' || k === 'winter' || k === 'all' ? 'sn:' : 'rg:') + k });
   rows.push([mark(rt.range, 'low', t.rgLow), mark(rt.range, 'mid', t.rgMid), mark(rt.range, 'high', t.rgHigh)]);
@@ -208,7 +211,7 @@ const setList = (chat, ids, title) => Object.assign(R(chat), { list: ids, title,
 function card(u, p) {
   const t = lg(u), l = u.lang, sp = salePct(p), cnt = Object.values(u.cart).reduce((a, b) => a + b, 0);
   const stt = !avail(p) ? t.out : (p.stock !== null && p.stock <= 5 ? t.left(p.stock) : t.inStock);
-  const text = `${p.hit ? '🔥 ' : ''}${p.new ? '🆕 ' : ''}<b>${esc(nm(p, l))}</b>\n${t.for}: ${esc(p.car[l] || p.car.ru)}\n${t.price}: <b>${money(p.price, l)}</b>${sp ? ` <s>${money(p.old, l)}</s> 🏷 −${sp}%` : ''}\n${isTire(p) && KIT_PCT ? t.kitDisc(KIT_PCT) + ' (4+)\n' : ''}${stt}\n\n${esc(p.desc[l] || p.desc.ru)}`;
+  const text = `${p.hit ? '🔥 ' : ''}${p.new ? '🆕 ' : ''}<b>${esc(nm(p, l))}</b>\n${t.for}: ${esc(p.car[l] || p.car.ru)}\n${p.sku ? 'SKU: ' + esc(p.sku) + (p.brand ? ' · ' + esc(p.brand) : '') + '\n' : ''}${t.price}: <b>${money(p.price, l)}</b>${sp ? ` <s>${money(p.old, l)}</s> 🏷 −${sp}%` : ''}\n${isTire(p) && KIT_PCT ? t.kitDisc(KIT_PCT) + ' (4+)\n' : ''}${stt}\n\n${esc(p.desc[l] || p.desc.ru)}`;
   const fav = u.fav.includes(p.id);
   const row1 = avail(p) ? (isTire(p) ? [{ text: t.add, callback_data: 'a:' + p.id }, { text: t.kit, callback_data: 'a4:' + p.id }] : [{ text: t.add, callback_data: 'a:' + p.id }]) : [{ text: t.notify, callback_data: 'nf:' + p.id }];
   return { text, kb: ik([row1, [{ text: fav ? t.favDel : t.favAdd, callback_data: 'f:' + p.id }, { text: t.cmpBtn, callback_data: 'cmp:' + p.id }], [{ text: t.toCart(cnt), callback_data: 'cart' }]]) };
@@ -225,8 +228,8 @@ function compareView(u, ids) {
 /* ---------- прайс-лист ---------- */
 function priceText(u, catId) {
   const t = lg(u), l = u.lang, cats = catId ? CAT.categories.filter(c => c.id === catId) : CAT.categories, out = [];
-  for (const c of cats) { let s = `<b>${esc(cname(c, l))}</b>\n`; for (const p0 of CAT.products.filter(p => p.cat === c.id)) { const p = prod(p0.id); s += `${avail(p) ? '•' : '✖'} ${esc(nm(p, l))} — <b>${Number(p.price).toLocaleString('ru-RU')}</b>\n`; } out.push(s); }
-  const txt = out.join('\n') + '\n<i>' + t.priceNote + (KIT_PCT ? ' ' + t.kitDisc(KIT_PCT) + ' (4+).' : '') + '</i>', parts = []; let cur = '';
+  for (const c of cats) { let s = `<b>${esc(cname(c, l))}</b>\n`; for (const p0 of CAT.products.filter(p => p.cat === c.id)) { const p = prod(p0.id); s += `${avail(p) ? '•' : '✖'} ${esc(fullName(p, l))} — <b>${Number(p.price).toLocaleString('ru-RU')}</b>\n`; } out.push(s); }
+  const txt = out.join('\n') + '\n<i>' + t.priceNote + (KIT_PCT && hasTires() ? ' ' + t.kitDisc(KIT_PCT) + ' (4+).' : '') + '</i>', parts = []; let cur = '';
   for (const line of txt.split('\n')) { if ((cur + line).length > 3500) { parts.push(cur); cur = ''; } cur += line + '\n'; } if (cur) parts.push(cur); return parts;
 }
 function priceCsv(u) { const l = u.lang; return 'ID;' + L[l].btn.catalog + ';Name;Price;Stock\n' + CAT.products.map(p0 => { const p = prod(p0.id), c = CAT.categories.find(x => x.id === p.cat); return [p.id, cname(c, l), nm(p, l), p.price, avail(p) ? (p.stock ?? 'yes') : 0].join(';'); }).join('\n'); }
@@ -235,7 +238,7 @@ function priceCsv(u) { const l = u.lang; return 'ID;' + L[l].btn.catalog + ';Nam
 function cartView(u) {
   const t = lg(u), l = u.lang, ids = cartIds(u); if (!ids.length) return { text: t.cartEmpty, kb: ik([[{ text: t.btn.catalog, callback_data: 'cats' }]]) };
   const x = totals(u, { delivery: 'delivery' });
-  const lines = ids.map(id => { const p = prod(id), q = u.cart[id], up = unit(p, q); return `• ${esc(nm(p, l))}\n   ${q} × ${money(up, l)}${up < p.price ? ' 🎁' : ''} = <b>${money(up * q, l)}</b>`; });
+  const lines = ids.map(id => { const p = prod(id), q = u.cart[id], up = unit(p, q); return `• ${esc(fullName(p, l))}\n   ${q} × ${money(up, l)}${up < p.price ? ' 🎁' : ''} = <b>${money(up * q, l)}</b>`; });
   const rows = ids.map(id => [{ text: '−', callback_data: 'cm:' + id }, { text: `${nm(prod(id), l).slice(0, 22)} · ${u.cart[id]}`, callback_data: 'n' }, { text: '+', callback_data: 'cp:' + id }]);
   rows.push([{ text: t.promo, callback_data: 'promo' }, { text: t.clear, callback_data: 'cx' }], [{ text: t.continue, callback_data: 'cats' }, { text: t.checkout, callback_data: 'co' }]);
   return { text: `${t.cartTitle}\n\n${lines.join('\n')}\n\n${x.kit ? t.kitDisc(KIT_PCT) + ': −' + money(x.kit, l) + '\n' : ''}${x.disc ? t.discount(x.pct) + ': −' + money(x.disc, l) + '\n' : ''}<b>${t.total}: ${money(x.sub - x.disc, l)}</b>${u.points ? '\n' + t.points(u.points) : ''}`, kb: ik(rows) };
@@ -267,7 +270,7 @@ async function notifyAdmins(text, extra) { for (const a of ADMINS) await send(a,
 async function placeOrder(chat, u, from) {
   const t = lg(u), rt = R(chat), d = rt.draft, ids = cartIds(u);
   for (const id of ids) { const p = prod(id); if (!avail(p) || (p.stock !== null && p.stock < u.cart[id])) return send(chat, t.stockShort(nm(p, u.lang)), mainKb(u)); }
-  const x = totals(u, d), items = ids.map(id => ({ id: +id, qty: u.cart[id], name: nm(prod(id), 'ru'), price: unit(prod(id), u.cart[id]) }));
+  const x = totals(u, d), items = ids.map(id => ({ id: +id, qty: u.cart[id], name: fullName(prod(id), 'ru'), price: unit(prod(id), u.cart[id]) }));
   const order = { id: state.nextOrder++, uid: chat, user: u.name, lang: u.lang, items, phone: d.phone, delivery: d.delivery, address: d.address || '', slot: d.slotL, pay: d.pay, note: d.note || '', promo: x.pct ? u.promo : '', discount: x.disc + x.kit, points: x.pts, fee: x.fee, total: x.total, status: 'new', ts: Date.now() };
   if (SB_URL && SB_KEY) {
     try { const r = await fetch(SB_URL + '/rest/v1/rpc/place_order', { method: 'POST', headers: { apikey: SB_KEY, authorization: 'Bearer ' + SB_KEY, 'content-type': 'application/json' }, body: JSON.stringify({ items: items.map(i => ({ id: i.id, qty: i.qty })), p_phone: order.phone, p_address: order.address, p_comment: (order.note || 'Telegram') + ' | ' + (order.slot || ''), p_delivery: order.delivery, p_payment: order.pay, p_promo: '', p_name: order.user || 'Telegram' }) }); if (r.ok) order.dbId = await r.json(); } catch (e) { console.error('db order:', e.message); }
@@ -283,8 +286,8 @@ async function placeOrder(chat, u, from) {
 }
 
 /* ---------- прочие экраны ---------- */
-const CARS = ['Matiz', 'Spark', 'Damas', 'Nexia', 'Cobalt', 'Gentra', 'Lacetti', 'Malibu', 'Captiva', 'Tracker'];
-const carIds = tok => CAT.products.filter(p => isTire(p) && JSON.stringify(p.car).toLowerCase().includes(tok.toLowerCase())).map(p => p.id);
+const CARS = ['Cobalt', 'Damas', 'Gentra', 'Lacetti', 'Nexia', 'Spark', 'Matiz', 'Malibu', 'Captiva', 'Tracker'];
+const carIds = tok => CAT.products.filter(p => JSON.stringify(p.car).toLowerCase().includes(tok.toLowerCase())).map(p => p.id);
 const ST = { new: '🆕', processing: '🔧', done: '✅', cancelled: '❌' };
 const contacts = u => { const t = lg(u); return `${t.contacts}\n${shopOpen() ? t.openS : t.closedS}\n${STORE.phone ? '☎ ' + esc(STORE.phone) + '\n' : ''}📍 ${esc(STORE.address)}\n🕘 ${t.hours}: ${esc(STORE.hours)}${STORE.telegram ? '\n✈ @' + esc(STORE.telegram) : ''}`; };
 function ordersView(u, chat) {
@@ -297,7 +300,9 @@ function pickStep(u, rt) {
   const key = !f.w ? 'w' : !f.h ? 'h' : 'd', vals = [...new Set(tires.map(p => p[key]))].sort((a, b) => a - b);
   return { text: `${t.pick}\n${f.w || '…'}/${f.h || '…'} R…\n\n${{ w: t.pickW, h: t.pickH, d: t.pickD }[key]}`, kb: ik([...chunk(vals.map(v => ({ text: v, callback_data: `p${key}:${v}` })), 4), [{ text: t.back, callback_data: 'fm' }]]) };
 }
-const finderMenu = u => { const t = lg(u); return { text: t.fMenu, kb: ik([[{ text: t.byDims, callback_data: 'pick' }, { text: t.byCar, callback_data: 'fc' }, { text: t.bySeason, callback_data: 'fs' }], ...(u.cars || []).map(c => [{ text: '⭐ ' + c, callback_data: 'fcar:' + c }])]) }; };
+const hasTires = () => CAT.products.some(isTire);
+const finderMenu = u => { const t = lg(u), cars = CARS.filter(c => carIds(c).length), top = hasTires() ? [[{ text: t.byDims, callback_data: 'pick' }, { text: t.bySeason, callback_data: 'fs' }]] : [];
+  return { text: hasTires() ? t.fMenu : t.pickCar, kb: ik([...top, ...chunk(cars.map(c => ({ text: '🚗 ' + c, callback_data: 'fcar:' + c })), 3), [{ text: t.otherCar, callback_data: 'fcar:?' }], ...(u.cars || []).map(c => [{ text: '⭐ ' + c, callback_data: 'fcar:' + c }])]) }; };
 const infoMenu = u => { const t = lg(u); return { text: t.infoMenu, kb: ik([[{ text: t.i1, callback_data: 'inf:g1' }], [{ text: t.i2, callback_data: 'inf:g2' }], [{ text: t.i3, callback_data: 'inf:g3' }], [{ text: t.i4, callback_data: 'inf:g4' }], [{ text: t.i5, callback_data: 'inf:faq' }], [{ text: t.invite, callback_data: 'inv' }]]) }; };
 const settingsView = u => { const t = lg(u); return { text: t.settings, kb: ik([[...Object.entries(L).map(([k, v]) => ({ text: v.flag + ' ' + v.code, callback_data: 'lang:' + k }))], [{ text: u.mute ? t.notifOff : t.notifOn, callback_data: 'nt' }], [{ text: t.invite, callback_data: 'inv' }], [{ text: t.deleteMe, callback_data: 'del' }]]) }; };
 
@@ -412,7 +417,7 @@ async function onMessage(m) {
 }
 function doSearch(chat, u, q) {
   const t = lg(u), n = norm(q), m = n.match(/(\d{3})\D+(\d{2})\D+r?(\d{2}(?:\.\d)?)/), words = n.split(' ').filter(Boolean);
-  const res = CAT.products.filter(p => m ? (p.w === m[1] && p.h === m[2] && p.d === m[3]) : words.every(w => norm(Object.values(p.name).join(' ') + ' ' + p.car.ru).includes(w))).map(p => p.id);
+  const res = CAT.products.filter(p => m ? (p.w === m[1] && p.h === m[2] && p.d === m[3]) : words.every(w => norm(Object.values(p.name).join(' ') + ' ' + p.car.ru + ' ' + (p.sku || '')).includes(w))).map(p => p.id);
   setList(chat, res, '«' + q.slice(0, 30) + '»'); return showList(chat, u).then(() => res.length ? null : send(chat, t.sizeHint));
 }
 
@@ -463,7 +468,13 @@ async function onCallback(q) {
     case 'pw': case 'ph': { rt.pick = { ...(rt.pick || {}), [k[1]]: v }; const s = pickStep(u, rt); return edit(chat, mid, s.text, s.kb); }
     case 'pd': { const f = { ...rt.pick, d: v }; setList(chat, CAT.products.filter(p => p.w === f.w && p.h === f.h && p.d === f.d).map(p => p.id), t.pickRes(`${f.w}/${f.h} R${f.d}`)); return showList(chat, u, mid); }
     case 'fc': return edit(chat, mid, t.pickCar, ik([...chunk(CARS.map(c => ({ text: c, callback_data: 'fcar:' + c })), 3), [{ text: t.otherCar, callback_data: 'fcar:?' }]]));
-    case 'fcar': { if (v === '?') { rt.step = 'support'; return send(chat, t.notFoundCar + '\n\n' + t.managerOn, { reply_markup: { keyboard: [[{ text: t.exit }]], resize_keyboard: true } }); } setList(chat, carIds(v), '🚗 ' + v); await showList(chat, u); return (u.cars || []).includes(v) ? null : send(chat, '👆', ik([[{ text: t.saveCar, callback_data: 'sv:' + v }]])); }
+    case 'fcar': {
+      if (v === '?') { rt.step = 'support'; return send(chat, t.notFoundCar + '\n\n' + t.managerOn, { reply_markup: { keyboard: [[{ text: t.exit }]], resize_keyboard: true } }); }
+      const ids = carIds(v);
+      if (ids.length > 12) { const cs = CAT.categories.map(c => [c, ids.filter(id => prod(id).cat === c.id).length]).filter(x => x[1]); return ed(chat, msg, `🚗 <b>${esc(v)}</b>\n${t.pickCat}`, ik([...cs.map(([c, n]) => [{ text: `${cname(c, u.lang)} (${n})`, callback_data: `fcc:${v}:${c.id}` }]), [{ text: t.allParts, callback_data: `fcc:${v}:*` }]])); }
+      setList(chat, ids, '🚗 ' + v); await showList(chat, u); return (u.cars || []).includes(v) ? null : send(chat, '👆', ik([[{ text: t.saveCar, callback_data: 'sv:' + v }]])); }
+    case 'fcc': { const cat = a[1], ids = carIds(v).filter(id => cat === '*' || prod(id).cat === cat), c = CAT.categories.find(x => x.id === cat);
+      setList(chat, ids, '🚗 ' + v + (c ? ' · ' + cname(c, u.lang) : '')); await showList(chat, u); return (u.cars || []).includes(v) ? null : send(chat, '👆', ik([[{ text: t.saveCar, callback_data: 'sv:' + v }]])); }
     case 'sv': u.cars = [...new Set([...(u.cars || []), v])].slice(-4); save(); return ed(chat, msg, t.carSaved, ik([]));
     case 'fs': return edit(chat, mid, t.pickSeason, ik([[{ text: t.sSummer, callback_data: 'fse:summer' }, { text: t.sWinter, callback_data: 'fse:winter' }, { text: t.sAll, callback_data: 'fse:all' }]]));
     case 'fse': setList(chat, CAT.products.filter(p => p.season === v).map(p => p.id), t.season[v]); return showList(chat, u, mid);
@@ -513,7 +524,7 @@ async function main() {
   const me = await call('getMe', {}); if (!me) console.error('Telegram не отвечает или токен неверный'); else { BOT_NAME = me.username; console.log('Бот: @' + me.username); }
   if (!ADMINS.length) console.log('Внимание: ADMIN_IDS не задан — админ-функции и уведомления о заказах отключены.');
   await call('setMyCommands', { commands: [{ command: 'start', description: 'Start / Начать / Boshlash' }, { command: 'catalog', description: 'Catalog / Каталог / Katalog' }, { command: 'price', description: 'Price list / Прайс / Narxlar' }, { command: 'cart', description: 'Cart / Корзина / Savat' }, { command: 'lang', description: 'Settings / Настройки / Sozlamalar' }] });
-  for (const [lc, d, s] of [['ru', 'Шины для легковых, внедорожных и грузовых авто, диски, камеры и шиномонтаж. Заказ прямо в Telegram.', 'MEGABAZA — центр автозапчастей'], ['uz', "Yengil, yo'ldan tashqari va yuk avtomobillari uchun shinalar, disklar, kameralar. Buyurtma Telegramda.", 'MEGABAZA — avtoehtiyot qismlar markazi'], ['en', 'Tires for cars, SUVs and trucks, wheels, tubes and fitting. Order right in Telegram.', 'MEGABAZA — auto parts center']])
+  for (const [lc, d, s] of [['ru', 'Автозапчасти, шины и аксессуары. Подбор по автомобилю, заказ прямо в Telegram.', 'MEGABAZA — центр автозапчастей'], ['uz', "Avtoehtiyot qismlar, shinalar va aksessuarlar. Avtomobil bo'yicha tanlash, buyurtma Telegramda.", 'MEGABAZA — avtoehtiyot qismlar markazi'], ['en', 'Auto parts, tires and accessories. Find by car, order right in Telegram.', 'MEGABAZA — auto parts center']])
     { await call('setMyDescription', { description: d, language_code: lc }); await call('setMyShortDescription', { short_description: s, language_code: lc }); }
   setInterval(() => background().catch(console.error), Number(env('BG_INTERVAL_MS')) || 300000);
   let offset = 0; console.log('MEGABAZA bot запущен');
