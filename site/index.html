@@ -9,6 +9,7 @@
 <meta property="og:title" content="MEGABAZA — центр автозапчастей"><meta property="og:description" content="Автозапчасти в Ташкенте с доставкой"><meta property="og:image" content="logo.png"><meta property="og:type" content="website">
 <link rel="icon" href="mark.png"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-192.png">
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/market.css">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"AutoPartsStore","name":"MEGABAZA","description":"Центр автозапчастей","image":"logo.png","address":{"@type":"PostalAddress","addressLocality":"Ташкент","addressCountry":"UZ"}}</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="config.js"></script>
@@ -16,26 +17,27 @@
 <body>
 <div class="banner" id="demo" hidden data-i="demo"></div>
 <div class="banner" id="offline" hidden data-i="offline"></div>
+<div class="promo"><span data-i="promoBar"></span></div>
 <header><div class="wrap bar">
-  <a class="logo" href="./"><img src="mark.png" alt="MEGABAZA"><div>MEGABAZA<small>центр автозапчастей</small></div></a>
-  <div class="grow search"><input id="q" data-ip="search" type="search" autocomplete="off"><div class="sugg" id="sugg" hidden></div></div>
-  <a class="ghost iconbtn" id="callBtn" href="#contacts" aria-label="Phone">📞</a>
-  <a class="ghost iconbtn" id="tgBtn" href="#" target="_blank" rel="noopener" style="text-decoration:none" aria-label="Telegram">✈</a>
-  <button class="ghost iconbtn" id="lang" aria-label="Language">RU</button>
-  <button class="ghost iconbtn" id="theme" aria-label="Theme">🌓</button>
-  <button class="ghost iconbtn cartbtn" id="favBtn" aria-label="Favorites">♥<b id="favCount" hidden>0</b></button>
+  <a class="logo" href="./"><img src="mark-t.png" alt="MEGABAZA"><div>MEGABAZA<small>центр автозапчастей</small></div></a>
+  <button class="catbtn" id="catBtn">☰ <span data-i="catalogBtn"></span></button>
+  <div class="grow search"><input id="q" data-ip="search" type="search" autocomplete="off"><button class="sbtn" id="sbtn" aria-label="Search">🔍</button><div class="sugg" id="sugg" hidden></div></div>
+  <a class="hbtn" id="callBtn" href="#contacts" aria-label="Phone"><span class="ic">📞</span></a>
+  <a class="hbtn" id="tgBtn" href="#" target="_blank" rel="noopener" aria-label="Telegram"><span class="ic">✈</span></a>
+  <button class="hbtn" id="lang" aria-label="Language"><span class="ic">RU</span></button>
+  <button class="hbtn" id="theme" aria-label="Theme"><span class="ic">🌓</span></button>
   <a class="btn sm" id="adminLink" href="admin.html" hidden style="text-decoration:none" data-i="admin"></a>
-  <button class="ghost sm" id="authBtn" data-i="login"></button>
-  <button class="ghost cartbtn iconbtn" id="open" aria-label="Cart">🛒<b id="count">0</b></button>
+  <button class="hbtn" id="authBtn" data-i="login"></button>
+  <button class="hbtn" id="favBtn" aria-label="Favorites"><span class="ic">♥</span><small class="lbl" data-i="fav"></small><b id="favCount" hidden>0</b></button>
+  <button class="hbtn" id="open" aria-label="Cart"><span class="ic">🛒</span><small class="lbl" data-i="cart"></small><b id="count">0</b></button>
+  <div class="mega" id="mega" hidden></div>
 </div></header>
 
 <main class="wrap">
   <div class="slider" id="slider" hidden></div>
-  <section class="hero">
-    <h1><span data-i="hero1"></span> <span class="red" data-i="hero2"></span> <span data-i="hero3"></span></h1>
-    <p data-i="heroP"></p>
-  </section>
   <div class="chips" id="chips"></div>
+  <div class="chips" id="chips2"></div>
+  <section id="hitsBox" hidden><h2 class="sech" data-i="hitsTitle"></h2><div class="hrow" id="hits"></div></section>
   <div class="tools" id="finder"><b style="grid-column:1/-1">📏 <span data-i="finder"></span></b><select id="fw"></select><select id="fh"></select><select id="fd"></select><button class="ghost" id="priceCsv">📄 <span data-i="priceCsv"></span></button></div>
   <div class="tools">
     <select id="car" aria-label="car"></select>
@@ -46,7 +48,8 @@
     <button class="ghost" id="resetF" data-i="reset"></button>
   </div>
   <div id="recentBox" hidden><h3 data-i="recent" style="margin-bottom:8px"></h3><div class="mini" id="recent"></div></div>
-  <p class="muted" id="foundN" style="margin:8px 0"></p>
+  <h2 class="sech" data-i="allGoods"></h2>
+  <p class="muted" id="foundN" style="margin:4px 0 8px"></p>
   <div class="grid" id="grid"></div>
 
   <section class="sec" id="delivery"><h2 data-i="secDelivery"></h2><div class="cols">
@@ -65,7 +68,12 @@
     <div class="cols"><div class="tile" id="contactInfo"></div><div class="tile kv" id="contactBtns"></div></div>
     <iframe class="map" id="map" loading="lazy" title="map" hidden></iframe></section>
 </main>
-<footer><div class="wrap"><button class="ghost sm" id="trackOpen">📦 <span data-i="track"></span></button> · © MEGABAZA · <a href="legal.html#offer" data-i="offer"></a> · <a href="legal.html#privacy" data-i="privacy"></a></div></footer>
+<footer class="mfoot"><div class="wrap"><div class="fcols">
+  <div><b>MEGABAZA</b><p class="muted" data-i="footAbout"></p></div>
+  <div><b data-i="footHelp"></b><a href="#delivery" data-i="secDelivery"></a><a href="#faq" data-i="secFaq"></a><button class="linkbtn" id="trackOpen" data-i="track"></button></div>
+  <div><b data-i="secContacts"></b><a href="#contacts" data-i="secContacts"></a><a id="footTg" href="#" target="_blank" rel="noopener">Telegram</a></div>
+  <div><b data-i="footLegal"></b><a href="legal.html#offer" data-i="offer"></a><a href="legal.html#privacy" data-i="privacy"></a></div></div>
+  <p class="muted" style="margin-top:16px">© MEGABAZA</p></div></footer>
 <button class="top ghost" id="top" aria-label="Up">↑</button>
 
 <!-- корзина -->
@@ -120,7 +128,7 @@
   <form class="compose" id="compose"><label class="ghost sm" style="cursor:pointer;margin:0;display:grid;place-items:center;border-radius:10px" title="📷">📎<input type="file" id="file" accept="image/*" hidden></label>
     <textarea id="msgInput" rows="1" maxlength="2000" data-ip="msg"></textarea><button class="btn" aria-label="Send">➤</button></form>
 </section>
-<nav class="mbar" id="mbar"><button data-m="home" aria-label="Home">🏠</button><button data-m="search" aria-label="Search">🔍</button><button data-m="chat" aria-label="Chat">💬</button><button data-m="cart" aria-label="Cart">🛒<b id="mcount">0</b></button></nav>
+<nav class="mbar" id="mbar"><button data-m="home"><span>🏠</span><small data-i="mHome"></small></button><button data-m="cat"><span>☰</span><small data-i="catalogBtn"></small></button><button data-m="cart"><span>🛒</span><small data-i="cart"></small><b id="mcount">0</b></button><button data-m="fav"><span>♥</span><small data-i="fav"></small></button><button data-m="prof"><span>👤</span><small data-i="profile"></small></button></nav>
 <div class="modal" id="doneModal"><div class="box" style="text-align:center"><div style="font-size:56px">✅</div><h2 id="doneTitle"></h2><p class="muted" id="doneText"></p>
   <button class="btn" id="doneOrders"></button><button class="ghost" id="doneClose" data-i="continue"></button></div></div>
 <div class="modal" id="trackModal"><form class="box" id="trackForm"><h3>📦 <span data-i="track"></span></h3>

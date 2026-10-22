@@ -140,7 +140,7 @@ details{background:var(--card);border:1px solid var(--line);border-radius:10px;p
 .qtyrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:space-between}
 .qin{width:52px;text-align:center;padding:4px 2px;-moz-appearance:textfield}.qin::-webkit-inner-spin-button{display:none}
 .rm{padding:4px 8px}
-.bar{height:8px;border-radius:99px;background:var(--bg2);overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;background:var(--red);border-radius:99px;transition:width .3s}
+.pbar{height:8px;border-radius:99px;background:var(--bg2);overflow:hidden;margin-top:6px}.pbar i{display:block;height:100%;background:var(--red);border-radius:99px;transition:width .3s}
 .shipmsg{font-size:14px;color:var(--muted)}.shipmsg.ok{color:var(--ok)}
 .strbar{height:6px;border-radius:99px;background:var(--bg2);overflow:hidden}.strbar i{display:block;height:100%;width:0;transition:width .2s,background .2s}
 .chk{display:flex;gap:8px;align-items:flex-start;font-size:14px;color:var(--text);margin:0}.chk input{width:auto;margin-top:4px}

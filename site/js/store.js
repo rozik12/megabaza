@@ -14,7 +14,10 @@ const unit = (p, q) => isTire(p) && q >= 4 ? Math.round(priceOf(p) * (100 - KIT_
 const isDeal = p => p.badge || (p.old_price && +p.old_price > priceOf(p));
 const stars = n => '★'.repeat(n) + '☆'.repeat(5 - n);
 const st = k => S.settings[k] || '';
-const imgOf = p => p.image_url ? `<img src="${esc(p.image_url)}" alt="${esc(p.name)}" loading="lazy" decoding="async">` : 'MB';
+const ICONS = { tires_car: '🚗', tires_lt: '🚐', tires_suv: '🚙', tires_truck: '🚛', disks: '⚙️', accessories: '🔧', services: '🛠' };
+const catIcon = id => ICONS[id] || '🛞';
+const TIRE_SVG = `<svg viewBox="0 0 100 100" class="phsvg" aria-hidden="true"><circle cx="50" cy="50" r="40" fill="#2b2d3a"/><circle cx="50" cy="50" r="27" fill="#dfe1ea"/><circle cx="50" cy="50" r="9" fill="#2b2d3a"/>${[0, 72, 144, 216, 288].map(a => `<rect x="48.2" y="25" width="3.6" height="15" rx="1.8" fill="#9ea2b5" transform="rotate(${a} 50 50)"/>`).join('')}</svg>`;
+const imgOf = p => p.image_url ? `<img src="${esc(p.image_url)}" alt="${esc(p.name)}" loading="lazy" decoding="async">` : (isTire(p) ? TIRE_SVG : `<span class="phico">${catIcon(p.cat)}</span>`);
 
 /* ---------- данные ---------- */
 const COLS = 'id,category,name,car,brand,price,in_stock,image_url,description,sku,badge,old_price,stock,wholesale_price';
@@ -38,10 +41,13 @@ async function loadExtras() {
   if (!b.error && b.data.length) drawSlider(b.data);
   drawContacts();
 }
+const defaultSlides = () => [{ title: t('sl1t'), text: t('sl1d'), link: '#grid' }, { title: t('sl2t'), text: t('sl2d'), link: '#grid' }, { title: t('sl3t'), text: t('sl3d'), link: 'https://t.me/' + (CFG.bot || '') }];
+let slideTimer;
 function drawSlider(list) {
   const el = $('slider'); el.hidden = false;
-  el.innerHTML = list.map((b, i) => `<div class="slide ${i ? '' : 'on'}"><h2>${esc(b.title)}</h2><p>${esc(b.text)}</p>${b.link ? `<a href="${esc(b.link)}" rel="noopener">→</a>` : ''}</div>`).join('');
-  if (list.length > 1) { let i = 0; setInterval(() => { const s = el.children; s[i].classList.remove('on'); i = (i + 1) % s.length; s[i].classList.add('on'); }, 5000); }
+  el.innerHTML = list.map((b, i) => `<div class="slide ${i ? '' : 'on'}"><h2>${esc(b.title)}</h2><p>${esc(b.text)}</p>${b.link ? `<a href="${esc(b.link)}" rel="noopener">${t('slBtn')} →</a>` : ''}</div>`).join('');
+  clearInterval(slideTimer);
+  if (list.length > 1) { let i = 0; slideTimer = setInterval(() => { const s = el.children; s[i].classList.remove('on'); i = (i + 1) % s.length; s[i].classList.add('on'); }, 5000); }
 }
 function drawContacts() {
   const ph = st('phone'), tg = st('telegram'), wa = st('whatsapp').replace(/\D/g, ''), ig = st('instagram');
@@ -64,14 +70,19 @@ function filtered() {
   if (S.sort === 'asc') l.sort((a, b) => priceOf(a) - priceOf(b)); else if (S.sort === 'desc') l.sort((a, b) => priceOf(b) - priceOf(a)); else if (S.sort === 'name') l.sort((a, b) => a.name.localeCompare(b.name, 'ru'));
   return l;
 }
+const cardAct = p => { const q = cart[p.id] || 0; if (!p.in_stock) return `<button class="ghost wide" data-open="${p.id}">${t('out')}</button>`; return q ? `<div class="stepper"><button data-d="-1" data-id="${p.id}" aria-label="-">−</button><span>${q}</span><button data-d="1" data-id="${p.id}" aria-label="+">+</button></div>` : `<button class="btn wide" data-add="${p.id}">${t('add')}</button>`; };
+function refreshActs() { document.querySelectorAll('[data-act]').forEach(el => { const p = byId(el.dataset.act); if (p) el.innerHTML = cardAct(p); }); }
 function cardHtml(p) {
-  const pr = priceOf(p), low = p.stock != null && p.stock > 0 && p.stock <= 5;
+  const pr = priceOf(p), low = p.stock != null && p.stock > 0 && p.stock <= 5, pct = p.old_price && +p.old_price > pr ? Math.round((1 - pr / p.old_price) * 100) : 0;
   return `<div class="card"><div class="img" data-open="${p.id}">${imgOf(p)}${p.badge ? `<span class="badge">${esc(p.badge)}</span>` : ''}<button class="heart ${S.favs.has(p.id) ? 'on' : ''}" data-fav="${p.id}" aria-label="fav">♥</button></div>
-    <h3 data-open="${p.id}" style="cursor:pointer">${esc(p.name)}</h3><div class="meta">${esc(p.car)}${p.brand ? ' · ' + esc(p.brand) : ''}</div>
-    ${low ? `<div class="meta red">${t('left')} ${p.stock} ${t('pcs')}</div>` : ''}
-    ${isTire(p) ? `<div class="meta">🎁 ${t('kit')}</div>` : ''}<div class="price">${money(pr)}${p.old_price && +p.old_price > pr ? `<span class="old">${money(p.old_price)}</span>` : ''}</div>
-    ${p.in_stock ? `<button class="btn" data-add="${p.id}">${t('add')}</button>` : `<button class="ghost" data-open="${p.id}">${t('out')}</button>`}</div>`;
+    <div class="cbd"><div class="price"><b>${money(pr)}</b></div>${pct ? `<div class="old2"><s>${money(p.old_price)}</s> <span class="disc">−${pct}%</span></div>` : ''}
+    <h3 data-open="${p.id}">${esc(p.name)}</h3><div class="meta">${esc(p.car)}${p.brand ? ' · ' + esc(p.brand) : ''}</div>
+    ${low ? `<div class="meta red">${t('left')} ${p.stock} ${t('pcs')}</div>` : (isTire(p) ? `<div class="meta">🎁 ${t('kitS')}</div>` : '')}
+    <div class="cact" data-act="${p.id}">${cardAct(p)}</div></div></div>`;
 }
+const filtersActive = () => !!(S.q || S.brand || S.car || S.stockOnly || S.pmin || S.pmax || S.deals || S.season || S.fw || S.cat !== 'all');
+function renderHits() { const hs = S.products.filter(p => p.in_stock && (p.badge || isDeal(p))).slice(0, 12); $('hitsBox').hidden = filtersActive() || !hs.length; $('hits').innerHTML = hs.map(cardHtml).join(''); }
+function fillMega() { $('mega').innerHTML = S.cats.map(c => `<button class="mitem" data-c="${esc(c.id)}"><span class="cico">${catIcon(c.id)}</span><span>${esc(c.name)}</span></button>`).join(''); }
 function renderFinder() {
   const sz = S.products.map(sizeOf).filter(Boolean), uniq = a => [...new Set(a)].sort((x, y) => x - y);
   const W = uniq(sz.map(x => x.w)), H = uniq(sz.filter(x => !S.fw || x.w === S.fw).map(x => x.h)), D = uniq(sz.filter(x => (!S.fw || x.w === S.fw) && (!S.fh || x.h === S.fh)).map(x => x.d));
@@ -85,9 +96,9 @@ function downloadPrice() {
   const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' })); a.download = 'megabaza-prices.csv'; a.click();
 }
 function render() {
-  $('chips').innerHTML = [{ id: 'all', name: t('all') }, ...S.cats].map(c => `<button class="chip ${c.id === S.cat ? 'on' : ''}" data-c="${esc(c.id)}">${esc(c.name)}</button>`).join('')
-    + `<button class="chip ${S.deals ? 'on' : ''}" data-deals="1">🔥 ${t('deals')}</button>` + ['summer', 'winter', 'all'].map(k => `<button class="chip ${S.season === k ? 'on' : ''}" data-season="${k}">${t('s_' + k)}</button>`).join('');
-  renderFinder();
+  $('chips').innerHTML = [{ id: 'all', name: t('all') }, ...S.cats].map(c => `<button class="ctile ${c.id === S.cat ? 'on' : ''}" data-c="${esc(c.id)}"><span class="cico">${c.id === 'all' ? '🛍' : catIcon(c.id)}</span><span>${esc(c.name)}</span></button>`).join('');
+  $('chips2').innerHTML = `<button class="chip ${S.deals ? 'on' : ''}" data-deals="1">🔥 ${t('deals')}</button>` + ['summer', 'winter', 'all'].map(k => `<button class="chip ${S.season === k ? 'on' : ''}" data-season="${k}">${t('s_' + k)}</button>`).join('');
+  renderFinder(); fillMega(); renderHits();
   const brands = [...new Set(S.products.map(p => p.brand).filter(Boolean))].sort();
   $('brand').innerHTML = `<option value="">${t('allbrands')}</option>` + brands.map(b => `<option ${b === S.brand ? 'selected' : ''}>${esc(b)}</option>`).join('');
   $('car').innerHTML = `<option value="">${t('anycar')}</option>` + S.garage.map(g => `<option value="${esc(g.model.toLowerCase())}" ${g.model.toLowerCase() === S.car ? 'selected' : ''}>${t('mycar')}: ${esc(g.make)} ${esc(g.model)}</option>`).join('');
@@ -152,7 +163,7 @@ async function loadCloudCart() {
   for (const [id, q] of Object.entries(remote)) if (byId(id) && (cart[id] || 0) < q) { cart[id] = Math.min(q, maxQty(byId(id))); ch = true; }
   if (ch || Object.keys(cart).length) { lsSet('cart', cart); drawCart(); scheduleSync(); }
 }
-const saveCart = () => { lsSet('cart', cart); drawCart(); scheduleSync(); };
+const saveCart = () => { lsSet('cart', cart); drawCart(); refreshActs(); scheduleSync(); };
 function sums() {
   const ids = Object.keys(cart).filter(byId); let sub = 0, kit = 0; ids.forEach(id => { const p = byId(id), q = cart[id]; sub += unit(p, q) * q; kit += (priceOf(p) - unit(p, q)) * q; });
   const disc = Math.round(sub * S.promoPct / 100), feeS = +st('delivery_fee') || 0, freeS = +st('free_delivery_from') || 0;
@@ -169,7 +180,7 @@ function drawCart() {
       <b>${money(up * q)}</b><button class="ghost sm rm" data-rm="${id}" aria-label="remove">🗑</button></div></div></div>`; }).join('')
     || `<div class="empty">🛒<br>${t('empty')}<br><br><button class="btn" data-go="1">${t('startShopping')}</button></div>`;
   const freeS = +st('free_delivery_from') || 0, left = freeS - (s.sub - s.disc);
-  $('ship').innerHTML = (S.delivery === 'delivery' && freeS && s.ids.length) ? (left > 0 ? `<div class="shipmsg">🚚 ${t('shipMore')} <b>${money(left)}</b></div><div class="bar"><i style="width:${Math.min(100, Math.round((s.sub - s.disc) / freeS * 100))}%"></i></div>` : `<div class="shipmsg ok">🚚 ${t('shipFree')} ✓</div>`) : '';
+  $('ship').innerHTML = (S.delivery === 'delivery' && freeS && s.ids.length) ? (left > 0 ? `<div class="shipmsg">🚚 ${t('shipMore')} <b>${money(left)}</b></div><div class="pbar"><i style="width:${Math.min(100, Math.round((s.sub - s.disc) / freeS * 100))}%"></i></div>` : `<div class="shipmsg ok">🚚 ${t('shipFree')} ✓</div>`) : '';
   $('form').style.display = s.ids.length ? 'flex' : 'none';
   $('oName').style.display = S.me ? 'none' : ''; $('oAddr').style.display = S.delivery === 'delivery' ? '' : 'none';
   $('sums').innerHTML = `<div class="sumrow"><span>${t('sub')}</span><span>${money(s.sub + s.kit)}</span></div>${s.kit ? `<div class="sumrow"><span>🎁 ${t('kit')}</span><span>−${money(s.kit)}</span></div>` : ''}${s.disc ? `<div class="sumrow"><span>${t('discount')} ${S.promoPct}%</span><span>−${money(s.disc)}</span></div>` : ''}
@@ -324,7 +335,8 @@ document.addEventListener('click', async e => {
   const b = e.target.closest('button,[data-open],a'); if (!b) return; const d = b.dataset;
   if (d.fav) { e.stopPropagation(); return toggleFav(d.fav); }
   if (d.open) return openProduct(d.open);
-  if (d.c) { S.cat = d.c; render(); }
+  if (!e.target.closest('#mega,#catBtn,[data-m="cat"]')) $('mega').hidden = true;
+  if (d.c) { S.cat = d.c; render(); $('mega').hidden = true; if (d.c !== 'all') $('grid').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
   if (d.add) { cart[d.add] = Math.min((cart[d.add] || 0) + 1, maxQty(byId(d.add))); if (cart[d.add] >= maxQty(byId(d.add)) && byId(d.add).stock != null) toast(t('maxStock')); saveCart(); toast(t('added')); if (typeof gtag === 'function') gtag('event', 'add_to_cart', { items: [{ item_id: d.add }] }); }
   if (d.d) { cart[d.id] = Math.min(cart[d.id] + +d.d, maxQty(byId(d.id))); if (cart[d.id] <= 0) delete cart[d.id]; saveCart(); }
   if (d.rm) { delete cart[d.rm]; saveCart(); toast(t('removed')); }
@@ -335,6 +347,9 @@ document.addEventListener('click', async e => {
   if (d.m === 'home') scrollTo({ top: 0, behavior: 'smooth' });
   if (d.m === 'search') { scrollTo({ top: 0, behavior: 'smooth' }); $('q').focus(); }
   if (d.m === 'chat') chat.toggle();
+  if (d.m === 'cat') $('mega').hidden = !$('mega').hidden;
+  if (d.m === 'fav') $('favBtn').click();
+  if (d.m === 'prof') $('authBtn').click();
   if (d.m === 'cart') $('drawer').classList.add('open');
   if (d.dl) { S.delivery = d.dl; drawCart(); }
   if (d.x === 'prod') closeProduct();
@@ -385,7 +400,7 @@ $('sugg').addEventListener('mousedown', e => { const s = e.target.dataset.s; if 
 $('fw').onchange = e => { S.fw = e.target.value; S.fh = ''; S.fd = ''; render(); };
 $('fh').onchange = e => { S.fh = e.target.value; S.fd = ''; render(); };
 $('fd').onchange = e => { S.fd = e.target.value; render(); };
-$('priceCsv').onclick = downloadPrice;
+$('priceCsv').onclick = downloadPrice; $('catBtn').onclick = () => { $('mega').hidden = !$('mega').hidden; }; $('sbtn').onclick = () => { render(); $('grid').scrollIntoView({ behavior: 'smooth' }); };
 $('sort').onchange = e => { S.sort = e.target.value; render(); };
 $('brand').onchange = e => { S.brand = e.target.value; render(); };
 $('car').onchange = e => { S.car = e.target.value; render(); };
@@ -418,8 +433,8 @@ $('top').onclick = () => scrollTo({ top: 0, behavior: 'smooth' });
 
 /* ---------- старт ---------- */
 (async () => {
-  document.documentElement.dataset.theme = ls('theme', 'dark'); $('lang').textContent = LANG.toUpperCase(); applyI18n(); setMode('login');
-  $('demo').hidden = CONFIGURED; $('tgBtn').href = 'https://t.me/' + (CFG.bot || ''); loadAnalytics();
+  document.documentElement.dataset.theme = ls('theme', 'light'); $('lang').textContent = LANG.toUpperCase(); applyI18n(); setMode('login');
+  $('demo').hidden = CONFIGURED; $('tgBtn').href = $('footTg').href = 'https://t.me/' + (CFG.bot || ''); drawSlider(defaultSlides()); loadAnalytics();
   $('grid').innerHTML = '<div class="sk"></div>'.repeat(8);
   await Promise.all([loadCatalog(), loadExtras()]); render(); drawCart();
   const pid = new URLSearchParams(location.search).get('p'); if (pid) openProduct(pid);
