@@ -1,0 +1,461 @@
+{
+ "currency": "сум",
+ "categories": [
+  {
+   "id": "tires_car",
+   "name": "Шины для легковых"
+  },
+  {
+   "id": "tires_lt",
+   "name": "Микроавтобус и пикап"
+  },
+  {
+   "id": "tires_suv",
+   "name": "Внедорожные шины"
+  },
+  {
+   "id": "tires_truck",
+   "name": "Грузовые шины"
+  },
+  {
+   "id": "disks",
+   "name": "Диски"
+  },
+  {
+   "id": "accessories",
+   "name": "Камеры, вентили, аксессуары"
+  },
+  {
+   "id": "services",
+   "name": "Услуги"
+  }
+ ],
+ "products": [
+  {
+   "id": 1,
+   "cat": "tires_car",
+   "name": "Шина 155/70 R13 летняя",
+   "brand": "",
+   "car": "Chevrolet Matiz / Spark",
+   "price": 350000
+  },
+  {
+   "id": 2,
+   "cat": "tires_car",
+   "name": "Шина 175/70 R13 летняя",
+   "brand": "",
+   "car": "Chevrolet Damas / Nexia (старые)",
+   "price": 370000
+  },
+  {
+   "id": 3,
+   "cat": "tires_car",
+   "name": "Шина 175/65 R14 летняя",
+   "brand": "",
+   "car": "Chevrolet Spark / Nexia",
+   "price": 440000
+  },
+  {
+   "id": 4,
+   "cat": "tires_car",
+   "name": "Шина 185/60 R14 летняя",
+   "brand": "",
+   "car": "Chevrolet Nexia",
+   "price": 450000
+  },
+  {
+   "id": 5,
+   "cat": "tires_car",
+   "name": "Шина 185/65 R15 летняя",
+   "brand": "",
+   "car": "Chevrolet Nexia 3 / Cobalt",
+   "price": 530000,
+   "badge": "Хит"
+  },
+  {
+   "id": 6,
+   "cat": "tires_car",
+   "name": "Шина 185/65 R15 зимняя",
+   "brand": "",
+   "car": "Chevrolet Nexia 3 / Cobalt",
+   "price": 590000
+  },
+  {
+   "id": 7,
+   "cat": "tires_car",
+   "name": "Шина 195/65 R15 летняя",
+   "brand": "",
+   "car": "Chevrolet Cobalt / Gentra",
+   "price": 550000,
+   "old_price": 616000
+  },
+  {
+   "id": 8,
+   "cat": "tires_car",
+   "name": "Шина 195/65 R15 всесезонная",
+   "brand": "",
+   "car": "Chevrolet Cobalt / Gentra",
+   "price": 590000,
+   "badge": "Хит"
+  },
+  {
+   "id": 9,
+   "cat": "tires_car",
+   "name": "Шина 205/60 R15 летняя",
+   "brand": "",
+   "car": "Chevrolet Gentra / Lacetti",
+   "price": 560000
+  },
+  {
+   "id": 10,
+   "cat": "tires_car",
+   "name": "Шина 205/55 R16 летняя",
+   "brand": "",
+   "car": "Chevrolet Lacetti / Gentra",
+   "price": 690000,
+   "old_price": 772000,
+   "badge": "Хит"
+  },
+  {
+   "id": 11,
+   "cat": "tires_car",
+   "name": "Шина 205/55 R16 зимняя",
+   "brand": "",
+   "car": "Chevrolet Lacetti / Gentra",
+   "price": 760000
+  },
+  {
+   "id": 12,
+   "cat": "tires_car",
+   "name": "Шина 215/60 R16 летняя",
+   "brand": "",
+   "car": "Chevrolet Malibu",
+   "price": 700000
+  },
+  {
+   "id": 13,
+   "cat": "tires_car",
+   "name": "Шина 215/55 R17 летняя",
+   "brand": "",
+   "car": "Chevrolet Malibu",
+   "price": 890000
+  },
+  {
+   "id": 14,
+   "cat": "tires_car",
+   "name": "Шина 225/45 R17 летняя",
+   "brand": "",
+   "car": "Chevrolet Malibu / седаны",
+   "price": 910000
+  },
+  {
+   "id": 15,
+   "cat": "tires_car",
+   "name": "Шина 235/45 R18 летняя",
+   "brand": "",
+   "car": "Chevrolet Malibu / седаны",
+   "price": 1130000
+  },
+  {
+   "id": 16,
+   "cat": "tires_lt",
+   "name": "Шина 195/75 R16C всесезонная",
+   "brand": "",
+   "car": "Микроавтобусы",
+   "price": 910000
+  },
+  {
+   "id": 17,
+   "cat": "tires_lt",
+   "name": "Шина 205/75 R16C всесезонная",
+   "brand": "",
+   "car": "Фургоны, пикапы",
+   "price": 930000
+  },
+  {
+   "id": 18,
+   "cat": "tires_lt",
+   "name": "Шина 215/75 R16C всесезонная",
+   "brand": "",
+   "car": "Фургоны, пикапы",
+   "price": 950000
+  },
+  {
+   "id": 19,
+   "cat": "tires_lt",
+   "name": "Шина 235/65 R16C всесезонная",
+   "brand": "",
+   "car": "Микроавтобусы, фургоны",
+   "price": 990000
+  },
+  {
+   "id": 20,
+   "cat": "tires_suv",
+   "name": "Шина 215/65 R16 всесезонная",
+   "brand": "",
+   "car": "Chevrolet Tracker / кроссоверы",
+   "price": 870000
+  },
+  {
+   "id": 21,
+   "cat": "tires_suv",
+   "name": "Шина 235/65 R17 всесезонная",
+   "brand": "",
+   "car": "Кроссоверы / SUV",
+   "price": 1160000,
+   "badge": "Хит"
+  },
+  {
+   "id": 22,
+   "cat": "tires_suv",
+   "name": "Шина 235/60 R17 всесезонная",
+   "brand": "",
+   "car": "Chevrolet Captiva",
+   "price": 1160000
+  },
+  {
+   "id": 23,
+   "cat": "tires_suv",
+   "name": "Шина 265/65 R17 всесезонная",
+   "brand": "",
+   "car": "Внедорожники",
+   "price": 1230000,
+   "old_price": 1377000
+  },
+  {
+   "id": 24,
+   "cat": "tires_suv",
+   "name": "Шина 255/55 R18 всесезонная",
+   "brand": "",
+   "car": "Chevrolet Captiva / SUV",
+   "price": 1460000
+  },
+  {
+   "id": 25,
+   "cat": "tires_truck",
+   "name": "Шина 275/70 R22.5 рулевая",
+   "brand": "",
+   "car": "Грузовики, тягачи",
+   "price": 2900000
+  },
+  {
+   "id": 26,
+   "cat": "tires_truck",
+   "name": "Шина 295/80 R22.5 рулевая",
+   "brand": "",
+   "car": "Грузовики, тягачи",
+   "price": 3100000,
+   "badge": "Хит"
+  },
+  {
+   "id": 27,
+   "cat": "tires_truck",
+   "name": "Шина 295/80 R22.5 ведущая",
+   "brand": "",
+   "car": "Грузовики, тягачи",
+   "price": 3200000
+  },
+  {
+   "id": 28,
+   "cat": "tires_truck",
+   "name": "Шина 315/80 R22.5 ведущая",
+   "brand": "",
+   "car": "Грузовики, тягачи",
+   "price": 3400000,
+   "badge": "Хит"
+  },
+  {
+   "id": 29,
+   "cat": "tires_truck",
+   "name": "Шина 385/65 R22.5 прицепная",
+   "brand": "",
+   "car": "Грузовики, тягачи",
+   "price": 3300000
+  },
+  {
+   "id": 30,
+   "cat": "tires_truck",
+   "name": "Шина 8.25 R20 универсальная",
+   "brand": "",
+   "car": "Грузовики, тягачи",
+   "price": 2300000
+  },
+  {
+   "id": 31,
+   "cat": "tires_truck",
+   "name": "Шина 9.00 R20 универсальная",
+   "brand": "",
+   "car": "Грузовики, тягачи",
+   "price": 2450000
+  },
+  {
+   "id": 32,
+   "cat": "tires_truck",
+   "name": "Шина 10.00 R20 универсальная",
+   "brand": "",
+   "car": "Грузовики, тягачи",
+   "price": 2500000
+  },
+  {
+   "id": 33,
+   "cat": "tires_truck",
+   "name": "Шина 11.00 R20 универсальная",
+   "brand": "",
+   "car": "Грузовики, тягачи",
+   "price": 2600000
+  },
+  {
+   "id": 34,
+   "cat": "tires_truck",
+   "name": "Шина 12.00 R20 универсальная",
+   "brand": "",
+   "car": "Грузовики, тягачи",
+   "price": 3000000
+  },
+  {
+   "id": 35,
+   "cat": "disks",
+   "name": "Диск штампованный R13",
+   "brand": "",
+   "car": "Универсальный",
+   "price": 320000
+  },
+  {
+   "id": 36,
+   "cat": "disks",
+   "name": "Диск штампованный R14",
+   "brand": "",
+   "car": "Универсальный",
+   "price": 350000
+  },
+  {
+   "id": 37,
+   "cat": "disks",
+   "name": "Диск штампованный R15",
+   "brand": "",
+   "car": "Универсальный",
+   "price": 380000
+  },
+  {
+   "id": 38,
+   "cat": "disks",
+   "name": "Диск штампованный R16",
+   "brand": "",
+   "car": "Универсальный",
+   "price": 430000
+  },
+  {
+   "id": 39,
+   "cat": "disks",
+   "name": "Диск литой R15",
+   "brand": "",
+   "car": "Универсальный",
+   "price": 780000
+  },
+  {
+   "id": 40,
+   "cat": "disks",
+   "name": "Диск литой R16",
+   "brand": "",
+   "car": "Универсальный",
+   "price": 900000
+  },
+  {
+   "id": 41,
+   "cat": "disks",
+   "name": "Диск литой R17",
+   "brand": "",
+   "car": "Универсальный",
+   "price": 1100000
+  },
+  {
+   "id": 42,
+   "cat": "accessories",
+   "name": "Камера для шины R13",
+   "brand": "",
+   "car": "Легковые",
+   "price": 75000
+  },
+  {
+   "id": 43,
+   "cat": "accessories",
+   "name": "Камера для шины R15",
+   "brand": "",
+   "car": "Легковые",
+   "price": 85000
+  },
+  {
+   "id": 44,
+   "cat": "accessories",
+   "name": "Вентиль бескамерный (4 шт.)",
+   "brand": "",
+   "car": "Универсальный",
+   "price": 25000
+  },
+  {
+   "id": 45,
+   "cat": "accessories",
+   "name": "Балансировочные грузики (упаковка)",
+   "brand": "",
+   "car": "Универсальный",
+   "price": 60000
+  },
+  {
+   "id": 46,
+   "cat": "accessories",
+   "name": "Герметик для шин",
+   "brand": "",
+   "car": "Универсальный",
+   "price": 70000
+  },
+  {
+   "id": 47,
+   "cat": "accessories",
+   "name": "Колёсные болты (комплект 20 шт.)",
+   "brand": "",
+   "car": "Универсальный",
+   "price": 140000
+  },
+  {
+   "id": 48,
+   "cat": "accessories",
+   "name": "Насос автомобильный",
+   "brand": "",
+   "car": "Универсальный",
+   "price": 180000
+  },
+  {
+   "id": 49,
+   "cat": "services",
+   "name": "Шиномонтаж (4 колеса)",
+   "brand": "",
+   "car": "Универсальный",
+   "price": 120000,
+   "badge": "Хит"
+  },
+  {
+   "id": 50,
+   "cat": "services",
+   "name": "Балансировка (4 колеса)",
+   "brand": "",
+   "car": "Универсальный",
+   "price": 80000
+  },
+  {
+   "id": 51,
+   "cat": "services",
+   "name": "Ремонт прокола",
+   "brand": "",
+   "car": "Универсальный",
+   "price": 40000
+  },
+  {
+   "id": 52,
+   "cat": "services",
+   "name": "Хранение шин (сезон)",
+   "brand": "",
+   "car": "Универсальный",
+   "price": 200000
+  }
+ ]
+}

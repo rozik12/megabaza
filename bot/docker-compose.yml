@@ -1,0 +1,9 @@
+services:
+  megabaza-bot:
+    build: .
+    restart: always
+    env_file: .env
+    volumes:
+      - botdata:/data
+volumes:
+  botdata:

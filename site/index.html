@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MEGABAZA — центр автозапчастей</title>
+<meta name="description" content="Автозапчасти в Ташкенте с доставкой: фильтры, тормоза, масла, подвеска, шины. Подбор по автомобилю, чат с менеджером.">
+<meta name="theme-color" content="#232237">
+<meta property="og:title" content="MEGABAZA — центр автозапчастей"><meta property="og:description" content="Автозапчасти в Ташкенте с доставкой"><meta property="og:image" content="logo.png"><meta property="og:type" content="website">
+<link rel="icon" href="mark.png"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="css/style.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"AutoPartsStore","name":"MEGABAZA","description":"Центр автозапчастей","image":"logo.png","address":{"@type":"PostalAddress","addressLocality":"Ташкент","addressCountry":"UZ"}}</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+</head>
+<body>
+<div class="banner" id="demo" hidden data-i="demo"></div>
+<div class="banner" id="offline" hidden data-i="offline"></div>
+<header><div class="wrap bar">
+  <a class="logo" href="./"><img src="mark.png" alt="MEGABAZA"><div>MEGABAZA<small>центр автозапчастей</small></div></a>
+  <div class="grow search"><input id="q" data-ip="search" type="search" autocomplete="off"><div class="sugg" id="sugg" hidden></div></div>
+  <a class="ghost iconbtn" id="callBtn" href="#contacts" aria-label="Phone">📞</a>
+  <a class="ghost iconbtn" id="tgBtn" href="#" target="_blank" rel="noopener" style="text-decoration:none" aria-label="Telegram">✈</a>
+  <button class="ghost iconbtn" id="lang" aria-label="Language">RU</button>
+  <button class="ghost iconbtn" id="theme" aria-label="Theme">🌓</button>
+  <button class="ghost iconbtn cartbtn" id="favBtn" aria-label="Favorites">♥<b id="favCount" hidden>0</b></button>
+  <a class="btn sm" id="adminLink" href="admin.html" hidden style="text-decoration:none" data-i="admin"></a>
+  <button class="ghost sm" id="authBtn" data-i="login"></button>
+  <button class="ghost cartbtn iconbtn" id="open" aria-label="Cart">🛒<b id="count">0</b></button>
+</div></header>
+
+<main class="wrap">
+  <div class="slider" id="slider" hidden></div>
+  <section class="hero">
+    <h1><span data-i="hero1"></span> <span class="red" data-i="hero2"></span> <span data-i="hero3"></span></h1>
+    <p data-i="heroP"></p>
+  </section>
+  <div class="chips" id="chips"></div>
+  <div class="tools" id="finder"><b style="grid-column:1/-1">📏 <span data-i="finder"></span></b><select id="fw"></select><select id="fh"></select><select id="fd"></select><button class="ghost" id="priceCsv">📄 <span data-i="priceCsv"></span></button></div>
+  <div class="tools">
+    <select id="car" aria-label="car"></select>
+    <select id="sort"><option value="new" data-i="s_new"></option><option value="asc" data-i="s_asc"></option><option value="desc" data-i="s_desc"></option><option value="name" data-i="s_name"></option></select>
+    <select id="brand"></select>
+    <input id="pmin" type="number" min="0" data-ip="from"><input id="pmax" type="number" min="0" data-ip="to">
+    <label><input type="checkbox" id="stockOnly"><span data-i="instock"></span></label>
+    <button class="ghost" id="resetF" data-i="reset"></button>
+  </div>
+  <div id="recentBox" hidden><h3 data-i="recent" style="margin-bottom:8px"></h3><div class="mini" id="recent"></div></div>
+  <p class="muted" id="foundN" style="margin:8px 0"></p>
+  <div class="grid" id="grid"></div>
+
+  <section class="sec" id="delivery"><h2 data-i="secDelivery"></h2><div class="cols">
+    <div class="tile"><b data-i="delivery1"></b><p class="muted" data-i="delivery1t"></p></div>
+    <div class="tile"><b data-i="delivery2"></b><p class="muted" data-i="delivery2t"></p></div>
+    <div class="tile"><b data-i="delivery3"></b><p class="muted" data-i="delivery3t"></p></div></div></section>
+  <section class="sec" id="about"><h2 data-i="secWhy"></h2><div class="cols">
+    <div class="tile">✅ <span data-i="why1"></span></div><div class="tile">🚗 <span data-i="why2"></span></div>
+    <div class="tile">🛡 <span data-i="why3"></span></div><div class="tile">💬 <span data-i="why4"></span></div></div></section>
+  <section class="sec" id="faq"><h2 data-i="secFaq"></h2>
+    <details><summary data-i="q1"></summary><p class="muted" data-i="a1"></p></details>
+    <details><summary data-i="q2"></summary><p class="muted" data-i="a2"></p></details>
+    <details><summary data-i="q3"></summary><p class="muted" data-i="a3"></p></details>
+    <details><summary data-i="q4"></summary><p class="muted" data-i="a4"></p></details></section>
+  <section class="sec" id="contacts"><h2 data-i="secContacts"></h2>
+    <div class="cols"><div class="tile" id="contactInfo"></div><div class="tile kv" id="contactBtns"></div></div>
+    <iframe class="map" id="map" loading="lazy" title="map" hidden></iframe></section>
+</main>
+<footer><div class="wrap">© MEGABAZA · <a href="legal.html#offer" data-i="offer"></a> · <a href="legal.html#privacy" data-i="privacy"></a></div></footer>
+<button class="top ghost" id="top" aria-label="Up">↑</button>
+
+<!-- корзина -->
+<aside class="drawer" id="drawer" aria-label="Cart" style="overflow:auto">
+  <div style="display:flex;justify-content:space-between;align-items:center"><h2 data-i="cartTitle"></h2><button class="ghost sm" id="close">✕</button></div>
+  <div class="items" id="items" style="min-height:80px"></div>
+  <div id="form" style="display:none;flex-direction:column;gap:8px">
+    <div class="tabs"><button type="button" class="chip on" data-dl="delivery" data-i="delivery"></button><button type="button" class="chip" data-dl="pickup" data-i="pickup"></button></div>
+    <input id="oName" data-ip="name" autocomplete="name"><input id="oPhone" type="tel" data-ip="phone" autocomplete="tel">
+    <input id="oAddr" data-ip="addr" autocomplete="street-address">
+    <select id="oSlot"><option data-i="slotAsap"></option><option data-i="slotToday"></option><option data-i="slotTomorrow"></option></select>
+    <select id="oPay"><option value="cash" data-i="cash"></option><option value="card" data-i="card"></option></select>
+    <div style="display:flex;gap:8px"><input id="oPromo" data-ip="promo" style="text-transform:uppercase"><button class="ghost" id="promoBtn" data-i="apply"></button></div>
+    <input id="oNote" data-ip="note">
+    <div id="sums"></div><div class="err" id="oErr"></div>
+  </div>
+  <button class="btn" id="order"></button>
+</aside>
+
+<!-- вход -->
+<div class="modal" id="authModal"><form class="box" id="authForm" novalidate>
+  <div class="tabs"><button type="button" class="chip on" data-mode="login" data-i="tabLogin"></button><button type="button" class="chip" data-mode="register" data-i="tabReg"></button></div>
+  <div data-reg hidden><input id="aName" data-ip="regName" autocomplete="name"></div>
+  <div data-reg hidden><input id="aPhone" type="tel" data-ip="phone" autocomplete="tel"></div>
+  <input id="aEmail" type="email" data-ip="email" autocomplete="email">
+  <input id="aPass" type="password" data-ip="pass" autocomplete="current-password">
+  <div class="err" id="aErr"></div>
+  <button class="btn" id="aSubmit"></button>
+  <button type="button" class="ghost sm" id="aMagic" data-i="magic"></button>
+  <button type="button" class="ghost sm" id="aForgot" data-i="forgot"></button>
+  <button type="button" class="ghost" id="aCancel" data-i="cancel"></button>
+</form></div>
+
+<!-- профиль -->
+<div class="modal mod" id="profModal"><div class="box">
+  <div class="tabs" style="flex-wrap:wrap"><button class="chip on" data-pt="orders" data-i="p_orders"></button><button class="chip" data-pt="favs" data-i="p_favs"></button><button class="chip" data-pt="garage" data-i="p_garage"></button><button class="chip" data-pt="prof" data-i="p_prof"></button></div>
+  <div id="profBody"></div><button class="ghost" id="profClose" data-i="cancel"></button>
+</div></div>
+
+<!-- товар -->
+<div class="modal mod" id="prodModal"><div class="box" id="prodBody"></div></div>
+<div class="modal mod" id="cmpModal"><div class="box"><h3 data-i="cmp_title"></h3><div style="overflow:auto" id="cmpBody"></div><button class="ghost" id="cmpClose" data-i="cancel"></button></div></div>
+
+<!-- чат -->
+<button class="chatfab" id="chatFab" aria-label="Chat">💬<span class="dot" id="chatDot" hidden></span></button>
+<section class="chat" id="chat" aria-label="Chat">
+  <div class="chathead"><b data-i="chatTitle"></b><button class="ghost sm" id="chatClose">✕</button></div>
+  <div class="msgs" id="msgs"></div><div class="typing" id="typing"></div>
+  <form class="compose" id="compose"><label class="ghost sm" style="cursor:pointer;margin:0;display:grid;place-items:center;border-radius:10px" title="📷">📎<input type="file" id="file" accept="image/*" hidden></label>
+    <textarea id="msgInput" rows="1" maxlength="2000" data-ip="msg"></textarea><button class="btn" aria-label="Send">➤</button></form>
+</section>
+<nav class="mbar" id="mbar"><button data-m="home" aria-label="Home">🏠</button><button data-m="search" aria-label="Search">🔍</button><button data-m="chat" aria-label="Chat">💬</button><button data-m="cart" aria-label="Cart">🛒<b id="mcount">0</b></button></nav>
+<div class="toast" id="toast"></div>
+
+<script src="js/core.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/store.js"></script>
+</body>
+</html>
