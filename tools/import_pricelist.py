@@ -54,7 +54,54 @@ for i, (n, sku, _ph, name, cat, car, brand, unit, price) in enumerate(rows, 1):
     prods.append(dict(id=i, cat=CATS[cat][0], price=int(price), stock=None, w=None, h=None, d=None, season=None, hit=name in HITS, new=False, old=None, sku=sku, brand=brand,
         name=C(name, uz, en), car=C(car, car, car),
         desc=C(f'Артикул {sku}. Производитель: {brand}. Подходит: {car}.', f'Artikul {sku}. Ishlab chiqaruvchi: {brand}. Mos: {car}.', f'SKU {sku}. Brand: {brand}. Fits: {car}.')))
-cats = [dict(id=v[0], name=C(k, v[1], v[2])) for k, v in CATS.items()]
+
+# ---------- шины (pricelist-tires.xlsx) ----------
+import re, os
+TCATS = [('tires_car', 'Шины легковые', 'Yengil avtomobil shinalari', 'Passenger car tires'), ('tires_suv', 'Шины Кроссовер / SUV', 'Krossover / SUV shinalari', 'Crossover / SUV tires'),
+ ('tires_offroad', 'Шины внедорожные (A/T, M/T)', "Yo‘ldan tashqari shinalar (A/T, M/T)", 'Off-road tires (A/T, M/T)'), ('tires_lt', 'Шины лёгкогрузовые', 'Yengil yuk shinalari', 'Light truck tires'),
+ ('tires_truck', 'Шины грузовые', 'Yuk shinalari', 'Truck tires'), ('tires_rf', 'Шины Run-flat', 'Run-flat shinalari', 'Run-flat tires'),
+ ('tires_moto', 'Мотошины', 'Mototsikl shinalari', 'Motorcycle tires'), ('tires_agro', 'Шины для сельхозтехники', 'Qishloq xo‘jaligi shinalari', 'Agricultural tires')]
+SEA = {'Летняя': ('летняя', 'yozgi', 'summer', 'summer'), 'Зимняя': ('зимняя', 'qishki', 'winter', 'winter'), 'Всесезонная': ('всесезонная', 'barcha fasllar uchun', 'all-season', 'all')}
+AXLE = {'рулевая': ('рулевая', 'rul', 'steer'), 'ведущая': ('ведущая', 'yetaklovchi', 'drive'), 'прицепная': ('прицепная', 'tirkama', 'trailer'), 'универсальная': ('универсальная', 'universal', 'universal')}
+CLS = {'Эконом': ('Эконом', 'Ekonom', 'Economy'), 'Средний': ('Средний', "O‘rta", 'Mid-range'), 'Премиум': ('Премиум', 'Premium', 'Premium')}
+tprods = []
+if os.path.exists('pricelist-tires.xlsx'):
+    tw = openpyxl.load_workbook('pricelist-tires.xlsx')['Шины']
+    for r in range(5, tw.max_row + 1):
+        v = [tw.cell(r, c).value for c in range(1, 12)]
+        if not v[4] or not isinstance(v[9], (int, float)): continue
+        _, _, vid, sea, size, fits, cls, brand, axle, price = v[:10]
+        S = SEA[sea]; kind = vid.split(':')[0].strip(); sub = vid.split(':')[1].strip() if ':' in vid else ''
+        if kind == 'Легковые': cid = 'tires_car'
+        elif kind.startswith('Кроссовер'): cid = 'tires_suv'
+        elif kind.startswith('Внедорожные'): cid = 'tires_offroad'
+        elif kind.startswith('Лёгкогрузовые'): cid = 'tires_lt'
+        elif kind == 'Грузовые': cid = 'tires_truck'
+        elif kind.startswith('Run-flat'): cid = 'tires_rf'
+        elif kind == 'Мото': cid = 'tires_moto'
+        else: cid = 'tires_agro'
+        ex = ['', '', '']
+        if cid in ('tires_car', 'tires_suv') and 'Зимние' in sub:
+            if 'нешип' in sub: ex = [' нешипованная', ' shipsiz', ' studless']
+            elif 'шип' in sub: ex = [' шипованная', ' shipli', ' studded']
+        if cid == 'tires_offroad':
+            tag = 'A/T' if 'A/T' in vid else 'M/T'; ru, uz, en = f'Шина {brand} {size} {tag}', f'{brand} {size} {tag} shina', f'{brand} {size} {tag} tire'
+        elif cid == 'tires_lt': ru, uz, en = f'Шина {brand} {size} (лёгкогрузовая)', f'{brand} {size} (yengil yuk) shina', f'{brand} {size} (light truck) tire'
+        elif cid == 'tires_truck':
+            a2 = AXLE.get(axle or '', ('', '', '')); ru, uz, en = f'Шина {brand} {size} {a2[0]}'.strip(), f'{brand} {size} {a2[1]} shina'.replace('  ', ' '), f'{brand} {size} {a2[2]} truck tire'.replace('  ', ' ')
+        elif cid == 'tires_rf': ru, uz, en = f'Шина {brand} {size} Run-flat {S[0]}', f'{brand} {size} Run-flat {S[1]} shina', f'{brand} {size} Run-flat {S[2]} tire'
+        elif cid == 'tires_moto': ru, uz, en = f'Мотошина {brand} {size}', f'Mototsikl shinasi {brand} {size}', f'Motorcycle tire {brand} {size}'
+        elif cid == 'tires_agro': ru, uz, en = f'Шина {brand} {size} ({fits})', f'{brand} {size} ({fits}) shina', f'{brand} {size} ({fits}) tire'
+        else: ru, uz, en = f'Шина {brand} {size} {S[0]}{ex[0]}', f'{brand} {size} {S[1]}{ex[1]} shina', f'{brand} {size} {S[2]}{ex[2]} tire'
+        m = re.match(r'^(\d{3})/(\d{2,3})\s*R(\d{2}(?:\.\d)?)C?$', size.strip()); w, h, d = (m.group(1), m.group(2), m.group(3)) if m else (None, None, None)
+        c3 = CLS.get(cls, None); desc = ('Класс: %s. ' % c3[0] if c3 else '') + f'Подходит для: {fits}.'
+        tprods.append(dict(cat=cid, price=int(price), w=w, h=h, d=d, season=S[3], brand=brand, name=C(ru, uz, en), car=C(fits, fits, fits),
+            desc=C(desc, ('Sinf: %s. ' % c3[1] if c3 else '') + f'Mos: {fits}.', ('Class: %s. ' % c3[2] if c3 else '') + f'Fits: {fits}.')))
+for i, tp in enumerate(tprods, 1):
+    tp.update(id=len(prods) + i, stock=None, hit=False, new=False, old=None, sku='TR-%04d' % i); 
+prods += tprods
+
+cats = [dict(id=i, name=C(r, u, e)) for i, r, u, e in TCATS if any(p['cat'] == i for p in prods)] + [dict(id=v[0], name=C(k, v[1], v[2])) for k, v in CATS.items()]
 json.dump(dict(categories=cats, products=prods), open('bot/catalog.json', 'w', encoding='utf8'), ensure_ascii=False, separators=(',', ':'))
 json.dump(dict(currency='сум', categories=[dict(id=c['id'], name=c['name']['ru']) for c in cats],
     products=[dict(id=p['id'], cat=p['cat'], name=p['name']['ru'], brand=p['brand'], car=p['car']['ru'], sku=p['sku'], price=p['price'], **({'badge': 'Хит'} if p['hit'] else {})) for p in prods]),
