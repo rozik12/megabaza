@@ -3,7 +3,7 @@ const ls = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } 
 const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} };
 const S = { cats: [], products: [], cat: 'all', q: '', sort: 'new', brand: '', car: '', stockOnly: false, pmin: 0, pmax: 0,
   season: '', deals: false, fw: '', fh: '', fd: '', favs: new Set(ls('favs', [])), garage: [], settings: {}, me: null, delivery: 'delivery', promoPct: 0, promo: '', cmp: [] };
-let cart = ls('cart', {}), recent = ls('recent', []);
+S.car = ls('mycar', ''); let cart = ls('cart', {}), recent = ls('recent', []);
 const byId = id => S.products.find(p => p.id == id);
 const priceOf = p => (S.me && S.me.wholesale && p.wholesale_price) ? +p.wholesale_price : +p.price;
 const isTire = p => (p.cat || '').startsWith('tires_');
@@ -105,11 +105,26 @@ function showMore() {
   const l = filtered(), from = S.shown; if (from >= l.length) return; S.shown = from + PAGE_N;
   const old = $('more'); if (old) old.remove(); $('grid').insertAdjacentHTML('beforeend', l.slice(from, S.shown).map(cardHtml).join('') + gridMore(l)); watchMore();
 }
+function modelList() {
+  const m = new Map();
+  S.products.forEach(p => (p.car || '').replace(/Chevrolet\s*/gi, '').replace(/\([^)]*\)/g, '').split(/[\/,]/).map(x => x.trim()).filter(x => /^[A-Za-z]/.test(x)).forEach(x => { const k = x.toLowerCase(); if (!m.has(k)) m.set(k, { k, name: x, n: 0 }); }));
+  m.forEach(v => { v.n = S.products.filter(p => (p.car || '').toLowerCase().includes(v.k)).length; });
+  return [...m.values()].sort((a, b) => b.n - a.n || a.name.localeCompare(b.name));
+}
+function renderCarPick() {
+  const ms = modelList(), cur = ms.find(x => x.k === S.car);
+  $('cpModel').innerHTML = `<option value="">${t('cpModel')}</option>` + ms.map(x => `<option value="${esc(x.k)}" ${x.k === S.car ? 'selected' : ''}>${esc(x.name)} (${x.n})</option>`).join('');
+  const base = S.car ? S.products.filter(p => (p.car || '').toLowerCase().includes(S.car)) : S.products;
+  $('cpCat').innerHTML = `<option value="all">${t('cpAll')} (${base.length})</option>` + S.cats.map(c => [c, base.filter(p => p.cat === c.id).length]).filter(x => x[1]).map(([c, n]) => `<option value="${esc(c.id)}" ${c.id === S.cat ? 'selected' : ''}>${esc(c.name)} (${n})</option>`).join('');
+  $('cpChips').innerHTML = `<span>${t('cpPop')}</span>` + ms.slice(0, 8).map(x => `<button class="chip ${x.k === S.car ? 'on' : ''}" data-model="${esc(x.k)}">${esc(x.name)}</button>`).join('');
+  const now = $('cpNow'); now.hidden = !S.car; if (S.car) now.innerHTML = `<span>🚗 ${t('cpFor')} <b>${esc(cur ? cur.name : S.car)}</b></span><button class="ghost sm" data-model="">${t('cpReset')}</button>`;
+}
+function setModel(k) { S.car = k || ''; S.cat = 'all'; lsSet('mycar', S.car); render(); }
 function render() {
   $('chips').innerHTML = [{ id: 'all', name: t('all') }, ...S.cats].map(c => `<button class="ctile ${c.id === S.cat ? 'on' : ''}" data-c="${esc(c.id)}"><span class="cico">${c.id === 'all' ? '🛍' : catIcon(c.id)}</span><span>${esc(c.name)}</span></button>`).join('');
   $('chips2').innerHTML = `<button class="chip ${S.deals ? 'on' : ''}" data-deals="1">🔥 ${t('deals')}</button>` + ['summer', 'winter', 'all'].map(k => `<button class="chip ${S.season === k ? 'on' : ''}" data-season="${k}">${t('s_' + k)}</button>`).join('');
   const tires = S.products.some(isTire); { const pb = document.querySelector('.promo span'); pb.dataset.i = 'promoBar2'; pb.textContent = t(pb.dataset.i); } $('finder').hidden = !tires; $('chips2').querySelectorAll('[data-season]').forEach(b => b.hidden = !tires);
-  renderFinder(); fillMega(); renderHits();
+  renderFinder(); fillMega(); renderHits(); renderCarPick();
   const brands = [...new Set(S.products.map(p => p.brand).filter(Boolean))].sort();
   $('brand').innerHTML = `<option value="">${t('allbrands')}</option>` + brands.map(b => `<option ${b === S.brand ? 'selected' : ''}>${esc(b)}</option>`).join('');
   const models = [...new Set(S.products.flatMap(p => (p.car || '').replace(/Chevrolet\s*/gi, '').replace(/\([^)]*\)/g, '').split(/[\/,]/).map(x => x.trim()).filter(x => /^[A-Za-z]/.test(x))))].sort();
@@ -356,6 +371,7 @@ document.addEventListener('click', async e => {
   if (d.go) { $('drawer').classList.remove('open'); scrollTo({ top: 0, behavior: 'smooth' }); }
   if (d.mode) setMode(d.mode);
   if (d.more) showMore();
+  if (d.model !== undefined) { setModel(d.model); if (d.model) $('grid').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
   if (d.deals) { S.deals = !S.deals; render(); }
   if (d.season) { S.season = S.season === d.season ? '' : d.season; render(); }
   if (d.m === 'home') scrollTo({ top: 0, behavior: 'smooth' });
@@ -415,9 +431,12 @@ $('fw').onchange = e => { S.fw = e.target.value; S.fh = ''; S.fd = ''; render();
 $('fh').onchange = e => { S.fh = e.target.value; S.fd = ''; render(); };
 $('fd').onchange = e => { S.fd = e.target.value; render(); };
 $('priceCsv').onclick = downloadPrice; $('catBtn').onclick = () => { $('mega').hidden = !$('mega').hidden; }; $('sbtn').onclick = () => { render(); $('grid').scrollIntoView({ behavior: 'smooth' }); };
+$('cpModel').onchange = e => setModel(e.target.value);
+$('cpCat').onchange = e => { S.cat = e.target.value; render(); $('grid').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+$('cpGo').onclick = () => $('grid').scrollIntoView({ behavior: 'smooth', block: 'start' });
 $('sort').onchange = e => { S.sort = e.target.value; render(); };
 $('brand').onchange = e => { S.brand = e.target.value; render(); };
-$('car').onchange = e => { S.car = e.target.value; render(); };
+$('car').onchange = e => { S.car = e.target.value; lsSet('mycar', S.car); render(); };
 $('stockOnly').onchange = e => { S.stockOnly = e.target.checked; render(); };
 $('pmin').oninput = debounce(e => { S.pmin = +e.target.value || 0; render(); }, 300);
 $('pmax').oninput = debounce(e => { S.pmax = +e.target.value || 0; render(); }, 300);
