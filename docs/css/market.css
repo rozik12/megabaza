@@ -92,3 +92,6 @@ header{border-bottom:1px solid var(--line);box-shadow:0 1px 0 rgba(0,0,0,.02)}
 [data-theme=dark] .cp-now{background:#3a2530}
 #car{display:none}
 @media(max-width:640px){.cp-row{grid-template-columns:1fr}.cp-chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.cp-chips::-webkit-scrollbar{display:none}.cp-chips .chip{flex:none}}
+
+#chips2{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:8px;scrollbar-width:none;padding-bottom:4px}#chips2::-webkit-scrollbar{display:none}#chips2 .chip{flex:none}
+.actrow{display:flex;gap:6px}.actrow .ghost{flex:none;padding:0 12px;font-weight:700;border-radius:10px}

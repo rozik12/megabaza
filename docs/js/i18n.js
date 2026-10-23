@@ -30,6 +30,7 @@ const DICT = {
   promoBar:'🚚 Доставка по Ташкенту · Комплект из 4 шин — скидка 5% · Оплата при получении', catalogBtn:'Каталог', hitsTitle:'🔥 Хиты и акции', allGoods:'Все товары', footAbout:'Центр автозапчастей: шины, диски, аксессуары и шиномонтаж.', footHelp:'Помощь', footLegal:'Документы', mHome:'Главная', sl1t:'Шины с доставкой по Ташкенту', sl1d:'Выберите размер, оформите заказ за минуту, оплата при получении.', sl2t:'Комплект из 4 шин — скидка 5%', sl2d:'Скидка применяется автоматически в корзине.', sl3t:'Закажите в Telegram', sl3d:'Наш бот: каталог, прайс и заказ в пару нажатий.', slBtn:'Смотреть',
   kitS:'Комплект ×4 — скидка 5%', promoBar2:'🚚 Доставка по Ташкенту · Оригинал и аналоги · Оплата при получении', sl2t2:'Запчасти и шины по вашему автомобилю', sl2d2:'Выберите модель в фильтре или найдите деталь по артикулу.',
   showMore:'Показать ещё', cpTitle:'🚗 Подбор по автомобилю', cpModel:'Выберите модель авто', cpCat:'Что нужно?', cpAll:'Все разделы', cpGo:'Показать', cpReset:'Сбросить авто', cpFor:'Показаны товары для', cpPop:'Быстро:',
+  setOf4:'Комплект 4 шт.', sameSize:'Тот же размер — другие бренды (от дешёвых)', otherCars:'Эта деталь для других автомобилей',
   nothing:'Ничего не найдено', fav:'Избранное', err:'Ошибка, попробуйте ещё раз', needLogin:'Войдите в аккаунт'
  },
  uz: {
@@ -62,6 +63,7 @@ const DICT = {
   promoBar:'🚚 Toshkent bo‘ylab yetkazib berish · 4 ta shina komplektiga 5% chegirma · Olishda to‘lov', catalogBtn:'Katalog', hitsTitle:'🔥 Xitlar va aksiyalar', allGoods:'Barcha tovarlar', footAbout:'Avtoehtiyot qismlar markazi: shinalar, disklar, aksessuarlar va shina o‘rnatish.', footHelp:'Yordam', footLegal:'Hujjatlar', mHome:'Bosh sahifa', sl1t:'Toshkent bo‘ylab shinalar yetkazib berish', sl1d:'O‘lchamni tanlang, bir daqiqada buyurtma bering, olishda to‘lov.', sl2t:'4 ta shina komplekti — 5% chegirma', sl2d:'Chegirma savatda avtomatik qo‘llanadi.', sl3t:'Telegramda buyurtma bering', sl3d:'Botimiz: katalog, narxlar va buyurtma bir necha bosishda.', slBtn:'Ko‘rish',
   kitS:'4 ta komplekt — 5% chegirma', promoBar2:'🚚 Toshkent bo‘ylab yetkazib berish · Original va analoglar · Olishda to‘lov', sl2t2:'Avtomobilingizga ehtiyot qismlar va shinalar', sl2d2:'Filtrdan modelni tanlang yoki detalni artikul bo‘yicha toping.',
   showMore:'Yana ko‘rsatish', cpTitle:'🚗 Avtomobil bo‘yicha tanlash', cpModel:'Avtomobil modelini tanlang', cpCat:'Nima kerak?', cpAll:'Barcha bo‘limlar', cpGo:'Ko‘rsatish', cpReset:'Avtomobilni tozalash', cpFor:'Tovarlar ko‘rsatilmoqda:', cpPop:'Tez:',
+  setOf4:'4 ta komplekt', sameSize:'Xuddi shu o‘lcham — boshqa brendlar (arzonidan)', otherCars:'Bu detal boshqa avtomobillar uchun',
   nothing:'Hech narsa topilmadi', fav:'Sevimlilar', err:'Xatolik, qayta urinib ko‘ring', needLogin:'Akkauntga kiring'
  }
 };

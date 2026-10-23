@@ -2,7 +2,7 @@
 const ls = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } };
 const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} };
 const S = { cats: [], products: [], cat: 'all', q: '', sort: 'new', brand: '', car: '', stockOnly: false, pmin: 0, pmax: 0,
-  season: '', deals: false, fw: '', fh: '', fd: '', favs: new Set(ls('favs', [])), garage: [], settings: {}, me: null, delivery: 'delivery', promoPct: 0, promo: '', cmp: [] };
+  season: '', cls: '', deals: false, fw: '', fh: '', fd: '', favs: new Set(ls('favs', [])), garage: [], settings: {}, me: null, delivery: 'delivery', promoPct: 0, promo: '', cmp: [] };
 S.car = ls('mycar', ''); let cart = ls('cart', {}), recent = ls('recent', []);
 const byId = id => S.products.find(p => p.id == id);
 const priceOf = p => (S.me && S.me.wholesale && p.wholesale_price) ? +p.wholesale_price : +p.price;
@@ -11,6 +11,7 @@ const sizeOf = p => { const m = (p.name || '').match(/(\d{3})\/(\d{2})\s*R(\d{2}
 const seasonOf = p => /всесезон/i.test(p.name) ? 'all' : /зимн/i.test(p.name) ? 'winter' : /летн/i.test(p.name) ? 'summer' : '';
 const KIT_PCT = 0;
 const unit = (p, q) => isTire(p) && q >= 4 ? Math.round(priceOf(p) * (100 - KIT_PCT) / 100) : priceOf(p);
+const clsOf = p => p.cls || ((p.description || '').match(/Класс: ([^.]+)\./) || [])[1] || '';
 const isDeal = p => p.badge || (p.old_price && +p.old_price > priceOf(p));
 const stars = n => '★'.repeat(n) + '☆'.repeat(5 - n);
 const st = k => S.settings[k] || '';
@@ -65,22 +66,22 @@ function filtered() {
   let l = S.products.filter(p => (S.cat === 'all' || p.cat === S.cat) && (!S.brand || p.brand === S.brand) && (!S.stockOnly || p.in_stock)
     && (!S.pmin || priceOf(p) >= S.pmin) && (!S.pmax || priceOf(p) <= S.pmax)
     && (!S.car || (p.car || '').toLowerCase().includes(S.car) || /универс|universal/i.test(p.car || ''))
-    && (!S.deals || isDeal(p)) && (!S.season || seasonOf(p) === S.season) && (!S.fw || (sizeOf(p) || {}).w === S.fw) && (!S.fh || (sizeOf(p) || {}).h === S.fh) && (!S.fd || (sizeOf(p) || {}).d === S.fd)
+    && (!S.cls || clsOf(p) === S.cls) && (!S.deals || isDeal(p)) && (!S.season || seasonOf(p) === S.season) && (!S.fw || (sizeOf(p) || {}).w === S.fw) && (!S.fh || (sizeOf(p) || {}).h === S.fh) && (!S.fd || (sizeOf(p) || {}).d === S.fd)
     && (!q || matchQ(p, q) || matchQ(p, q2)));
   if (S.sort === 'asc') l.sort((a, b) => priceOf(a) - priceOf(b)); else if (S.sort === 'desc') l.sort((a, b) => priceOf(b) - priceOf(a)); else if (S.sort === 'name') l.sort((a, b) => a.name.localeCompare(b.name, 'ru'));
   return l;
 }
-const cardAct = p => { const q = cart[p.id] || 0; if (!p.in_stock) return `<button class="ghost wide" data-open="${p.id}">${t('out')}</button>`; return q ? `<div class="stepper"><button data-d="-1" data-id="${p.id}" aria-label="-">−</button><span>${q}</span><button data-d="1" data-id="${p.id}" aria-label="+">+</button></div>` : `<button class="btn wide" data-add="${p.id}">${t('add')}</button>`; };
+const cardAct = p => { const q = cart[p.id] || 0; if (!p.in_stock) return `<button class="ghost wide" data-open="${p.id}">${t('out')}</button>`; return q ? `<div class="stepper"><button data-d="-1" data-id="${p.id}" aria-label="-">−</button><span>${q}</span><button data-d="1" data-id="${p.id}" aria-label="+">+</button></div>` : (isTire(p) ? `<div class="actrow"><button class="btn wide" data-add="${p.id}">${t('add')}</button><button class="ghost" data-add4="${p.id}" title="${t('setOf4')}">×4</button></div>` : `<button class="btn wide" data-add="${p.id}">${t('add')}</button>`); };
 function refreshActs() { document.querySelectorAll('[data-act]').forEach(el => { const p = byId(el.dataset.act); if (p) el.innerHTML = cardAct(p); }); }
 function cardHtml(p) {
   const pr = priceOf(p), low = p.stock != null && p.stock > 0 && p.stock <= 5, pct = p.old_price && +p.old_price > pr ? Math.round((1 - pr / p.old_price) * 100) : 0;
   return `<div class="card"><div class="img" data-open="${p.id}">${imgOf(p)}${p.badge ? `<span class="badge">${esc(p.badge)}</span>` : ''}<button class="heart ${S.favs.has(p.id) ? 'on' : ''}" data-fav="${p.id}" aria-label="fav">♥</button></div>
     <div class="cbd"><div class="price"><b>${money(pr)}</b></div>${pct ? `<div class="old2"><s>${money(p.old_price)}</s> <span class="disc">−${pct}%</span></div>` : ''}
     <h3 data-open="${p.id}">${esc(p.name)}</h3><div class="meta">${esc(p.car)}${p.brand ? ' · ' + esc(p.brand) : ''}</div>${p.sku ? `<div class="meta">${esc(p.sku)}</div>` : ''}
-    ${low ? `<div class="meta red">${t('left')} ${p.stock} ${t('pcs')}</div>` : (isTire(p) && KIT_PCT ? `<div class="meta">🎁 ${t('kitS')}</div>` : '')}
+    ${low ? `<div class="meta red">${t('left')} ${p.stock} ${t('pcs')}</div>` : ''}${isTire(p) && p.in_stock ? `<div class="meta">${t('setOf4')}: <b>${money(pr * 4)}</b></div>` : ''}
     <div class="cact" data-act="${p.id}">${cardAct(p)}</div></div></div>`;
 }
-const filtersActive = () => !!(S.q || S.brand || S.car || S.stockOnly || S.pmin || S.pmax || S.deals || S.season || S.fw || S.cat !== 'all');
+const filtersActive = () => !!(S.cls || S.q || S.brand || S.car || S.stockOnly || S.pmin || S.pmax || S.deals || S.season || S.fw || S.cat !== 'all');
 function renderHits() { const hs = S.products.filter(p => p.in_stock && (p.badge || isDeal(p))).slice(0, 12); $('hitsBox').hidden = filtersActive() || !hs.length; $('hits').innerHTML = hs.map(cardHtml).join(''); }
 function fillMega() { $('mega').innerHTML = S.cats.map(c => `<button class="mitem" data-c="${esc(c.id)}"><span class="cico">${catIcon(c.id)}</span><span>${esc(c.name)}</span></button>`).join(''); }
 function renderFinder() {
@@ -122,16 +123,20 @@ function renderCarPick() {
 function setModel(k) { S.car = k || ''; S.cat = 'all'; lsSet('mycar', S.car); render(); }
 function render() {
   $('chips').innerHTML = [{ id: 'all', name: t('all') }, ...S.cats].map(c => `<button class="ctile ${c.id === S.cat ? 'on' : ''}" data-c="${esc(c.id)}"><span class="cico">${c.id === 'all' ? '🛍' : catIcon(c.id)}</span><span>${esc(c.name)}</span></button>`).join('');
-  $('chips2').innerHTML = `<button class="chip ${S.deals ? 'on' : ''}" data-deals="1">🔥 ${t('deals')}</button>` + ['summer', 'winter', 'all'].map(k => `<button class="chip ${S.season === k ? 'on' : ''}" data-season="${k}">${t('s_' + k)}</button>`).join('');
+  const clsList = ['Эконом', 'Средний', 'Премиум'].filter(c => S.products.some(p => clsOf(p) === c));
+  const inCat = S.cat === 'all' ? S.products : S.products.filter(p => p.cat === S.cat), bc = {}; inCat.forEach(p => { if (p.brand) bc[p.brand] = (bc[p.brand] || 0) + 1; });
+  const topB = Object.entries(bc).sort((x, y) => y[1] - x[1]).slice(0, 8).map(x => x[0]);
+  $('chips2').innerHTML = `<button class="chip ${S.deals ? 'on' : ''}" data-deals="1">🔥 ${t('deals')}</button>` + ['summer', 'winter', 'all'].map(k => `<button class="chip ${S.season === k ? 'on' : ''}" data-season="${k}">${t('s_' + k)}</button>`).join('')
+    + clsList.map(c => `<button class="chip ${S.cls === c ? 'on' : ''}" data-cls="${c}">${c}</button>`).join('') + topB.map(x => `<button class="chip ${S.brand === x ? 'on' : ''}" data-brand="${esc(x)}">${esc(x)}</button>`).join('');
   const tires = S.products.some(isTire); { const pb = document.querySelector('.promo span'); pb.dataset.i = 'promoBar2'; pb.textContent = t(pb.dataset.i); } $('finder').hidden = !tires; $('chips2').querySelectorAll('[data-season]').forEach(b => b.hidden = !tires);
   renderFinder(); fillMega(); renderHits(); renderCarPick();
   const brands = [...new Set(S.products.map(p => p.brand).filter(Boolean))].sort();
   $('brand').innerHTML = `<option value="">${t('allbrands')}</option>` + brands.map(b => `<option ${b === S.brand ? 'selected' : ''}>${esc(b)}</option>`).join('');
   const models = [...new Set(S.products.flatMap(p => (p.car || '').replace(/Chevrolet\s*/gi, '').replace(/\([^)]*\)/g, '').split(/[\/,]/).map(x => x.trim()).filter(x => /^[A-Za-z]/.test(x))))].sort();
   $('car').innerHTML = `<option value="">${t('anycar')}</option>` + models.map(m => `<option value="${esc(m.toLowerCase())}" ${m.toLowerCase() === S.car ? 'selected' : ''}>${esc(m)}</option>`).join('') + S.garage.map(g => `<option value="${esc(g.model.toLowerCase())}" ${g.model.toLowerCase() === S.car ? 'selected' : ''}>${t('mycar')}: ${esc(g.make)} ${esc(g.model)}</option>`).join('');
-  const sig = JSON.stringify([S.cat, S.q, S.brand, S.car, S.stockOnly, S.pmin, S.pmax, S.deals, S.season, S.fw, S.fh, S.fd, S.sort]); if (sig !== S._sig) { S._sig = sig; S.shown = PAGE_N; }
+  const sig = JSON.stringify([S.cls, S.cat, S.q, S.brand, S.car, S.stockOnly, S.pmin, S.pmax, S.deals, S.season, S.fw, S.fh, S.fd, S.sort]); if (sig !== S._sig) { S._sig = sig; S.shown = PAGE_N; }
   const l = filtered();
-  $('foundN').textContent = (S.q || S.brand || S.car || S.stockOnly || S.pmin || S.pmax || S.deals || S.season || S.fw || S.cat !== 'all') ? `${t('found')} ${l.length}` : '';
+  $('foundN').textContent = (S.cls || S.q || S.brand || S.car || S.stockOnly || S.pmin || S.pmax || S.deals || S.season || S.fw || S.cat !== 'all') ? `${t('found')} ${l.length}` : '';
   $('grid').innerHTML = (l.slice(0, S.shown).map(cardHtml).join('') + gridMore(l)) || `<p class="empty" style="grid-column:1/-1">${t('nothing')}</p>`; watchMore();
   $('favCount').hidden = !S.favs.size; $('favCount').textContent = S.favs.size;
   const rl = recent.map(byId).filter(Boolean);
@@ -148,11 +153,16 @@ async function toggleFav(id) {
 }
 
 /* ---------- страница товара ---------- */
+function related(p) {
+  if (isTire(p)) { const sz = sizeOf(p), ss = seasonOf(p); if (sz) { const l = S.products.filter(x => x.id !== p.id && isTire(x) && x.in_stock !== false && seasonOf(x) === ss && (sizeOf(x) || {}).w === sz.w && (sizeOf(x) || {}).h === sz.h && (sizeOf(x) || {}).d === sz.d).sort((a, b) => priceOf(a) - priceOf(b)).slice(0, 8); if (l.length) return { title: t('sameSize'), list: l }; } }
+  const same = S.products.filter(x => x.id !== p.id && x.name === p.name).slice(0, 8); if (same.length) return { title: t('otherCars'), list: same };
+  return { title: t('analogs'), list: S.products.filter(x => x.cat === p.cat && x.id !== p.id).slice(0, 6) };
+}
 async function openProduct(id) {
   const p = byId(id); if (!p) return;
   recent = [p.id, ...recent.filter(x => x != p.id)].slice(0, 8); lsSet('recent', recent);
   history.replaceState(null, '', '?p=' + p.id); document.title = p.name + ' — MEGABAZA';
-  const pr = priceOf(p), analogs = S.products.filter(x => x.cat === p.cat && x.id !== p.id).slice(0, 6);
+  const pr = priceOf(p), rel = related(p);
   $('prodBody').innerHTML = `<div style="display:flex;justify-content:space-between"><h2>${esc(p.name)}</h2><button class="ghost sm" data-x="prod">✕</button></div>
     <div class="pgrid"><div class="pimg">${imgOf(p)}</div><div style="display:flex;flex-direction:column;gap:8px">
       <div class="price" style="font-size:26px">${money(pr)}${p.old_price && +p.old_price > pr ? `<span class="old">${money(p.old_price)}</span>` : ''}</div>
@@ -163,7 +173,7 @@ async function openProduct(id) {
       <div class="kv">${p.in_stock ? `<button class="btn" data-add="${p.id}">${t('add')}</button>` : `<button class="btn" data-alert="${p.id}">${t('notify')}</button>`}
         <button class="ghost sm" data-fav="${p.id}">♥</button><button class="ghost sm" data-cmp="${p.id}">${t('compare')} (${S.cmp.length})</button>
         <button class="ghost sm" data-share="${p.id}">${t('share')}</button><button class="ghost sm" data-ask="${p.id}">💬 ${t('ask')}</button></div></div></div>
-    ${analogs.length ? `<h3 style="margin-top:12px">${t('analogs')}</h3><div class="mini">${analogs.map(cardHtml).join('')}</div>` : ''}
+    ${rel.list.length ? `<h3 style="margin-top:12px">${rel.title}</h3><div class="mini">${rel.list.map(cardHtml).join('')}</div>` : ''}
     <h3>${t('reviews')}</h3><div id="revs" class="muted">…</div>
     <form id="revForm" data-pid="${p.id}" style="display:flex;flex-direction:column;gap:8px"><select id="rStars">${[5, 4, 3, 2, 1].map(n => `<option value="${n}">${stars(n)}</option>`).join('')}</select>
       <textarea id="rText" rows="2" maxlength="1000" placeholder="${t('writerev')}"></textarea><button class="btn">${t('send')}</button></form>`;
@@ -371,6 +381,9 @@ document.addEventListener('click', async e => {
   if (d.go) { $('drawer').classList.remove('open'); scrollTo({ top: 0, behavior: 'smooth' }); }
   if (d.mode) setMode(d.mode);
   if (d.more) showMore();
+  if (d.cls !== undefined) { S.cls = S.cls === d.cls ? '' : d.cls; render(); }
+  if (d.brand !== undefined) { S.brand = S.brand === d.brand ? '' : d.brand; render(); }
+  if (d.add4) { cart[d.add4] = Math.min((cart[d.add4] || 0) + 4, maxQty(byId(d.add4))); saveCart(); toast(t('added')); }
   if (d.model !== undefined) { setModel(d.model); if (d.model) $('grid').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
   if (d.deals) { S.deals = !S.deals; render(); }
   if (d.season) { S.season = S.season === d.season ? '' : d.season; render(); }
@@ -440,7 +453,7 @@ $('car').onchange = e => { S.car = e.target.value; lsSet('mycar', S.car); render
 $('stockOnly').onchange = e => { S.stockOnly = e.target.checked; render(); };
 $('pmin').oninput = debounce(e => { S.pmin = +e.target.value || 0; render(); }, 300);
 $('pmax').oninput = debounce(e => { S.pmax = +e.target.value || 0; render(); }, 300);
-$('resetF').onclick = () => { Object.assign(S, { cat: 'all', q: '', sort: 'new', brand: '', car: '', stockOnly: false, pmin: 0, pmax: 0, season: '', deals: false, fw: '', fh: '', fd: '' }); ['q', 'pmin', 'pmax'].forEach(i => $(i).value = ''); $('stockOnly').checked = false; $('sort').value = 'new'; render(); };
+$('resetF').onclick = () => { Object.assign(S, { cat: 'all', q: '', sort: 'new', brand: '', car: '', stockOnly: false, pmin: 0, pmax: 0, season: '', cls: '', deals: false, fw: '', fh: '', fd: '' }); ['q', 'pmin', 'pmax'].forEach(i => $(i).value = ''); $('stockOnly').checked = false; $('sort').value = 'new'; render(); };
 $('favBtn').onclick = () => { if (!S.me) { toast(S.favs.size ? t('needLogin') : t('noFavs')); return S.favs.size ? openAuth('login') : null; } openProfile(); profTab('favs'); };
 $('open').onclick = () => $('drawer').classList.add('open');
 $('close').onclick = () => $('drawer').classList.remove('open');

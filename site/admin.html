@@ -49,7 +49,7 @@
 
 <section id="tab-products" class="scroll" hidden>
   <div class="kv" style="margin-bottom:12px"><input id="pSearch" placeholder="Поиск товара" style="max-width:240px"><button class="btn" id="pNew">+ Товар</button><button class="ghost" id="pExport">⬇ Excel</button>
-    <label class="ghost" style="cursor:pointer;padding:9px 14px;border-radius:10px;margin:0">⬆ Импорт из Excel<input type="file" id="pImport" accept=".xlsx,.xls,.csv" hidden></label><button class="ghost" id="catBtn">Категории</button></div>
+    <label class="ghost" style="cursor:pointer;padding:9px 14px;border-radius:10px;margin:0">⬆ Импорт из Excel<input type="file" id="pImport" accept=".xlsx,.xls,.csv" hidden></label><button class="ghost" id="catBtn">Категории</button><button class="ghost" id="photoBulk">🖼 Фото пачкой</button></div>
   <p class="muted" style="margin-bottom:8px">Колонки для импорта: name, category (название или id), price, car, brand, sku, stock, description, old_price, wholesale_price, badge.</p>
   <table class="tbl"><thead><tr><th></th><th>Товар</th><th>Цена</th><th>Склад</th><th>Наличие</th><th>На сайте</th><th></th></tr></thead><tbody id="prodRows"></tbody></table>
 </section>
@@ -78,6 +78,13 @@
   <div class="kv"><label style="margin:0"><input type="checkbox" id="fStockOk" style="width:auto"> В наличии</label><label style="margin:0"><input type="checkbox" id="fActive" style="width:auto"> На сайте</label></div>
   <div class="kv"><button class="btn">Сохранить</button><button type="button" class="ghost" id="pCancel">Отмена</button></div></form></div>
 <div class="modal mod" id="nModal"><form class="box" id="nForm"><h3>Заметка о клиенте</h3><textarea id="nText" rows="4"></textarea><div class="kv"><button class="btn">Сохранить</button><button type="button" class="ghost" id="nCancel">Отмена</button></div></form></div>
+<div class="modal mod" id="phModal"><div class="box" style="gap:10px"><h3>🖼 Загрузка фото пачкой</h3>
+  <p class="muted" style="font-size:14px">Имя файла должно совпадать с товаром. Фото сжимаются автоматически. Примеры: <b>AZ-0001.jpg</b> (по артикулу), <b>Фильтр масляный.jpg</b> (получат все модели авто), <b>Michelin.jpg</b> (для шин этого бренда).</p>
+  <select id="phRule"><option value="sku">Имя файла = артикул</option><option value="name">Имя файла = название товара</option><option value="brand">Имя файла = бренд (только товары без фото)</option></select>
+  <label class="chk"><input type="checkbox" id="phKeep" checked> <span>Не заменять уже загруженные фото</span></label>
+  <label class="btn" style="cursor:pointer;text-align:center;margin:0">Выбрать фото<input type="file" id="phFiles" accept="image/*" multiple hidden></label>
+  <div id="phLog" class="muted" style="max-height:200px;overflow:auto;font-size:13px"></div>
+  <button type="button" class="ghost" id="phClose">Закрыть</button></div></div>
 <div class="toast" id="toast"></div>
 
 <script src="js/core.js"></script>
@@ -255,6 +262,25 @@ $('pForm').addEventListener('submit', async e => {
   const row = { name: $('fName').value.trim(), car: $('fCar').value.trim(), brand: $('fBrand').value.trim(), sku: $('fSku').value.trim(), category: $('fCat').value || null, price: +$('fPrice').value, old_price: n('fOld'), wholesale_price: n('fWh'), stock: n('fStock'), badge: $('fBadge').value.trim() || null, description: $('fDesc').value.trim(), image_url: imgUrl, in_stock: $('fStockOk').checked, active: $('fActive').checked };
   const r = editId ? await sb.from('products').update(row).eq('id', editId) : await sb.from('products').insert(row);
   if (!mapErr(r, 'Не сохранено')) { $('pModal').classList.remove('open'); toast('Сохранено'); loadProducts(); }
+});
+$('photoBulk').onclick = () => { $('phLog').textContent = ''; $('phModal').classList.add('open'); };
+$('phClose').onclick = () => { $('phModal').classList.remove('open'); loadProducts(); };
+$('phFiles').addEventListener('change', async e => {
+  const files = [...e.target.files]; e.target.value = ''; const rule = $('phRule').value, keep = $('phKeep').checked;
+  const log = m => { $('phLog').insertAdjacentHTML('beforeend', m + '<br>'); $('phLog').scrollTop = 1e9; }; let ok = 0, skip = 0;
+  for (const f of files) {
+    const base = f.name.replace(/\.[^.]+$/, '').trim().toLowerCase();
+    let targets = allProducts.filter(p => rule === 'sku' ? (p.sku || '').toLowerCase() === base : rule === 'name' ? (p.name || '').toLowerCase() === base : (p.brand || '').toLowerCase() === base);
+    if (keep || rule === 'brand') targets = targets.filter(p => !p.image_url);
+    if (!targets.length) { skip++; log('⚠ ' + esc(f.name) + ': совпадений нет'); continue; }
+    try {
+      const b = await toWebp(f), path = `bulk/${Date.now()}-${Math.random().toString(36).slice(2, 7)}.webp`;
+      const up = await sb.storage.from('products').upload(path, b, { contentType: 'image/webp', cacheControl: '31536000' }); if (up.error) throw up.error;
+      const url = sb.storage.from('products').getPublicUrl(path).data.publicUrl, r = await sb.from('products').update({ image_url: url }).in('id', targets.map(p => p.id)); if (r.error) throw r.error;
+      targets.forEach(p => p.image_url = url); ok++; log('✓ ' + esc(f.name) + ' → товаров: ' + targets.length);
+    } catch (er) { skip++; log('✗ ' + esc(f.name) + ': ' + esc(er.message || String(er))); }
+  }
+  log('<b>Готово: загружено файлов ' + ok + ', пропущено ' + skip + '</b>');
 });
 $('pExport').onclick = () => { const ws = XLSX.utils.json_to_sheet(allProducts.map(x => ({ name: x.name, category: x.category, price: x.price, car: x.car, brand: x.brand, sku: x.sku, stock: x.stock, description: x.description, old_price: x.old_price, wholesale_price: x.wholesale_price, badge: x.badge }))); const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'Товары'); XLSX.writeFile(wb, 'products.xlsx'); };
 $('pImport').addEventListener('change', async e => {
