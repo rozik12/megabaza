@@ -105,7 +105,7 @@ cats = [dict(id=i, name=C(r, u, e)) for i, r, u, e in TCATS if any(p['cat'] == i
 json.dump(dict(categories=cats, products=prods), open('bot/catalog.json', 'w', encoding='utf8'), ensure_ascii=False, separators=(',', ':'))
 json.dump(dict(currency='сум', categories=[dict(id=c['id'], name=c['name']['ru']) for c in cats],
     products=[dict(id=p['id'], cat=p['cat'], name=p['name']['ru'], brand=p['brand'], car=p['car']['ru'], sku=p['sku'], price=p['price'], **({'badge': 'Хит'} if p['hit'] else {})) for p in prods]),
-    open('site/products.json', 'w', encoding='utf8'), ensure_ascii=False, indent=1)
+    open('site/products.json', 'w', encoding='utf8'), ensure_ascii=False, separators=(',', ':'))
 wb = openpyxl.Workbook(); w = wb.active; w.append(['name', 'category', 'price', 'car', 'brand', 'sku', 'stock', 'description', 'old_price', 'wholesale_price', 'badge'])
 for p in prods: w.append([p['name']['ru'], p['cat'], p['price'], p['car']['ru'], p['brand'], p['sku'], None, p['desc']['ru'], None, None, 'Хит' if p['hit'] else None])
 wb.save('products-import.xlsx')

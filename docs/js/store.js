@@ -95,6 +95,16 @@ function downloadPrice() {
   const csv = '\ufeff' + rows.map(r => r.map(x => '"' + String(x).replace(/"/g, '""') + '"').join(';')).join('\n');
   const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' })); a.download = 'megabaza-prices.csv'; a.click();
 }
+const PAGE_N = 24; let moreObs = null;
+function gridMore(l) { return l.length > S.shown ? `<div class="more" id="more"><button class="ghost wide" data-more="1">${t('showMore')} (${l.length - S.shown})</button></div>` : ''; }
+function watchMore() {
+  if (moreObs) moreObs.disconnect(); const el = $('more'); if (!el || !('IntersectionObserver' in window)) return;
+  moreObs = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) showMore(); }, { rootMargin: '600px' }); moreObs.observe(el);
+}
+function showMore() {
+  const l = filtered(), from = S.shown; if (from >= l.length) return; S.shown = from + PAGE_N;
+  const old = $('more'); if (old) old.remove(); $('grid').insertAdjacentHTML('beforeend', l.slice(from, S.shown).map(cardHtml).join('') + gridMore(l)); watchMore();
+}
 function render() {
   $('chips').innerHTML = [{ id: 'all', name: t('all') }, ...S.cats].map(c => `<button class="ctile ${c.id === S.cat ? 'on' : ''}" data-c="${esc(c.id)}"><span class="cico">${c.id === 'all' ? '🛍' : catIcon(c.id)}</span><span>${esc(c.name)}</span></button>`).join('');
   $('chips2').innerHTML = `<button class="chip ${S.deals ? 'on' : ''}" data-deals="1">🔥 ${t('deals')}</button>` + ['summer', 'winter', 'all'].map(k => `<button class="chip ${S.season === k ? 'on' : ''}" data-season="${k}">${t('s_' + k)}</button>`).join('');
@@ -104,9 +114,10 @@ function render() {
   $('brand').innerHTML = `<option value="">${t('allbrands')}</option>` + brands.map(b => `<option ${b === S.brand ? 'selected' : ''}>${esc(b)}</option>`).join('');
   const models = [...new Set(S.products.flatMap(p => (p.car || '').replace(/Chevrolet\s*/gi, '').replace(/\([^)]*\)/g, '').split(/[\/,]/).map(x => x.trim()).filter(x => /^[A-Za-z]/.test(x))))].sort();
   $('car').innerHTML = `<option value="">${t('anycar')}</option>` + models.map(m => `<option value="${esc(m.toLowerCase())}" ${m.toLowerCase() === S.car ? 'selected' : ''}>${esc(m)}</option>`).join('') + S.garage.map(g => `<option value="${esc(g.model.toLowerCase())}" ${g.model.toLowerCase() === S.car ? 'selected' : ''}>${t('mycar')}: ${esc(g.make)} ${esc(g.model)}</option>`).join('');
+  const sig = JSON.stringify([S.cat, S.q, S.brand, S.car, S.stockOnly, S.pmin, S.pmax, S.deals, S.season, S.fw, S.fh, S.fd, S.sort]); if (sig !== S._sig) { S._sig = sig; S.shown = PAGE_N; }
   const l = filtered();
   $('foundN').textContent = (S.q || S.brand || S.car || S.stockOnly || S.pmin || S.pmax || S.deals || S.season || S.fw || S.cat !== 'all') ? `${t('found')} ${l.length}` : '';
-  $('grid').innerHTML = l.map(cardHtml).join('') || `<p class="empty" style="grid-column:1/-1">${t('nothing')}</p>`;
+  $('grid').innerHTML = (l.slice(0, S.shown).map(cardHtml).join('') + gridMore(l)) || `<p class="empty" style="grid-column:1/-1">${t('nothing')}</p>`; watchMore();
   $('favCount').hidden = !S.favs.size; $('favCount').textContent = S.favs.size;
   const rl = recent.map(byId).filter(Boolean);
   $('recentBox').hidden = !rl.length; $('recent').innerHTML = rl.map(cardHtml).join('');
@@ -344,6 +355,7 @@ document.addEventListener('click', async e => {
   if (d.rm) { delete cart[d.rm]; saveCart(); toast(t('removed')); }
   if (d.go) { $('drawer').classList.remove('open'); scrollTo({ top: 0, behavior: 'smooth' }); }
   if (d.mode) setMode(d.mode);
+  if (d.more) showMore();
   if (d.deals) { S.deals = !S.deals; render(); }
   if (d.season) { S.season = S.season === d.season ? '' : d.season; render(); }
   if (d.m === 'home') scrollTo({ top: 0, behavior: 'smooth' });
