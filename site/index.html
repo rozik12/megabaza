@@ -16,6 +16,7 @@
 <script src="config.js" defer></script>
 </head>
 <body>
+<noscript><div class="banner">Для работы сайта включите JavaScript / Saytni ishlatish uchun JavaScript yoqing.</div></noscript>
 <div class="banner" id="demo" hidden data-i="demo"></div>
 <div class="banner" id="offline" hidden data-i="offline"></div>
 <div class="promo"><span data-i="promoBar"></span></div>
@@ -56,9 +57,10 @@
   </div>
   <div id="recentBox" hidden><h3 data-i="recent" style="margin-bottom:8px"></h3><div class="mini" id="recent"></div></div>
   <h2 class="sech" data-i="allGoods"></h2>
-  <p class="muted" id="foundN" style="margin:4px 0 8px"></p>
+  <p class="muted" id="foundN" style="margin:4px 0 4px"></p><p class="muted pnote" data-i="priceNote"></p>
   <div class="grid" id="grid"></div>
 
+  <section class="sec" id="services"><h2 data-i="secServices"></h2><div id="svc"></div></section>
   <section class="sec" id="delivery"><h2 data-i="secDelivery"></h2><div class="cols">
     <div class="tile"><b data-i="delivery1"></b><p class="muted" data-i="delivery1t"></p></div>
     <div class="tile"><b data-i="delivery2"></b><p class="muted" data-i="delivery2t"></p></div>
@@ -77,7 +79,7 @@
 </main>
 <footer class="mfoot"><div class="wrap"><div class="fcols">
   <div><b>MEGABAZA</b><p class="muted" data-i="footAbout"></p></div>
-  <div><b data-i="footHelp"></b><a href="#delivery" data-i="secDelivery"></a><a href="#faq" data-i="secFaq"></a><button class="linkbtn" id="trackOpen" data-i="track"></button></div>
+  <div><b data-i="footHelp"></b><a href="#services" data-i="secServices"></a><a href="#delivery" data-i="secDelivery"></a><a href="#faq" data-i="secFaq"></a><button class="linkbtn" id="trackOpen" data-i="track"></button></div>
   <div><b data-i="secContacts"></b><a href="#contacts" data-i="secContacts"></a><a id="footTg" href="#" target="_blank" rel="noopener">Telegram</a></div>
   <div><b data-i="footLegal"></b><a href="legal.html#offer" data-i="offer"></a><a href="legal.html#privacy" data-i="privacy"></a></div></div>
   <p class="muted" style="margin-top:16px">© MEGABAZA</p></div></footer>
@@ -141,7 +143,7 @@
 <div class="modal" id="trackModal"><form class="box" id="trackForm"><h3>📦 <span data-i="track"></span></h3>
   <input id="trId" type="number" min="1" data-ip="orderNo" required inputmode="numeric"><input id="trPhone" type="tel" data-ip="phone" inputmode="tel" required>
   <div id="trRes" class="muted"></div><button class="btn" data-i="trackBtn"></button><button type="button" class="ghost" id="trClose" data-i="cancel"></button></form></div>
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="js/core.js" defer></script>
 <script src="js/i18n.js" defer></script>

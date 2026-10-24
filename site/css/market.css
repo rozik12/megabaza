@@ -95,3 +95,9 @@ header{border-bottom:1px solid var(--line);box-shadow:0 1px 0 rgba(0,0,0,.02)}
 
 #chips2{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:8px;scrollbar-width:none;padding-bottom:4px}#chips2::-webkit-scrollbar{display:none}#chips2 .chip{flex:none}
 .actrow{display:flex;gap:6px}.actrow .ghost{flex:none;padding:0 12px;font-weight:700;border-radius:10px}
+
+:focus-visible{outline:2px solid var(--red);outline-offset:2px;border-radius:6px}
+.pnote{font-size:13px;margin:0 0 10px}
+.svc{margin:0}.svc td{padding:9px 6px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+@media print{header,.mbar,.chatfab,.chat,.promo,.drawer,.modal{display:none!important}}

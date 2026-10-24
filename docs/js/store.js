@@ -32,7 +32,7 @@ async function loadCatalog() {
     const cached = ls('catalog', null);
     if (cached) { S.cats = cached.c; S.products = cached.p; $('offline').hidden = false; return; }
   }
-  const d = await (await fetch('products.json')).json();
+  let d; try { d = await (await fetch('products.json')).json(); } catch { $('grid').innerHTML = `<div class="empty" style="grid-column:1/-1">${t('loadErr')}<br><br><button class="btn" onclick="location.reload()">${t('retry')}</button></div>`; return; }
   S.cats = d.categories; S.products = d.products.map(x => ({ ...x, in_stock: true }));
 }
 async function loadExtras() {
@@ -49,6 +49,14 @@ function drawSlider(list) {
   el.innerHTML = list.map((b, i) => `<div class="slide ${i ? '' : 'on'}"><h2>${esc(b.title)}</h2><p>${esc(b.text)}</p>${b.link ? `<a href="${esc(b.link)}" rel="noopener">${t('slBtn')} →</a>` : ''}</div>`).join('');
   clearInterval(slideTimer);
   if (list.length > 1) { let i = 0; slideTimer = setInterval(() => { const s = el.children; s[i].classList.remove('on'); i = (i + 1) % s.length; s[i].classList.add('on'); }, 5000); }
+}
+async function drawServices() {
+  try {
+    const d = await (await fetch('services.json')).json(), l = LANG === 'uz' ? 'uz' : 'ru', pick = o => (o && typeof o === 'object') ? (o[l] || o.ru) : o;
+    $('svc').innerHTML = d.groups.map(g => `<h3 style="margin:14px 0 6px">${esc(pick(g.g))}</h3><table class="tbl svc">${g.rows.map(r => `<tr><td>${esc(pick(r[0]))}</td><td style="text-align:right;white-space:nowrap"><b>${l === 'uz' ? money(r[1]) + ' dan' : 'от ' + money(r[1])}</b></td></tr>`).join('')}</table>`).join('')
+      + `<p class="muted" style="margin-top:10px">${esc(pick(d.note))}</p><p><button class="btn" id="svcBook">💬 ${t('book')}</button></p>`;
+    $('svcBook').onclick = () => chat.toggle(true);
+  } catch { $('svc').textContent = ''; }
 }
 function drawContacts() {
   const ph = st('phone'), tg = st('telegram'), wa = st('whatsapp').replace(/\D/g, ''), ig = st('instagram');
@@ -472,7 +480,7 @@ $('compose').addEventListener('submit', e => { e.preventDefault(); const i = $('
 $('msgInput').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); $('compose').requestSubmit(); } });
 $('msgInput').addEventListener('input', () => chat.typing());
 $('file').addEventListener('change', e => { chat.sendFile(e.target.files[0]); e.target.value = ''; });
-$('lang').onclick = () => { setLang(LANG === 'ru' ? 'uz' : 'ru'); $('lang').textContent = LANG.toUpperCase(); setMode(mode); render(); drawCart(); drawContacts(); $('authBtn').textContent = S.me ? (S.me.full_name || t('profile')).split(' ')[0] : t('login'); };
+$('lang').onclick = () => { drawServices(); setLang(LANG === 'ru' ? 'uz' : 'ru'); $('lang').textContent = LANG.toUpperCase(); setMode(mode); render(); drawCart(); drawContacts(); $('authBtn').textContent = S.me ? (S.me.full_name || t('profile')).split(' ')[0] : t('login'); };
 $('theme').onclick = () => { const l = document.documentElement.dataset.theme !== 'light'; document.documentElement.dataset.theme = l ? 'light' : 'dark'; lsSet('theme', l ? 'light' : 'dark'); };
 addEventListener('scroll', () => { $('top').style.display = scrollY > 600 ? 'block' : 'none'; }, { passive: true });
 $('top').onclick = () => scrollTo({ top: 0, behavior: 'smooth' });
@@ -482,7 +490,7 @@ $('top').onclick = () => scrollTo({ top: 0, behavior: 'smooth' });
   document.documentElement.dataset.theme = ls('theme', 'light'); $('lang').textContent = LANG.toUpperCase(); applyI18n(); setMode('login');
   $('demo').hidden = CONFIGURED; $('tgBtn').href = $('footTg').href = 'https://t.me/' + (CFG.bot || ''); drawSlider(defaultSlides()); loadAnalytics();
   $('grid').innerHTML = '<div class="sk"></div>'.repeat(8);
-  await Promise.all([loadCatalog(), loadExtras()]); if (!S.dbBanners) drawSlider(defaultSlides()); render(); drawCart();
+  drawServices(); await Promise.all([loadCatalog(), loadExtras()]); if (!S.dbBanners) drawSlider(defaultSlides()); render(); drawCart();
   const pid = new URLSearchParams(location.search).get('p'); if (pid) openProduct(pid);
   if (sb) {
     sb.auth.onAuthStateChange((ev) => {

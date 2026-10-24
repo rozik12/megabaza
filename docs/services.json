@@ -1,0 +1,116 @@
+{
+ "note": {
+  "ru": "Цены ориентировочные (Ташкент). Точную стоимость подтверждает менеджер. Файл можно править вручную.",
+  "uz": "Narxlar taxminiy (Toshkent). Aniq narxni menejer tasdiqlaydi.",
+  "en": "Prices are approximate (Tashkent). The exact cost is confirmed by a manager."
+ },
+ "groups": [
+  {
+   "g": {
+    "ru": "Шиномонтаж (за 1 колесо)",
+    "uz": "Shina o‘rnatish (1 g‘ildirak)",
+    "en": "Tire fitting (per wheel)"
+   },
+   "rows": [
+    [
+     "R13–R15",
+     20000
+    ],
+    [
+     "R16–R17",
+     25000
+    ],
+    [
+     "R18–R19",
+     35000
+    ],
+    [
+     "R20 и выше / внедорожные",
+     50000
+    ]
+   ]
+  },
+  {
+   "g": {
+    "ru": "Балансировка (за 1 колесо)",
+    "uz": "Balanslash (1 g‘ildirak)",
+    "en": "Wheel balancing (per wheel)"
+   },
+   "rows": [
+    [
+     "R13–R15",
+     15000
+    ],
+    [
+     "R16–R17",
+     20000
+    ],
+    [
+     "R18–R19",
+     30000
+    ],
+    [
+     "R20 и выше",
+     40000
+    ]
+   ]
+  },
+  {
+   "g": {
+    "ru": "Прочие работы",
+    "uz": "Boshqa ishlar",
+    "en": "Other services"
+   },
+   "rows": [
+    [
+     {
+      "ru": "Ремонт прокола",
+      "uz": "Teshilishni ta’mirlash",
+      "en": "Puncture repair"
+     },
+     40000
+    ],
+    [
+     {
+      "ru": "Замена вентиля",
+      "uz": "Ventilni almashtirish",
+      "en": "Valve replacement"
+     },
+     10000
+    ],
+    [
+     {
+      "ru": "Развал-схождение",
+      "uz": "Razval-sxojdeniye",
+      "en": "Wheel alignment"
+     },
+     120000
+    ],
+    [
+     {
+      "ru": "Хранение комплекта шин (сезон)",
+      "uz": "Shinalar komplektini saqlash (mavsum)",
+      "en": "Tire set storage (season)"
+     },
+     150000
+    ],
+    [
+     {
+      "ru": "Замена тормозных колодок (работа, 1 ось)",
+      "uz": "Tormoz kolodkalarini almashtirish (ish, 1 o‘q)",
+      "en": "Brake pads replacement (labor, 1 axle)"
+     },
+     60000
+    ],
+    [
+     {
+      "ru": "Замена масла и фильтра (работа)",
+      "uz": "Moy va filtrni almashtirish (ish)",
+      "en": "Oil and filter change (labor)"
+     },
+     30000
+    ]
+   ]
+  }
+ ]
+}
